@@ -4,19 +4,88 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vjra.us — Research</title>
+<meta name="description" content="External knowledge sources curated for the NovaCart Product Finance Reporting Agent.">
 <style>
-  body { font-family: -apple-system, Helvetica, Arial, sans-serif; max-width: 720px; margin: 4rem auto; padding: 0 1.5rem; color: #222; line-height: 1.6; }
-  h1 { color: #1a1a2e; }
-  ul { padding-left: 1.2rem; }
-  a { color: #b85042; }
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    max-width: 760px; margin: 0 auto; padding: 0 1.5rem 4rem;
+    color: #2b2b2b; line-height: 1.6; background: #fdfdfb;
+  }
+  header.site-header {
+    border-bottom: 4px solid var(--accent);
+    padding: 3rem 0 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .75rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .75rem;
+  }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 2.4rem; line-height: 1.2; color: var(--ink); margin: 0 0 .75rem;
+  }
+  .lede { font-size: 1.05rem; color: #444; margin: 0; max-width: 56ch; }
+  h2 {
+    font-size: 1.1rem; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); margin: 2.5rem 0 1rem; font-weight: 700;
+  }
+  .article-list { list-style: none; padding: 0; margin: 0; }
+  .article-card {
+    display: block; padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+    border: 1px solid #eee; border-radius: 8px; text-decoration: none;
+    color: inherit; transition: border-color .15s, box-shadow .15s;
+  }
+  .article-card:hover { border-color: var(--accent); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+  .article-card .article-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.25rem; color: var(--ink); margin: 0 0 .35rem; font-weight: 700;
+  }
+  .article-card .article-meta {
+    font-size: .8rem; color: var(--muted);
+  }
+  .article-card .article-meta span:not(:last-child)::after {
+    content: "•"; margin-left: .6rem; color: #ccc;
+  }
+  .article-card .read-more {
+    display: inline-block; margin-top: .6rem; font-size: .85rem;
+    font-weight: 600; color: var(--accent);
+  }
+  footer.page-footer {
+    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #eee;
+    font-size: .8rem; color: #999;
+  }
 </style>
 </head>
 <body>
-<h1>vjra.us — Research</h1>
-<p>External knowledge sources curated for the NovaCart Product Finance Reporting Agent.</p>
+<header class="site-header">
+  <div class="kicker">vjra.us / research</div>
+  <h1>Research Library</h1>
+  <p class="lede">External knowledge sources curated for the NovaCart Product Finance Reporting Agent — industry outlooks and market reports used to ground its Monthly Financial Standing Report.</p>
+</header>
+
 <h2>Articles</h2>
-<ul>
-  <li><a href="/research/2026-semiconductor-industry-outlook-deloitte-insights.html">2026 Global Semiconductor Industry Outlook (Deloitte Insights)</a></li>
+<ul class="article-list">
+  <li>
+    <a class="article-card" href="/research/2026-semiconductor-industry-outlook-deloitte-insights.html">
+      <p class="article-title">2026 Global Semiconductor Industry Outlook</p>
+      <div class="article-meta">
+        <span>Deloitte Insights</span>
+        <span>11-min read</span>
+        <span>05 February 2026</span>
+      </div>
+      <span class="read-more">Read article &rarr;</span>
+    </a>
+  </li>
 </ul>
+
+<footer class="page-footer">
+  Curated for the <strong>novacart-ext</strong> Pinecone namespace, NovaCart Product Finance Reporting Agent.
+</footer>
 </body>
 </html>
