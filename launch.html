@@ -399,13 +399,14 @@
     gap: .6rem;
   }
 
-  /* ── Info Carousel (below greeter) ── */
+  /* ── Info Carousel (injected into chat after greeter) ── */
   #info-carousel {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: .75rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .75rem 1rem;
     background: var(--surface);
-    flex-shrink: 0;
+    margin-top: .25rem;
+    display: none;
   }
   .carousel-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -656,7 +657,7 @@
       <div id="chat">
       </div>
 
-      <!-- Rotating info panel — sits below greeter, above input -->
+      <!-- Rotating info panel — injected into #chat after greeter via JS -->
       <div id="info-carousel">
         <div class="carousel-header">
           <div class="carousel-kicker" id="carouselTitle">How Agents Transfer</div>
@@ -949,6 +950,10 @@ function greet() {
   const text = "Hi! Welcome to the Project Nightingale Launch Command Center. I can help with technical readiness and engineering status, marketing and go-to-market updates, or a high-level executive briefing. What are you looking for today?";
   addBotMsg(text, 'greeter');
   speak(text);
+  // Inject carousel into chat right after greeter bubble
+  const carousel = document.getElementById('info-carousel');
+  document.getElementById('chat').appendChild(carousel);
+  carousel.style.display = 'block';
 }
 
 // ── Claude API call ───────────────────────────────────────────────
