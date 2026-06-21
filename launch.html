@@ -415,36 +415,58 @@
   .orbit-node {
     display: flex; flex-direction: column; align-items: center; gap: 4px;
   }
+  /* ── Ball bounce / info-exchange animation ── */
+  /* Total cycle = 5 beats × 0.8s = 4s */
   .orbit-ball {
-    width: 42px; height: 42px; border-radius: 50%;
+    width: 44px; height: 44px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-family: 'Cormorant Garamond', serif;
     font-size: 1rem; font-weight: 700;
-    box-shadow: inset -2px -2px 5px rgba(0,0,0,.35), inset 1px 1px 4px rgba(255,255,255,.3), 0 4px 12px rgba(0,0,0,.25);
+    box-shadow: inset -2px -2px 5px rgba(0,0,0,.35), inset 1px 1px 4px rgba(255,255,255,.3), 0 3px 10px rgba(0,0,0,.2);
     text-shadow: 0 1px 2px rgba(0,0,0,.4);
-    animation: helixOrbit 3.2s ease-in-out infinite;
+    animation: ballPulse 4s ease-in-out infinite;
   }
-  /* Helix: front→top→back→bottom→front using scale+translateY+opacity */
-  @keyframes helixOrbit {
-    0%   { transform: translateY(0px)   scale(1.0);  opacity: 1;   }
-    25%  { transform: translateY(-14px) scale(0.75); opacity: 0.6; }
-    50%  { transform: translateY(0px)   scale(0.5);  opacity: 0.3; }
-    75%  { transform: translateY(14px)  scale(0.75); opacity: 0.6; }
-    100% { transform: translateY(0px)   scale(1.0);  opacity: 1;   }
+  @keyframes ballPulse {
+    0%,100% { transform: scale(1);    filter: brightness(1);   }
+    8%       { transform: scale(1.35); filter: brightness(1.5); box-shadow: 0 0 18px 6px rgba(255,255,255,.5); }
+    20%      { transform: scale(1);    filter: brightness(1);   }
   }
+  /* Each ball gets its pulse at a different time in the 4s cycle */
+  #ob-g { animation-delay: 0s; }
+  #ob-t { animation-delay: 0.8s; }
+  #ob-m { animation-delay: 1.6s; }
+  #ob-e { animation-delay: 2.4s; }
+
+  /* Arrow flashes when the ball to its left just pulsed */
+  .orbit-arrow {
+    font-size: 1.2rem; color: var(--border);
+    animation: arrowFlash 4s ease-in-out infinite;
+    margin-top: -14px;
+  }
+  .orbit-arrow:nth-of-type(1) { animation-delay: 0.4s; }
+  .orbit-arrow:nth-of-type(2) { animation-delay: 1.2s; }
+  .orbit-arrow:nth-of-type(3) { animation-delay: 2.0s; }
+  .orbit-arrow:nth-of-type(4) { animation-delay: 2.8s; }
+  .orbit-arrow:nth-of-type(5) { animation-delay: 3.4s; }
+  @keyframes arrowFlash {
+    0%,100% { color: var(--border); transform: scaleX(1); }
+    8%       { color: var(--accent); transform: scaleX(1.4); }
+    18%      { color: var(--border); transform: scaleX(1); }
+  }
+
   .orbit-person {
     font-size: 1.7rem; line-height: 1;
-    animation: helixOrbit 3.2s ease-in-out infinite;
-    animation-delay: -1.6s;
   }
   .orbit-wave {
     font-size: 1.5rem; color: var(--accent);
-    animation: waveAnim 1.8s ease-in-out infinite;
+    animation: waveFlash 4s ease-in-out infinite;
+    animation-delay: 3.2s;
     letter-spacing: -2px;
   }
-  @keyframes waveAnim {
-    0%,100% { opacity: .4; transform: scaleX(0.9); }
-    50%      { opacity: 1;  transform: scaleX(1.2); }
+  @keyframes waveFlash {
+    0%,100% { opacity: .35; }
+    8%       { opacity: 1; transform: scaleX(1.2); }
+    20%      { opacity: .35; }
   }
   .orbit-label {
     font-size: .6rem; font-weight: 600; color: var(--muted);
@@ -730,25 +752,25 @@
             <span class="orbit-arrow">›</span>
             <!-- Greeter ball -->
             <div class="orbit-node">
-              <div class="orbit-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);animation-delay:0s">G</div>
+              <div class="orbit-ball" id="ob-g" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a)">G</div>
               <div class="orbit-label">Greeter</div>
             </div>
             <span class="orbit-arrow">›</span>
             <!-- Technical ball -->
             <div class="orbit-node">
-              <div class="orbit-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);animation-delay:.3s">T</div>
+              <div class="orbit-ball" id="ob-t" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320)">T</div>
               <div class="orbit-label">Technical<br>Readiness</div>
             </div>
             <span class="orbit-arrow">›</span>
             <!-- GTM ball -->
             <div class="orbit-node">
-              <div class="orbit-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);animation-delay:.6s">M</div>
+              <div class="orbit-ball" id="ob-m" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00)">M</div>
               <div class="orbit-label">GTM &amp;<br>Marketing</div>
             </div>
             <span class="orbit-arrow">›</span>
             <!-- Executive ball -->
             <div class="orbit-node">
-              <div class="orbit-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);animation-delay:.9s">E</div>
+              <div class="orbit-ball" id="ob-e" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a)">E</div>
               <div class="orbit-label">Executive<br>Briefing</div>
             </div>
             <span class="orbit-arrow">›</span>
