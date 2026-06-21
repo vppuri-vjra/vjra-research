@@ -384,6 +384,64 @@
   #sendBtn:disabled { opacity: .4; cursor: not-allowed; }
 
   .hints { display: flex; gap: 6px; flex-wrap: wrap; margin-top: .65rem; }
+
+  /* ── Mobile sidebar toggle ── */
+  #sidebarToggle {
+    display: none;
+    background: none; border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 10px;
+    font-size: .75rem; color: var(--muted);
+    cursor: pointer; font-family: 'Inter', sans-serif;
+  }
+  #sidebarToggle:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ── Responsive breakpoints ── */
+  @media (max-width: 768px) {
+
+    /* Header */
+    header { padding: .9rem 1rem; }
+    h1 { font-size: 1.1rem; }
+    .agent-pill { display: none; }
+
+    /* Tabs */
+    .tab { padding: .6rem .9rem; font-size: .75rem; }
+
+    /* Overview tab — single column grids */
+    #tab-overview { padding: 1rem; }
+    [style*="grid-template-columns:1fr 1fr"],
+    [style*="grid-template-columns: 1fr 1fr"] {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    [style*="grid-template-columns:repeat(3,1fr)"],
+    [style*="grid-template-columns: repeat(3,1fr)"] {
+      grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Chat layout — hide sidebar, full width chat */
+    .body-row { flex-direction: column; }
+    .chat-col { border-right: none; }
+    .sidebar { display: none; width: 100%; border-top: 1px solid var(--border); }
+    .sidebar.open { display: block; }
+
+    /* Show sidebar toggle button */
+    #sidebarToggle { display: inline-block; }
+
+    /* Footer */
+    footer { padding: .7rem 1rem .85rem; }
+
+    /* Chat bubbles */
+    .bubble { max-width: 88%; }
+  }
+
+  @media (max-width: 480px) {
+    [style*="grid-template-columns:repeat(3,1fr)"],
+    [style*="grid-template-columns: repeat(3,1fr)"] {
+      grid-template-columns: 1fr !important;
+    }
+    h1 { font-size: 1rem; }
+    .tab { padding: .55rem .7rem; font-size: .72rem; }
+  }
   .hint {
     font-size: .75rem; border: 1px solid var(--border);
     border-radius: 5px; padding: 3px 10px;
@@ -564,7 +622,10 @@
           </div>
           <div class="footer-meta">
             <div id="voiceStatus"></div>
-            <button id="resetBtn" onclick="resetChat()">↺ Reset</button>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button id="sidebarToggle" onclick="toggleSidebar()">☰ Sidebar</button>
+              <button id="resetBtn" onclick="resetChat()">↺ Reset</button>
+            </div>
           </div>
         </div>
       </footer>
@@ -791,6 +852,14 @@ let history = [];
 let isListening = false;
 let recognition = null;
 const ROUTE_RE = /ROUTE:\s*(technical|gtm|executive|end)/i;
+
+// ── Sidebar toggle (mobile) ───────────────────────────────────────
+function toggleSidebar() {
+  const sb = document.querySelector('.sidebar');
+  sb.classList.toggle('open');
+  document.getElementById('sidebarToggle').textContent =
+    sb.classList.contains('open') ? '✕ Sidebar' : '☰ Sidebar';
+}
 
 // ── Tab switching ─────────────────────────────────────────────────
 function switchTab(name) {
