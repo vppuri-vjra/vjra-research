@@ -1463,9 +1463,10 @@ function setAgent(agent) {
   dot.style.background = AGENT_COLORS[agent] || '#767676';
   name.textContent = AGENT_LABELS[agent] || agent;
 
-  // KB strip
+  // KB strip (sidebar may not be present)
   ['launch','tech','gtm'].forEach(k => {
-    document.getElementById('kb-'+k).classList.toggle('on', KB_ACCESS[agent]?.includes(k));
+    const el = document.getElementById('kb-'+k);
+    if (el) el.classList.toggle('on', KB_ACCESS[agent]?.includes(k));
   });
 }
 
