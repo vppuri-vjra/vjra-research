@@ -427,34 +427,40 @@
       <!-- Static info cards above chat -->
       <div id="info-cards" style="padding:1.25rem 1.5rem 0;display:flex;flex-direction:column;gap:.75rem;flex-shrink:0;">
 
-        <!-- Card 1: Business Scenario -->
+        <!-- Card 1: Business Problem -->
         <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;">
-            <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">01 · Business Scenario</span>
+          <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+            <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">01 · Business Problem</span>
           </div>
           <div style="padding:.75rem 1rem;display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1.5rem;">
+
+            <!-- The Problem -->
             <div>
-              <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:.3rem;">Project Nightingale</div>
-              <div style="font-size:.78rem;color:var(--muted);line-height:1.55;">A mid-size tech company launching <strong style="color:var(--ink)">Mobile App v3.0</strong> on April 15, 2026 — a redesigned one-tap checkout and a new loyalty program called <strong style="color:var(--ink)">Perks</strong>. The PM and TPM are flooded with questions from every stakeholder. This Command Center is their AI-powered switchboard.</div>
+              <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">The Problem</div>
+              <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">When a PM or TPM runs a product launch, they become the <strong style="color:var(--ink)">human switchboard</strong> for the entire org. Engineering asks about the rollback plan. Marketing asks about the press embargo. The VP wants a 30-second status read. Sales wants objection-handling scripts.</div>
+              <div style="font-size:.78rem;color:var(--muted);line-height:1.6;margin-top:.4rem;">Answering the same core questions from five angles, all day, for weeks — is not a good use of their time.</div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:5px;justify-content:center;">
-              <div style="font-size:.72rem;display:flex;justify-content:space-between;padding-bottom:4px;border-bottom:1px solid var(--border);">
-                <span style="color:var(--muted)">Launch date</span>
-                <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">April 15, 2026</strong>
-              </div>
-              <div style="font-size:.72rem;display:flex;justify-content:space-between;padding-bottom:4px;border-bottom:1px solid var(--border);">
-                <span style="color:var(--muted)">Sprint</span>
-                <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">9 of 11</strong>
-              </div>
-              <div style="font-size:.72rem;display:flex;justify-content:space-between;padding-bottom:4px;border-bottom:1px solid var(--border);">
-                <span style="color:var(--muted)">Status</span>
-                <strong style="color:#2d6a4f;font-family:'Cormorant Garamond',serif;">On Track ⚠ App Store</strong>
-              </div>
-              <div style="font-size:.72rem;display:flex;justify-content:space-between;">
-                <span style="color:var(--muted)">Budget</span>
-                <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">$220k · $35k remaining</strong>
+
+            <!-- The Solution -->
+            <div>
+              <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">The Solution</div>
+              <div style="font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:.45rem;">A <strong style="color:var(--ink)">voice AI Command Center</strong> that routes every stakeholder to the right specialist automatically:</div>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <div style="font-size:.73rem;display:flex;gap:6px;align-items:baseline;">
+                  <span style="width:7px;height:7px;border-radius:50%;background:#2d6a4f;flex-shrink:0;margin-top:3px;display:inline-block;"></span>
+                  <span style="color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Technical Readiness</strong> — engineering, QA, deployment, rollback</span>
+                </div>
+                <div style="font-size:.73rem;display:flex;gap:6px;align-items:baseline;">
+                  <span style="width:7px;height:7px;border-radius:50%;background:#b45309;flex-shrink:0;margin-top:3px;display:inline-block;"></span>
+                  <span style="color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">GTM & Marketing</strong> — campaigns, press, sales, competitive</span>
+                </div>
+                <div style="font-size:.73rem;display:flex;gap:6px;align-items:baseline;">
+                  <span style="width:7px;height:7px;border-radius:50%;background:#6d28d9;flex-shrink:0;margin-top:3px;display:inline-block;"></span>
+                  <span style="color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Executive Briefing</strong> — status, risks, budget, milestones</span>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
 
