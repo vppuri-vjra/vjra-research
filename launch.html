@@ -403,12 +403,17 @@
     h1 { font-size: 1.1rem; }
     .agent-pill { display: none; }
 
+    /* Prevent horizontal overflow */
+    body, #app { overflow-x: hidden; }
+
     /* Global left/right padding so nothing touches the edge */
     #chat { padding: 1rem; }
     #tab-overview { padding: 1rem; }
+    #info-cards { width: 100%; box-sizing: border-box; }
+    #info-cards > div { width: 100%; box-sizing: border-box; min-width: 0; }
     .sidebar { padding: 1rem; }
     footer { padding: .7rem 1rem .85rem; }
-    .bubble { font-size: .85rem; }
+    .bubble { max-width: 92%; font-size: .85rem; }
 
     /* Tabs */
     .tab { padding: .6rem .9rem; font-size: .75rem; }
