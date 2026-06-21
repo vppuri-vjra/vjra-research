@@ -1068,12 +1068,17 @@ function addUserMsg(text) {
   scrollBottom();
 }
 
-const AGENT_INITIALS = { greeter: 'G', technical: 'T', gtm: 'M', executive: 'E' };
+const AGENT_BALLS = {
+  greeter:   'radial-gradient(circle at 35% 35%, #b0b0b0, #606060, #2a2a2a)',
+  technical: 'radial-gradient(circle at 35% 35%, #6ecfa0, #2d6a4f, #0f3320)',
+  gtm:       'radial-gradient(circle at 35% 35%, #f0c060, #b45309, #6b2e00)',
+  executive: 'radial-gradient(circle at 35% 35%, #b48df0, #6d28d9, #320a7a)',
+};
 
 function agentAvatar(agent) {
-  const color = AGENT_COLORS[agent] || '#767676';
-  const initial = AGENT_INITIALS[agent] || '?';
-  return `<div class="avatar" style="background:${color};border-color:${color};color:#fff;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;">${initial}</div>`;
+  const grad = AGENT_BALLS[agent] || AGENT_BALLS.greeter;
+  const initial = { greeter:'G', technical:'T', gtm:'M', executive:'E' }[agent] || '?';
+  return `<div class="avatar" style="background:${grad};border:none;box-shadow:inset -2px -2px 5px rgba(0,0,0,.35),inset 1px 1px 4px rgba(255,255,255,.3),0 2px 6px rgba(0,0,0,.2);color:#fff;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.4);">${initial}</div>`;
 }
 
 function addBotMsg(text, agent) {
