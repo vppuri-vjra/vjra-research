@@ -464,7 +464,37 @@
           </div>
         </div>
 
-        <!-- Card 2: Technical Architecture -->
+        <!-- Card 2: Solution Description -->
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+            <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">02 · Solution Description</span>
+          </div>
+          <div style="padding:.75rem 1rem;display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1.5rem;">
+
+            <!-- Why not one agent -->
+            <div>
+              <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">Why Not One Agent?</div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">One giant system prompt gets confused about which "mode" to be in — response quality degrades as it gets longer</div>
+                <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">A single agent may leak marketing budget numbers when answering a technical question — no information boundaries</div>
+                <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">All agents share the same tone — can't be precise for engineers and concise for executives simultaneously</div>
+              </div>
+            </div>
+
+            <!-- Why multi-agent -->
+            <div>
+              <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">Why Multi-Agent Orchestration?</div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Each subagent has a short, focused prompt — the LLM knows exactly what role it's playing, keeping quality high</div>
+                <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Each subagent only sees the KB files relevant to its domain — information is scoped and cannot cross boundaries</div>
+                <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Each node is independently testable and debuggable — fixing one agent doesn't affect the others</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Card 3: Technical Architecture -->
         <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
           <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
             <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">02 · Technical Architecture</span>
