@@ -404,6 +404,11 @@
     display: flex;
     flex-direction: column;
     gap: .75rem;
+    overflow-y: auto;
+    padding: .75rem 1.5rem 1rem;
+    flex-shrink: 0;
+    max-height: 42vh;
+    border-top: 1px solid var(--border);
   }
   .info-section {
     border: 1px solid var(--border);
@@ -651,6 +656,40 @@
     <div class="chat-col">
       <div id="chat">
       </div><!-- #chat -->
+
+      <!-- Static info sections — always visible below greeter -->
+      <div class="greeter-info" id="greeter-info">
+        <div class="info-section">
+          <div class="info-section-head">How Agents Transfer</div>
+          <div class="info-section-body">
+            <div class="routing-diagram">
+              <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#767676"></span>Greeter</div><span class="route-arrow">→</span><div class="route-targets">Routes to <b>Technical</b>, <b>GTM</b>, or <b>Executive</b> based on your first question</div></div>
+              <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#2d6a4f"></span>Technical</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>GTM</b> for marketing/press. Transfers to <b>Executive</b> for summary or budget.</div></div>
+              <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#b45309"></span>GTM</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>Technical</b> for bugs/deployment. Transfers to <b>Executive</b> for status overview.</div></div>
+              <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#6d28d9"></span>Executive</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>Technical</b> or <b>GTM</b> if you drill into specifics.</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-head">Cross-Routing</div>
+          <div class="info-section-body" style="font-size:.78rem;color:var(--muted);line-height:1.7;">
+            <p style="margin-bottom:.5rem;"><strong style="color:var(--ink);">Any specialist can hand off mid-conversation</strong> — routing is transparent to you.</p>
+            <p style="margin-bottom:.5rem;">Say <em>"now tell me about marketing"</em> while in Technical and it switches automatically.</p>
+            <p>Up to <strong style="color:var(--ink);">3 hops</strong> per message before a clarification prompt.</p>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-head">Agents &amp; Roles</div>
+          <div class="info-section-body">
+            <table class="agent-table">
+              <tr><td><span class="dot" style="background:#767676"></span>Greeter</td><td>Welcomes you, detects intent, routes to the right specialist</td></tr>
+              <tr><td><span class="dot" style="background:#2d6a4f"></span>Technical</td><td>Sprint status, QA, bugs, deployment, rollback, on-call, architecture</td></tr>
+              <tr><td><span class="dot" style="background:#b45309"></span>GTM</td><td>Campaigns, press, messaging, competitive, sales enablement</td></tr>
+              <tr><td><span class="dot" style="background:#6d28d9"></span>Executive</td><td>High-level status, risks, budget, milestones — full KB access</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
 
       <footer>
         <div class="footer-inner">
@@ -940,7 +979,6 @@ function greet() {
   const text = "Hi! Welcome to the Project Nightingale Launch Command Center. I can help with technical readiness and engineering status, marketing and go-to-market updates, or a high-level executive briefing. What are you looking for today?";
   addBotMsg(text, 'greeter');
   speak(text);
-  document.getElementById('chat').appendChild(buildGreeterInfo());
 }
 
 // ── Claude API call ───────────────────────────────────────────────
