@@ -655,64 +655,6 @@
     <!-- Chat column -->
     <div class="chat-col">
       <div id="chat">
-
-      <!-- Rotating info panel — pre-placed in #chat, shown & moved after greeter via JS -->
-      <div id="info-carousel">
-        <div class="carousel-header">
-          <div class="carousel-kicker" id="carouselTitle">How Agents Transfer</div>
-          <div class="carousel-dots">
-            <span class="cdot active" onclick="goSlide(0)"></span>
-            <span class="cdot" onclick="goSlide(1)"></span>
-            <span class="cdot" onclick="goSlide(2)"></span>
-          </div>
-        </div>
-
-        <!-- Slide 0: How Agents Transfer -->
-        <div class="carousel-slide active" id="slide-0">
-          <div class="routing-diagram">
-            <div class="route-row">
-              <div class="route-from"><span class="route-dot" style="background:#767676"></span>Greeter</div>
-              <span class="route-arrow">→</span>
-              <div class="route-targets">Routes to <b>Technical</b>, <b>GTM</b>, or <b>Executive</b> based on your first question</div>
-            </div>
-            <div class="route-row">
-              <div class="route-from"><span class="route-dot" style="background:#2d6a4f"></span>Technical</div>
-              <span class="route-arrow">→</span>
-              <div class="route-targets">Transfers to <b>GTM</b> if you ask about marketing or press. Transfers to <b>Executive</b> for a summary or budget.</div>
-            </div>
-            <div class="route-row">
-              <div class="route-from"><span class="route-dot" style="background:#b45309"></span>GTM</div>
-              <span class="route-arrow">→</span>
-              <div class="route-targets">Transfers to <b>Technical</b> for bugs or deployment. Transfers to <b>Executive</b> for a status overview.</div>
-            </div>
-            <div class="route-row">
-              <div class="route-from"><span class="route-dot" style="background:#6d28d9"></span>Executive</div>
-              <span class="route-arrow">→</span>
-              <div class="route-targets">Transfers to <b>Technical</b> or <b>GTM</b> if you drill into specifics.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 1: Cross-routing -->
-        <div class="carousel-slide" id="slide-1">
-          <div style="font-size:.78rem;color:var(--muted);line-height:1.7;">
-            <p style="margin-bottom:.5rem;"><strong style="color:var(--ink);">Any specialist can hand off mid-conversation</strong> — routing is transparent to you.</p>
-            <p style="margin-bottom:.5rem;">Say <em>"now tell me about marketing"</em> while in Technical and it switches automatically — no restart needed.</p>
-            <p style="margin-bottom:.5rem;">The Greeter only runs once. After the first route, specialists cross-route directly between themselves.</p>
-            <p>Up to <strong style="color:var(--ink);">3 hops</strong> per message before a clarification prompt.</p>
-          </div>
-        </div>
-
-        <!-- Slide 2: Agents & Roles -->
-        <div class="carousel-slide" id="slide-2">
-          <table class="agent-table">
-            <tr><td><span class="dot" style="background:#767676"></span>Greeter</td><td>Welcomes you, detects intent, routes to the right specialist</td></tr>
-            <tr><td><span class="dot" style="background:#2d6a4f"></span>Technical</td><td>Sprint status, QA, bugs, deployment, rollback, on-call, architecture</td></tr>
-            <tr><td><span class="dot" style="background:#b45309"></span>GTM</td><td>Campaigns, press, messaging, competitive, sales enablement</td></tr>
-            <tr><td><span class="dot" style="background:#6d28d9"></span>Executive</td><td>High-level status, risks, budget, milestones — full KB access</td></tr>
-          </table>
-        </div>
-      </div><!-- #info-carousel -->
       </div><!-- #chat -->
 
       <footer>
@@ -946,15 +888,52 @@ window.addEventListener('load', () => {
   });
 });
 
+function buildCarousel() {
+  const el = document.createElement('div');
+  el.id = 'info-carousel';
+  el.innerHTML = `
+    <div class="carousel-header">
+      <div class="carousel-kicker" id="carouselTitle">${SLIDE_TITLES[0]}</div>
+      <div class="carousel-dots">
+        <span class="cdot active" onclick="goSlide(0)"></span>
+        <span class="cdot" onclick="goSlide(1)"></span>
+        <span class="cdot" onclick="goSlide(2)"></span>
+      </div>
+    </div>
+    <div class="carousel-slide active" id="slide-0">
+      <div class="routing-diagram">
+        <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#767676"></span>Greeter</div><span class="route-arrow">→</span><div class="route-targets">Routes to <b>Technical</b>, <b>GTM</b>, or <b>Executive</b> based on your first question</div></div>
+        <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#2d6a4f"></span>Technical</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>GTM</b> for marketing/press. Transfers to <b>Executive</b> for summary or budget.</div></div>
+        <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#b45309"></span>GTM</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>Technical</b> for bugs/deployment. Transfers to <b>Executive</b> for status overview.</div></div>
+        <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#6d28d9"></span>Executive</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>Technical</b> or <b>GTM</b> if you drill into specifics.</div></div>
+      </div>
+    </div>
+    <div class="carousel-slide" id="slide-1">
+      <div style="font-size:.78rem;color:var(--muted);line-height:1.7;">
+        <p style="margin-bottom:.5rem;"><strong style="color:var(--ink);">Any specialist can hand off mid-conversation</strong> — routing is transparent to you.</p>
+        <p style="margin-bottom:.5rem;">Say <em>"now tell me about marketing"</em> while in Technical and it switches automatically — no restart needed.</p>
+        <p style="margin-bottom:.5rem;">The Greeter only runs once. After the first route, specialists cross-route directly.</p>
+        <p>Up to <strong style="color:var(--ink);">3 hops</strong> per message before a clarification prompt.</p>
+      </div>
+    </div>
+    <div class="carousel-slide" id="slide-2">
+      <table class="agent-table">
+        <tr><td><span class="dot" style="background:#767676"></span>Greeter</td><td>Welcomes you, detects intent, routes to the right specialist</td></tr>
+        <tr><td><span class="dot" style="background:#2d6a4f"></span>Technical</td><td>Sprint status, QA, bugs, deployment, rollback, on-call, architecture</td></tr>
+        <tr><td><span class="dot" style="background:#b45309"></span>GTM</td><td>Campaigns, press, messaging, competitive, sales enablement</td></tr>
+        <tr><td><span class="dot" style="background:#6d28d9"></span>Executive</td><td>High-level status, risks, budget, milestones — full KB access</td></tr>
+      </table>
+    </div>`;
+  return el;
+}
+
 function greet() {
   const text = "Hi! Welcome to the Project Nightingale Launch Command Center. I can help with technical readiness and engineering status, marketing and go-to-market updates, or a high-level executive briefing. What are you looking for today?";
   addBotMsg(text, 'greeter');
   speak(text);
-  // Move carousel to end of #chat (after greeter bubble) and show it
-  const chat = document.getElementById('chat');
-  const carousel = document.getElementById('info-carousel');
-  chat.appendChild(carousel);
-  carousel.style.display = 'block';
+  document.getElementById('chat').appendChild(buildCarousel());
+  currentSlide = 0;
+  resetCarouselTimer();
 }
 
 // ── Claude API call ───────────────────────────────────────────────
