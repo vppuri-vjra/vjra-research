@@ -399,32 +399,28 @@
     gap: .6rem;
   }
 
-  /* ── Info Carousel (injected into chat after greeter) ── */
-  #info-carousel {
+  /* ── Greeter info sections ── */
+  .greeter-info {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
+  .info-section {
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: .75rem 1rem;
+    overflow: hidden;
+  }
+  .info-section-head {
     background: var(--surface);
-    margin-top: .25rem;
-  }
-  .carousel-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: .6rem;
-  }
-  .carousel-kicker {
+    padding: .45rem 1rem;
+    border-bottom: 1px solid var(--border);
     font-size: .63rem; font-weight: 700;
     text-transform: uppercase; letter-spacing: .12em;
     color: var(--accent);
   }
-  .carousel-dots { display: flex; gap: 5px; align-items: center; }
-  .cdot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--border); cursor: pointer;
-    transition: background .2s;
+  .info-section-body {
+    padding: .7rem 1rem;
   }
-  .cdot.active { background: var(--accent); }
-  .carousel-slide { display: none; animation: fadeUp .25s ease; }
-  .carousel-slide.active { display: block; }
 
   /* ── Mobile sidebar toggle ── */
   #sidebarToggle {
@@ -828,28 +824,43 @@ function toggleSidebar() {
     sb.classList.contains('open') ? '✕ Sidebar' : '☰ Sidebar';
 }
 
-// ── Carousel ─────────────────────────────────────────────────────
-const SLIDE_TITLES = ['How Agents Transfer', 'Cross-Routing', 'Agents & Roles'];
-let currentSlide = 0;
-let carouselTimer = null;
-
-function goSlide(n) {
-  document.getElementById('slide-' + currentSlide).classList.remove('active');
-  document.querySelectorAll('.cdot')[currentSlide].classList.remove('active');
-  currentSlide = n % SLIDE_TITLES.length;
-  document.getElementById('slide-' + currentSlide).classList.add('active');
-  document.querySelectorAll('.cdot')[currentSlide].classList.add('active');
-  document.getElementById('carouselTitle').textContent = SLIDE_TITLES[currentSlide];
-  resetCarouselTimer();
+// ── Greeter info sections ─────────────────────────────────────────
+function buildGreeterInfo() {
+  const el = document.createElement('div');
+  el.className = 'greeter-info';
+  el.innerHTML = `
+    <div class="info-section">
+      <div class="info-section-head">How Agents Transfer</div>
+      <div class="info-section-body">
+        <div class="routing-diagram">
+          <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#767676"></span>Greeter</div><span class="route-arrow">→</span><div class="route-targets">Routes to <b>Technical</b>, <b>GTM</b>, or <b>Executive</b> based on your first question</div></div>
+          <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#2d6a4f"></span>Technical</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>GTM</b> for marketing/press. Transfers to <b>Executive</b> for summary or budget.</div></div>
+          <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#b45309"></span>GTM</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>Technical</b> for bugs/deployment. Transfers to <b>Executive</b> for status overview.</div></div>
+          <div class="route-row"><div class="route-from"><span class="route-dot" style="background:#6d28d9"></span>Executive</div><span class="route-arrow">→</span><div class="route-targets">Transfers to <b>Technical</b> or <b>GTM</b> if you drill into specifics.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="info-section">
+      <div class="info-section-head">Cross-Routing</div>
+      <div class="info-section-body" style="font-size:.78rem;color:var(--muted);line-height:1.7;">
+        <p style="margin-bottom:.5rem;"><strong style="color:var(--ink);">Any specialist can hand off mid-conversation</strong> — routing is transparent to you.</p>
+        <p style="margin-bottom:.5rem;">Say <em>"now tell me about marketing"</em> while in Technical and it switches automatically — no restart needed.</p>
+        <p>Up to <strong style="color:var(--ink);">3 hops</strong> per message before a clarification prompt.</p>
+      </div>
+    </div>
+    <div class="info-section">
+      <div class="info-section-head">Agents &amp; Roles</div>
+      <div class="info-section-body">
+        <table class="agent-table">
+          <tr><td><span class="dot" style="background:#767676"></span>Greeter</td><td>Welcomes you, detects intent, routes to the right specialist</td></tr>
+          <tr><td><span class="dot" style="background:#2d6a4f"></span>Technical</td><td>Sprint status, QA, bugs, deployment, rollback, on-call, architecture</td></tr>
+          <tr><td><span class="dot" style="background:#b45309"></span>GTM</td><td>Campaigns, press, messaging, competitive, sales enablement</td></tr>
+          <tr><td><span class="dot" style="background:#6d28d9"></span>Executive</td><td>High-level status, risks, budget, milestones — full KB access</td></tr>
+        </table>
+      </div>
+    </div>`;
+  return el;
 }
-
-function resetCarouselTimer() {
-  clearInterval(carouselTimer);
-  carouselTimer = setInterval(() => goSlide(currentSlide + 1), 10000);
-}
-
-// Auto-start carousel when app launches
-function startCarousel() { resetCarouselTimer(); }
 
 // ── Tab switching ─────────────────────────────────────────────────
 function switchTab(name) {
@@ -872,7 +883,6 @@ function startApp() {
   document.getElementById('gate').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   switchTab('chat');
-  startCarousel();
   greet();
 }
 
@@ -930,9 +940,7 @@ function greet() {
   const text = "Hi! Welcome to the Project Nightingale Launch Command Center. I can help with technical readiness and engineering status, marketing and go-to-market updates, or a high-level executive briefing. What are you looking for today?";
   addBotMsg(text, 'greeter');
   speak(text);
-  document.getElementById('chat').appendChild(buildCarousel());
-  currentSlide = 0;
-  resetCarouselTimer();
+  document.getElementById('chat').appendChild(buildGreeterInfo());
 }
 
 // ── Claude API call ───────────────────────────────────────────────
