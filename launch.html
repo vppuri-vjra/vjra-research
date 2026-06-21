@@ -330,6 +330,14 @@
     margin-bottom: .3rem; opacity: .75;
   }
   .agent-tag.greeter   { color: var(--muted); }
+  .msg.bot.greeter-msg .bubble {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.75;
+    letter-spacing: .01em;
+  }
   .agent-tag.technical { color: var(--green); }
   .agent-tag.gtm       { color: var(--amber); }
   .agent-tag.executive { color: var(--purple); }
@@ -1115,7 +1123,7 @@ function greet() {
   const chat = document.getElementById('chat');
   const info = document.getElementById('greeter-info');
   const d = document.createElement('div');
-  d.className = 'msg bot';
+  d.className = 'msg bot greeter-msg';
   d.innerHTML = `${agentAvatar('greeter')}<div class="bubble"><div class="agent-tag greeter">Greeter</div><div>${esc(text)}</div></div>`;
   chat.insertBefore(d, info);
   setAgent('greeter');
