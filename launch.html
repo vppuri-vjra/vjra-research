@@ -22,15 +22,20 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.05rem;
+    font-family: 'Inter', system-ui, sans-serif;
     background: var(--bg);
     color: #2b2b2b;
-    line-height: 1.7;
+    line-height: 1.6;
     height: 100vh;
     display: flex;
     flex-direction: column;
+  }
+  /* Cormorant italic only on chat tab */
+  #tab-chat {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
   }
 
   /* ── Header ── */
