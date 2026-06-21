@@ -415,8 +415,7 @@
   .orbit-node {
     display: flex; flex-direction: column; align-items: center; gap: 4px;
   }
-  /* ── Ball bounce / info-exchange animation ── */
-  /* Total cycle = 5 beats × 0.8s = 4s */
+  /* ── Agent balls ── */
   .orbit-ball {
     width: 44px; height: 44px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -424,34 +423,47 @@
     font-size: 1rem; font-weight: 700;
     box-shadow: inset -2px -2px 5px rgba(0,0,0,.35), inset 1px 1px 4px rgba(255,255,255,.3), 0 3px 10px rgba(0,0,0,.2);
     text-shadow: 0 1px 2px rgba(0,0,0,.4);
-    animation: ballPulse 4s ease-in-out infinite;
+    transition: transform .15s, filter .15s;
   }
-  @keyframes ballPulse {
-    0%,100% { transform: scale(1);    filter: brightness(1);   }
-    8%       { transform: scale(1.35); filter: brightness(1.5); box-shadow: 0 0 18px 6px rgba(255,255,255,.5); }
-    20%      { transform: scale(1);    filter: brightness(1);   }
+  /* Subtle receive-glow: balls light up when the packet arrives */
+  #ob-g { animation: ballGlow 5s ease-in-out infinite; animation-delay: 0s; }
+  #ob-t { animation: ballGlow 5s ease-in-out infinite; animation-delay: 1s; }
+  #ob-m { animation: ballGlow 5s ease-in-out infinite; animation-delay: 2s; }
+  #ob-e { animation: ballGlow 5s ease-in-out infinite; animation-delay: 3s; }
+  @keyframes ballGlow {
+    0%,8%,100% { transform: scale(1);    filter: brightness(1); }
+    4%          { transform: scale(1.18); filter: brightness(1.4); }
   }
-  /* Each ball gets its pulse at a different time in the 4s cycle */
-  #ob-g { animation-delay: 0s; }
-  #ob-t { animation-delay: 0.8s; }
-  #ob-m { animation-delay: 1.6s; }
-  #ob-e { animation-delay: 2.4s; }
 
-  /* Arrow flashes when the ball to its left just pulsed */
-  .orbit-arrow {
-    font-size: 1.2rem; color: var(--border);
-    animation: arrowFlash 4s ease-in-out infinite;
+  /* ── Moving packet dot on arrows ── */
+  .orbit-arrow-wrap {
+    position: relative; display: flex; align-items: center;
     margin-top: -14px;
   }
-  .orbit-arrow:nth-of-type(1) { animation-delay: 0.4s; }
-  .orbit-arrow:nth-of-type(2) { animation-delay: 1.2s; }
-  .orbit-arrow:nth-of-type(3) { animation-delay: 2.0s; }
-  .orbit-arrow:nth-of-type(4) { animation-delay: 2.8s; }
-  .orbit-arrow:nth-of-type(5) { animation-delay: 3.4s; }
-  @keyframes arrowFlash {
-    0%,100% { color: var(--border); transform: scaleX(1); }
-    8%       { color: var(--accent); transform: scaleX(1.4); }
-    18%      { color: var(--border); transform: scaleX(1); }
+  .orbit-arrow {
+    font-size: 1.2rem; color: var(--border);
+  }
+  /* Packet dot */
+  .orbit-arrow-wrap::after {
+    content: '';
+    position: absolute; top: 50%; left: 0;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px 2px rgba(184,80,66,.6);
+    transform: translateY(-50%) translateX(-4px);
+    opacity: 0;
+  }
+  .orbit-arrow-wrap:nth-child(2)::after  { animation: packetMove 5s linear infinite; animation-delay: 0.5s; }
+  .orbit-arrow-wrap:nth-child(4)::after  { animation: packetMove 5s linear infinite; animation-delay: 1.5s; }
+  .orbit-arrow-wrap:nth-child(6)::after  { animation: packetMove 5s linear infinite; animation-delay: 2.5s; }
+  .orbit-arrow-wrap:nth-child(8)::after  { animation: packetMove 5s linear infinite; animation-delay: 3.5s; }
+  .orbit-arrow-wrap:nth-child(10)::after { animation: packetMove 5s linear infinite; animation-delay: 4.3s; }
+  @keyframes packetMove {
+    0%    { opacity: 0; left: 0; }
+    5%    { opacity: 1; }
+    45%   { opacity: 1; }
+    50%   { opacity: 0; left: calc(100% - 4px); }
+    100%  { opacity: 0; left: calc(100% - 4px); }
   }
 
   .orbit-person {
@@ -459,14 +471,12 @@
   }
   .orbit-wave {
     font-size: 1.5rem; color: var(--accent);
-    animation: waveFlash 4s ease-in-out infinite;
-    animation-delay: 3.2s;
-    letter-spacing: -2px;
+    opacity: .4; letter-spacing: -2px;
+    animation: waveBreath 3s ease-in-out infinite;
   }
-  @keyframes waveFlash {
+  @keyframes waveBreath {
     0%,100% { opacity: .35; }
-    8%       { opacity: 1; transform: scaleX(1.2); }
-    20%      { opacity: .35; }
+    50%      { opacity: .8; }
   }
   .orbit-label {
     font-size: .6rem; font-weight: 600; color: var(--muted);
@@ -749,31 +759,31 @@
               <div class="orbit-person">🧑</div>
               <div class="orbit-label">You</div>
             </div>
-            <span class="orbit-arrow">›</span>
+            <span class="orbit-arrow-wrap"><span class="orbit-arrow">›</span></span>
             <!-- Greeter ball -->
             <div class="orbit-node">
               <div class="orbit-ball" id="ob-g" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a)">G</div>
               <div class="orbit-label">Greeter</div>
             </div>
-            <span class="orbit-arrow">›</span>
+            <span class="orbit-arrow-wrap"><span class="orbit-arrow">›</span></span>
             <!-- Technical ball -->
             <div class="orbit-node">
               <div class="orbit-ball" id="ob-t" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320)">T</div>
               <div class="orbit-label">Technical<br>Readiness</div>
             </div>
-            <span class="orbit-arrow">›</span>
+            <span class="orbit-arrow-wrap"><span class="orbit-arrow">›</span></span>
             <!-- GTM ball -->
             <div class="orbit-node">
               <div class="orbit-ball" id="ob-m" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00)">M</div>
               <div class="orbit-label">GTM &amp;<br>Marketing</div>
             </div>
-            <span class="orbit-arrow">›</span>
+            <span class="orbit-arrow-wrap"><span class="orbit-arrow">›</span></span>
             <!-- Executive ball -->
             <div class="orbit-node">
               <div class="orbit-ball" id="ob-e" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a)">E</div>
               <div class="orbit-label">Executive<br>Briefing</div>
             </div>
-            <span class="orbit-arrow">›</span>
+            <span class="orbit-arrow-wrap"><span class="orbit-arrow">›</span></span>
             <!-- Wave -->
             <div class="orbit-node">
               <div class="orbit-wave">～</div>
