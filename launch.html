@@ -755,126 +755,172 @@
         </div>
 
         <!-- Card 4: Architecture Diagram -->
-        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div style="background:var(--surface);padding:.55rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
             <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">04 · System Architecture</span>
+            <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.82rem;color:var(--muted);">Multi-agent voice + text AI on static hosting</span>
           </div>
-          <div style="padding:.75rem 1rem;">
-            <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:'Inter',sans-serif;">
 
-              <!-- ── Row 1: User Input ── -->
-              <rect x="250" y="14" width="220" height="48" rx="8" fill="#fff" stroke="#e8e6e1" stroke-width="1.5"/>
-              <text x="360" y="32" text-anchor="middle" font-size="9" font-weight="700" fill="#767676" letter-spacing="1" text-transform="uppercase">USER INPUT</text>
-              <text x="310" y="50" text-anchor="middle" font-size="9" fill="#1a1a2e">🎤 Voice (STT)</text>
-              <text x="415" y="50" text-anchor="middle" font-size="9" fill="#1a1a2e">⌨️ Text</text>
-              <line x1="342" y1="38" x2="342" y2="52" stroke="#e8e6e1" stroke-width="1"/>
+          <!-- Dark diagram container -->
+          <div style="background:#0f0e17;padding:1.5rem 1.25rem 1.25rem;">
 
-              <!-- arrow down -->
-              <line x1="360" y1="62" x2="360" y2="86" stroke="#c8c4be" stroke-width="1.5" stroke-dasharray="3,2"/>
-              <polygon points="355,86 365,86 360,94" fill="#c8c4be"/>
+            <!-- ── LAYER 1: User Input ── -->
+            <div style="display:flex;justify-content:center;margin-bottom:.5rem;">
+              <div style="display:inline-flex;align-items:stretch;border:1px solid rgba(255,255,255,.14);border-radius:32px;overflow:hidden;background:rgba(255,255,255,.04);backdrop-filter:blur(4px);">
+                <div style="padding:.5rem 1.2rem;display:flex;align-items:center;gap:.4rem;border-right:1px solid rgba(255,255,255,.1);">
+                  <span style="font-size:1rem;">🎤</span>
+                  <div>
+                    <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:rgba(255,255,255,.9);">Voice</div>
+                    <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(255,255,255,.4);">Web Speech STT</div>
+                  </div>
+                </div>
+                <div style="padding:.5rem 1rem;display:flex;align-items:center;gap:.3rem;">
+                  <span style="font-size:.9rem;color:rgba(255,255,255,.5);">⌨</span>
+                  <div>
+                    <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:rgba(255,255,255,.9);">Text</div>
+                    <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(255,255,255,.4);">Chat input</div>
+                  </div>
+                </div>
+                <div style="padding:.4rem .9rem;display:flex;align-items:center;border-left:1px solid rgba(255,255,255,.1);">
+                  <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.72rem;color:rgba(184,80,66,.8);">You</span>
+                </div>
+              </div>
+            </div>
 
-              <!-- ── Row 2: Greeter Agent ── -->
-              <rect x="200" y="96" width="320" height="52" rx="8" fill="#1a1a2e" stroke="#1a1a2e" stroke-width="1.5"/>
-              <circle cx="226" cy="122" r="13" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
-              <text x="226" y="126" text-anchor="middle" font-size="11" font-weight="700" fill="white">G</text>
-              <text x="360" y="115" text-anchor="middle" font-size="10" font-weight="700" fill="white">Greeter Agent</text>
-              <text x="360" y="130" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.65)">Classifies intent → emits ROUTE: signal → hands off to specialist</text>
-              <rect x="596" y="107" width="82" height="14" rx="3" fill="rgba(255,255,255,.08)"/>
-              <text x="637" y="118" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,.5)" letter-spacing=".5">claude-sonnet-4-6</text>
+            <!-- connector -->
+            <div style="display:flex;justify-content:center;"><div style="width:1px;height:22px;background:linear-gradient(to bottom,rgba(255,255,255,.15),rgba(184,80,66,.5));position:relative;">
+              <div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#b85042;box-shadow:0 0 6px #b85042;"></div>
+            </div></div>
 
-              <!-- fork arrows to 3 agents -->
-              <!-- left branch -->
-              <line x1="260" y1="148" x2="260" y2="158" stroke="#c8c4be" stroke-width="1.5"/>
-              <line x1="260" y1="158" x2="125" y2="158" stroke="#c8c4be" stroke-width="1.5"/>
-              <line x1="125" y1="158" x2="125" y2="178" stroke="#c8c4be" stroke-width="1.5"/>
-              <polygon points="120,178 130,178 125,186" fill="#c8c4be"/>
-              <!-- center -->
-              <line x1="360" y1="148" x2="360" y2="186" stroke="#c8c4be" stroke-width="1.5" stroke-dasharray="3,2"/>
-              <polygon points="355,186 365,186 360,194" fill="#c8c4be"/>
-              <!-- right branch -->
-              <line x1="460" y1="148" x2="460" y2="158" stroke="#c8c4be" stroke-width="1.5"/>
-              <line x1="460" y1="158" x2="595" y2="158" stroke="#c8c4be" stroke-width="1.5"/>
-              <line x1="595" y1="158" x2="595" y2="178" stroke="#c8c4be" stroke-width="1.5"/>
-              <polygon points="590,178 600,178 595,186" fill="#c8c4be"/>
+            <!-- ── LAYER 2: Greeter / Orchestration ── -->
+            <div style="border:1px solid rgba(184,80,66,.4);border-radius:10px;padding:.75rem 1rem;background:rgba(184,80,66,.05);margin-bottom:.5rem;display:flex;align-items:center;gap:.9rem;position:relative;">
+              <!-- ball G -->
+              <div style="width:42px;height:42px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);box-shadow:inset -2px -2px 5px rgba(0,0,0,.4),inset 1px 1px 4px rgba(255,255,255,.25),0 0 14px rgba(184,80,66,.3);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;text-shadow:0 1px 2px rgba(0,0,0,.5);">G</div>
+              <div style="flex:1;">
+                <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(255,255,255,.95);margin-bottom:.1rem;">Greeter Agent <span style="font-style:normal;font-size:.72rem;color:rgba(184,80,66,.8);font-family:'Inter',sans-serif;font-weight:500;">· Orchestrator</span></div>
+                <div style="font-family:'Inter',sans-serif;font-size:.65rem;color:rgba(255,255,255,.45);">Classifies intent from any question → emits <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px;font-size:.6rem;color:rgba(184,80,66,.9);">ROUTE:</code> signal → hands off to the right specialist</div>
+              </div>
+              <div style="position:absolute;right:.75rem;top:.55rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:.2rem .45rem;font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(255,255,255,.35);letter-spacing:.3px;">claude-sonnet-4-6</div>
+            </div>
 
-              <!-- ── Row 3: Specialist Agents ── -->
+            <!-- fan-out connectors -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.3rem;padding:0 .5rem;">
+              <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(45,106,79,.6),rgba(45,106,79,.2));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#2d6a4f;box-shadow:0 0 5px #2d6a4f;"></div></div></div>
+              <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(180,83,9,.6),rgba(180,83,9,.2));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#b45309;box-shadow:0 0 5px #b45309;"></div></div></div>
+              <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(109,40,217,.6),rgba(109,40,217,.2));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#6d28d9;box-shadow:0 0 5px #6d28d9;"></div></div></div>
+            </div>
+
+            <!-- ── LAYER 3: Specialist Agents ── -->
+            <div class="card-grid-3" style="gap:.5rem;margin-bottom:.35rem;">
+
               <!-- Technical -->
-              <rect x="30" y="194" width="190" height="52" rx="8" fill="#f0fdf4" stroke="#2d6a4f" stroke-width="1.5"/>
-              <circle cx="56" cy="220" r="13" fill="#2d6a4f"/>
-              <text x="56" y="224" text-anchor="middle" font-size="11" font-weight="700" fill="white">T</text>
-              <text x="130" y="213" text-anchor="middle" font-size="10" font-weight="700" fill="#2d6a4f">Technical</text>
-              <text x="130" y="226" text-anchor="middle" font-size="8" fill="#166534">Readiness</text>
-              <text x="130" y="238" text-anchor="middle" font-size="7.5" fill="#767676">Eng · QA · Deploy · Rollback</text>
+              <div style="border:1px solid rgba(45,106,79,.5);border-radius:9px;padding:.65rem .7rem;background:rgba(45,106,79,.07);">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+                  <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);box-shadow:inset -1px -1px 4px rgba(0,0,0,.35),0 0 8px rgba(45,106,79,.3);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:.9rem;">T</div>
+                  <div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:#6ecfa0;line-height:1.1;">Technical</div>
+                    <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(110,207,160,.6);">Readiness</div>
+                  </div>
+                </div>
+                <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:rgba(255,255,255,.35);line-height:1.5;">Engineering · QA · Deployment<br>Rollback · On-call · APIs</div>
+              </div>
 
               <!-- GTM -->
-              <rect x="265" y="194" width="190" height="52" rx="8" fill="#fffbeb" stroke="#b45309" stroke-width="1.5"/>
-              <circle cx="291" cy="220" r="13" fill="#b45309"/>
-              <text x="291" y="224" text-anchor="middle" font-size="11" font-weight="700" fill="white">M</text>
-              <text x="365" y="213" text-anchor="middle" font-size="10" font-weight="700" fill="#b45309">GTM &amp; Marketing</text>
-              <text x="365" y="228" text-anchor="middle" font-size="7.5" fill="#767676">Campaigns · Press · Sales · Competitive</text>
+              <div style="border:1px solid rgba(180,83,9,.5);border-radius:9px;padding:.65rem .7rem;background:rgba(180,83,9,.07);">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+                  <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);box-shadow:inset -1px -1px 4px rgba(0,0,0,.35),0 0 8px rgba(180,83,9,.3);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:.9rem;">M</div>
+                  <div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:#f0c060;line-height:1.1;">GTM &amp; Marketing</div>
+                    <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(240,192,96,.6);">Go-to-Market</div>
+                  </div>
+                </div>
+                <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:rgba(255,255,255,.35);line-height:1.5;">Campaigns · Press · Messaging<br>Sales enablement · Competitive</div>
+              </div>
 
               <!-- Executive -->
-              <rect x="500" y="194" width="190" height="52" rx="8" fill="#f5f3ff" stroke="#6d28d9" stroke-width="1.5"/>
-              <circle cx="526" cy="220" r="13" fill="#6d28d9"/>
-              <text x="526" y="224" text-anchor="middle" font-size="11" font-weight="700" fill="white">E</text>
-              <text x="600" y="213" text-anchor="middle" font-size="10" font-weight="700" fill="#6d28d9">Executive</text>
-              <text x="600" y="226" text-anchor="middle" font-size="8" fill="#4c1d95">Briefing</text>
-              <text x="600" y="238" text-anchor="middle" font-size="7.5" fill="#767676">Status · Risks · Budget · KPIs</text>
+              <div style="border:1px solid rgba(109,40,217,.5);border-radius:9px;padding:.65rem .7rem;background:rgba(109,40,217,.07);">
+                <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+                  <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);box-shadow:inset -1px -1px 4px rgba(0,0,0,.35),0 0 8px rgba(109,40,217,.3);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:.9rem;">E</div>
+                  <div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:#b48df0;line-height:1.1;">Executive</div>
+                    <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(180,141,240,.6);">Briefing</div>
+                  </div>
+                </div>
+                <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:rgba(255,255,255,.35);line-height:1.5;">Status · Risks · Budget · KPIs<br>Milestones · Full KB access</div>
+              </div>
 
-              <!-- arrows to KB layer -->
-              <line x1="125" y1="246" x2="125" y2="276" stroke="#c8c4be" stroke-width="1.5" stroke-dasharray="3,2"/>
-              <polygon points="120,276 130,276 125,284" fill="#c8c4be"/>
-              <line x1="360" y1="246" x2="360" y2="276" stroke="#c8c4be" stroke-width="1.5" stroke-dasharray="3,2"/>
-              <polygon points="355,276 365,276 360,284" fill="#c8c4be"/>
-              <line x1="595" y1="246" x2="595" y2="276" stroke="#c8c4be" stroke-width="1.5" stroke-dasharray="3,2"/>
-              <polygon points="590,276 600,276 595,284" fill="#c8c4be"/>
+            </div>
 
-              <!-- ── Row 4: Knowledge Bases ── -->
-              <!-- KB Technical -->
-              <rect x="30" y="284" width="190" height="46" rx="6" fill="#fff" stroke="#2d6a4f" stroke-width="1" stroke-dasharray="4,3"/>
-              <text x="125" y="300" text-anchor="middle" font-size="8.5" font-weight="700" fill="#2d6a4f" letter-spacing=".5">KB_TECHNICAL</text>
-              <text x="125" y="314" text-anchor="middle" font-size="7.5" fill="#767676">Sprint · QA · APIs · Deploy · On-call</text>
-              <text x="125" y="324" text-anchor="middle" font-size="7" fill="#a8a29e">512 tok chunks · 64 tok overlap</text>
+            <!-- KB connectors -->
+            <div class="card-grid-3" style="gap:.5rem;margin-bottom:.3rem;padding:0 .5rem;">
+              <div style="display:flex;justify-content:center;"><div style="width:1px;height:16px;background:rgba(45,106,79,.3);"></div></div>
+              <div style="display:flex;justify-content:center;"><div style="width:1px;height:16px;background:rgba(180,83,9,.3);"></div></div>
+              <div style="display:flex;justify-content:center;"><div style="width:1px;height:16px;background:rgba(109,40,217,.3);"></div></div>
+            </div>
 
-              <!-- KB GTM -->
-              <rect x="265" y="284" width="190" height="46" rx="6" fill="#fff" stroke="#b45309" stroke-width="1" stroke-dasharray="4,3"/>
-              <text x="360" y="300" text-anchor="middle" font-size="8.5" font-weight="700" fill="#b45309" letter-spacing=".5">KB_GTM</text>
-              <text x="360" y="314" text-anchor="middle" font-size="7.5" fill="#767676">Channels · Messaging · Metrics · Objections</text>
-              <text x="360" y="324" text-anchor="middle" font-size="7" fill="#a8a29e">512 tok chunks · 64 tok overlap</text>
+            <!-- ── LAYER 4: Knowledge Bases ── -->
+            <div class="card-grid-3" style="gap:.5rem;margin-bottom:.5rem;">
 
-              <!-- KB Launch (executive sees all 3) -->
-              <rect x="500" y="284" width="190" height="46" rx="6" fill="#fff" stroke="#6d28d9" stroke-width="1" stroke-dasharray="4,3"/>
-              <text x="595" y="300" text-anchor="middle" font-size="8.5" font-weight="700" fill="#6d28d9" letter-spacing=".5">KB_LAUNCH + ALL KBs</text>
-              <text x="595" y="314" text-anchor="middle" font-size="7.5" fill="#767676">Roadmap · Stakeholders · Budget · Risks</text>
-              <text x="595" y="324" text-anchor="middle" font-size="7" fill="#a8a29e">Full access — 3 namespaces</text>
+              <div style="border:1px dashed rgba(45,106,79,.45);border-radius:7px;padding:.55rem .65rem;background:rgba(45,106,79,.04);">
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.06em;color:#2d6a4f;margin-bottom:.25rem;">KB_TECHNICAL</div>
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(255,255,255,.3);line-height:1.5;">Sprint · QA · APIs<br>Deploy · On-call</div>
+                <div style="margin-top:.3rem;font-family:'Inter',sans-serif;font-size:.55rem;color:rgba(255,255,255,.18);">512 tok · 64 overlap</div>
+              </div>
 
-              <!-- Pinecone label below KB row -->
-              <rect x="200" y="340" width="320" height="22" rx="4" fill="#f4f3f0" stroke="#e8e6e1" stroke-width="1"/>
-              <text x="360" y="355" text-anchor="middle" font-size="8" fill="#767676">🗄 <tspan font-weight="600" fill="#1a1a2e">Pinecone</tspan> · index: nightingale-launch · namespaces: technical / gtm / launch · text-embedding-3-small · 1536-dim</text>
+              <div style="border:1px dashed rgba(180,83,9,.45);border-radius:7px;padding:.55rem .65rem;background:rgba(180,83,9,.04);">
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.06em;color:#b45309;margin-bottom:.25rem;">KB_GTM</div>
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(255,255,255,.3);line-height:1.5;">Channels · Messaging<br>Metrics · Objections</div>
+                <div style="margin-top:.3rem;font-family:'Inter',sans-serif;font-size:.55rem;color:rgba(255,255,255,.18);">512 tok · 64 overlap</div>
+              </div>
 
-              <!-- ── Row 5: Infrastructure ── -->
-              <rect x="22" y="376" width="676" height="70" rx="8" fill="#1a1a2e"/>
-              <text x="360" y="393" text-anchor="middle" font-size="8" font-weight="700" fill="rgba(255,255,255,.45)" letter-spacing="1.5">INFRASTRUCTURE</text>
+              <div style="border:1px dashed rgba(109,40,217,.45);border-radius:7px;padding:.55rem .65rem;background:rgba(109,40,217,.04);">
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.06em;color:#8b5cf6;margin-bottom:.25rem;">KB_LAUNCH <span style="color:rgba(255,255,255,.2);font-weight:400;">+ all KBs</span></div>
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(255,255,255,.3);line-height:1.5;">Roadmap · Budget<br>Stakeholders · Risks</div>
+                <div style="margin-top:.3rem;font-family:'Inter',sans-serif;font-size:.55rem;color:rgba(255,255,255,.18);">Full access · 3 namespaces</div>
+              </div>
 
-              <!-- 4 infra chips -->
-              <rect x="36" y="400" width="150" height="32" rx="5" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-              <text x="111" y="413" text-anchor="middle" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.9)">Anthropic Claude API</text>
-              <text x="111" y="426" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,.45)">claude-sonnet-4-6</text>
+            </div>
 
-              <rect x="200" y="400" width="150" height="32" rx="5" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-              <text x="275" y="413" text-anchor="middle" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.9)">GitHub Pages</text>
-              <text x="275" y="426" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,.45)">Static · No backend · CDN</text>
+            <!-- ── Pinecone Vector Store ── -->
+            <div style="border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:.5rem .85rem;background:rgba(255,255,255,.03);margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem;">
+              <div style="display:flex;align-items:center;gap:.5rem;">
+                <span style="font-size:.9rem;">🗄</span>
+                <div>
+                  <span style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:rgba(255,255,255,.7);">Pinecone</span>
+                  <span style="font-family:'Inter',sans-serif;font-size:.58rem;color:rgba(255,255,255,.25);margin-left:.4rem;">Vector Store</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:.15rem .4rem;border-radius:3px;color:rgba(255,255,255,.4);">nightingale-launch</span>
+                <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:.15rem .4rem;border-radius:3px;color:rgba(255,255,255,.4);">text-embedding-3-small</span>
+                <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:.15rem .4rem;border-radius:3px;color:rgba(255,255,255,.4);">1536-dim · cosine</span>
+              </div>
+            </div>
 
-              <rect x="364" y="400" width="150" height="32" rx="5" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-              <text x="439" y="413" text-anchor="middle" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.9)">Web Speech API</text>
-              <text x="439" y="426" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,.45)">STT · SpeechSynthesis TTS</text>
+            <!-- ── LAYER 5: Infrastructure ── -->
+            <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:.65rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.2);text-transform:uppercase;text-align:center;margin-bottom:.5rem;">Infrastructure</div>
+              <div class="card-grid-2" style="gap:.4rem;">
+                <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:7px;padding:.45rem .6rem;">
+                  <span style="font-size:.9rem;">🤖</span>
+                  <div><div style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:600;color:rgba(255,255,255,.75);">Anthropic Claude API</div><div style="font-family:'Inter',sans-serif;font-size:.55rem;color:rgba(255,255,255,.3);">claude-sonnet-4-6 · direct browser access</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:7px;padding:.45rem .6rem;">
+                  <span style="font-size:.9rem;">📄</span>
+                  <div><div style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:600;color:rgba(255,255,255,.75);">GitHub Pages</div><div style="font-family:'Inter',sans-serif;font-size:.55rem;color:rgba(255,255,255,.3);">Static hosting · no backend · CDN cache</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:7px;padding:.45rem .6rem;">
+                  <span style="font-size:.9rem;">🎙</span>
+                  <div><div style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:600;color:rgba(255,255,255,.75);">Web Speech API</div><div style="font-family:'Inter',sans-serif;font-size:.55rem;color:rgba(255,255,255,.3);">STT input · SpeechSynthesis TTS · Daniel voice</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:7px;padding:.45rem .6rem;">
+                  <span style="font-size:.9rem;">🔑</span>
+                  <div><div style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:600;color:rgba(255,255,255,.75);">sessionStorage</div><div style="font-family:'Inter',sans-serif;font-size:.55rem;color:rgba(255,255,255,.3);">API key scoped to tab session · no server exposure</div></div>
+                </div>
+              </div>
+            </div>
 
-              <rect x="528" y="400" width="160" height="32" rx="5" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-              <text x="608" y="413" text-anchor="middle" font-size="8.5" font-weight="600" fill="rgba(255,255,255,.9)">sessionStorage</text>
-              <text x="608" y="426" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,.45)">API key · no server exposure</text>
-
-            </svg>
-          </div>
+          </div><!-- /dark container -->
         </div>
 
       </div>
