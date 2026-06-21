@@ -1067,12 +1067,20 @@ function addUserMsg(text) {
   scrollBottom();
 }
 
+const AGENT_INITIALS = { greeter: 'G', technical: 'T', gtm: 'M', executive: 'E' };
+
+function agentAvatar(agent) {
+  const color = AGENT_COLORS[agent] || '#767676';
+  const initial = AGENT_INITIALS[agent] || '?';
+  return `<div class="avatar" style="background:${color};border-color:${color};color:#fff;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;">${initial}</div>`;
+}
+
 function addBotMsg(text, agent) {
   const chat = document.getElementById('chat');
   const d = document.createElement('div');
   d.className = 'msg bot';
   d.innerHTML = `
-    <div class="avatar">🤖</div>
+    ${agentAvatar(agent)}
     <div class="bubble">
       <div class="agent-tag ${agent}">${AGENT_LABELS[agent] || agent}</div>
       <div>${esc(text)}</div>
