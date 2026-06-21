@@ -424,6 +424,67 @@
 
     <!-- Chat column -->
     <div class="chat-col">
+      <!-- Static info cards above chat -->
+      <div id="info-cards" style="padding:1.25rem 1.5rem 0;display:flex;flex-direction:column;gap:.75rem;flex-shrink:0;">
+
+        <!-- Card 1: Business Scenario -->
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;">
+            <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">01 · Business Scenario</span>
+          </div>
+          <div style="padding:.75rem 1rem;display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1.5rem;">
+            <div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:.3rem;">Project Nightingale</div>
+              <div style="font-size:.78rem;color:var(--muted);line-height:1.55;">A mid-size tech company launching <strong style="color:var(--ink)">Mobile App v3.0</strong> on April 15, 2026 — a redesigned one-tap checkout and a new loyalty program called <strong style="color:var(--ink)">Perks</strong>. The PM and TPM are flooded with questions from every stakeholder. This Command Center is their AI-powered switchboard.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;justify-content:center;">
+              <div style="font-size:.72rem;display:flex;justify-content:space-between;padding-bottom:4px;border-bottom:1px solid var(--border);">
+                <span style="color:var(--muted)">Launch date</span>
+                <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">April 15, 2026</strong>
+              </div>
+              <div style="font-size:.72rem;display:flex;justify-content:space-between;padding-bottom:4px;border-bottom:1px solid var(--border);">
+                <span style="color:var(--muted)">Sprint</span>
+                <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">9 of 11</strong>
+              </div>
+              <div style="font-size:.72rem;display:flex;justify-content:space-between;padding-bottom:4px;border-bottom:1px solid var(--border);">
+                <span style="color:var(--muted)">Status</span>
+                <strong style="color:#2d6a4f;font-family:'Cormorant Garamond',serif;">On Track ⚠ App Store</strong>
+              </div>
+              <div style="font-size:.72rem;display:flex;justify-content:space-between;">
+                <span style="color:var(--muted)">Budget</span>
+                <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">$220k · $35k remaining</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Technical Architecture -->
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+            <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">02 · Technical Architecture</span>
+          </div>
+          <div style="padding:.75rem 1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;">
+            <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Model</div>
+              <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">Claude<br><strong style="color:var(--ink)">sonnet-4-6</strong><br>via Anthropic API</div>
+            </div>
+            <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Orchestration</div>
+              <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">4 agents with scoped system prompts. <code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">ROUTE:</code> signals switch agents mid-conversation.</div>
+            </div>
+            <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">KB Scoping</div>
+              <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">3 KB files embedded in JS. Each agent only receives files relevant to its domain.</div>
+            </div>
+            <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Voice I/O</div>
+              <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">STT: Web Speech API. TTS: SpeechSynthesis — Daniel voice, rate 0.92, pitch 0.88.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
       <div id="chat"></div>
       <footer>
         <div class="footer-inner">
