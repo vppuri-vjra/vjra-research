@@ -655,9 +655,8 @@
     <!-- Chat column -->
     <div class="chat-col">
       <div id="chat">
-      </div>
 
-      <!-- Rotating info panel — injected into #chat after greeter via JS -->
+      <!-- Rotating info panel — pre-placed in #chat, shown & moved after greeter via JS -->
       <div id="info-carousel">
         <div class="carousel-header">
           <div class="carousel-kicker" id="carouselTitle">How Agents Transfer</div>
@@ -713,7 +712,8 @@
             <tr><td><span class="dot" style="background:#6d28d9"></span>Executive</td><td>High-level status, risks, budget, milestones — full KB access</td></tr>
           </table>
         </div>
-      </div>
+      </div><!-- #info-carousel -->
+      </div><!-- #chat -->
 
       <footer>
         <div class="footer-inner">
@@ -950,9 +950,10 @@ function greet() {
   const text = "Hi! Welcome to the Project Nightingale Launch Command Center. I can help with technical readiness and engineering status, marketing and go-to-market updates, or a high-level executive briefing. What are you looking for today?";
   addBotMsg(text, 'greeter');
   speak(text);
-  // Inject carousel into chat right after greeter bubble
+  // Move carousel to end of #chat (after greeter bubble) and show it
+  const chat = document.getElementById('chat');
   const carousel = document.getElementById('info-carousel');
-  document.getElementById('chat').appendChild(carousel);
+  chat.appendChild(carousel);
   carousel.style.display = 'block';
 }
 
