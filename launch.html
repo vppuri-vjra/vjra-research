@@ -540,57 +540,6 @@
     <!-- Right Sidebar -->
     <aside class="sidebar">
 
-      <!-- Business Scenario -->
-      <div class="sidebar-section">
-        <div class="sidebar-kicker">Business Scenario</div>
-        <p style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;color:var(--ink);line-height:1.5;margin-bottom:.6rem;">Project Nightingale</p>
-        <p style="font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:.55rem;">A mid-size tech company is launching <strong style="color:var(--ink)">Mobile App v3.0</strong> on April 15, 2026 — a redesigned one-tap checkout and a new loyalty program called <strong style="color:var(--ink)">Perks</strong>.</p>
-        <p style="font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:.55rem;">The PM (Sam Torres) and TPM (Rachel Nguyen) are flooded with questions from every team — engineering wants to know rollback plans, marketing wants press embargo details, the VP wants a 30-second status read.</p>
-        <p style="font-size:.78rem;color:var(--muted);line-height:1.55;">This Command Center replaces that human switchboard. Stakeholders ask anything — the right specialist answers instantly.</p>
-        <div style="margin-top:.75rem;display:flex;flex-direction:column;gap:4px;">
-          <div style="font-size:.72rem;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:3px;">
-            <span style="color:var(--muted)">Launch date</span>
-            <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">April 15, 2026</strong>
-          </div>
-          <div style="font-size:.72rem;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:3px;">
-            <span style="color:var(--muted)">Current sprint</span>
-            <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">9 of 11</strong>
-          </div>
-          <div style="font-size:.72rem;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:3px;">
-            <span style="color:var(--muted)">Status</span>
-            <strong style="color:#2d6a4f;font-family:'Cormorant Garamond',serif;">On Track ⚠ App Store</strong>
-          </div>
-          <div style="font-size:.72rem;display:flex;justify-content:space-between;">
-            <span style="color:var(--muted)">Budget</span>
-            <strong style="color:var(--ink);font-family:'Cormorant Garamond',serif;">$220k total · $35k left</strong>
-          </div>
-        </div>
-      </div>
-
-      <!-- Technical Architecture -->
-      <div class="sidebar-section">
-        <div class="sidebar-kicker">Technical Architecture</div>
-        <p style="font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:.7rem;">Built entirely with <strong style="color:var(--ink)">Claude (claude-sonnet-4-6)</strong> via the Anthropic API. No ElevenLabs. No backend server. Runs entirely in this browser.</p>
-        <div style="font-size:.75rem;line-height:1.5;">
-          <div style="margin-bottom:.5rem;">
-            <div style="font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink);margin-bottom:2px;">Multi-Agent Orchestration</div>
-            <div style="color:var(--muted);">Each agent has its own system prompt + scoped KB. The router detects <code style="font-size:.68rem;background:var(--surface);padding:1px 4px;border-radius:3px;">ROUTE: agent</code> signals in Claude's response and transparently switches agents mid-conversation.</div>
-          </div>
-          <div style="margin-bottom:.5rem;">
-            <div style="font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink);margin-bottom:2px;">Knowledge Base Scoping</div>
-            <div style="color:var(--muted);">3 KB files embedded in JS. Each agent only receives the files relevant to its domain — enforcing information boundaries without code-level access control.</div>
-          </div>
-          <div style="margin-bottom:.5rem;">
-            <div style="font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink);margin-bottom:2px;">Voice I/O</div>
-            <div style="color:var(--muted);">STT via <strong style="color:var(--ink)">Web Speech API</strong> (browser mic). TTS via <strong style="color:var(--ink)">SpeechSynthesis</strong> — Daniel/Inter voice, rate 0.92, pitch 0.88.</div>
-          </div>
-          <div>
-            <div style="font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink);margin-bottom:2px;">Conversation Memory</div>
-            <div style="color:var(--muted);">Full message history passed to Claude on every turn — agents remember what was said earlier in the session across routing hops.</div>
-          </div>
-        </div>
-      </div>
-
       <!-- Routing Logic -->
       <div class="sidebar-section">
         <div class="sidebar-kicker">How Agents Transfer</div>
