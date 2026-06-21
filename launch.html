@@ -399,6 +399,61 @@
     gap: .6rem;
   }
 
+  /* ── Agent orbit diagram ── */
+  .agent-orbit-wrap {
+    padding: .9rem 1.5rem .75rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .orbit-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .orbit-node {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .orbit-ball {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: 'Cormorant Garamond', serif;
+    font-size: .95rem; font-weight: 700;
+    box-shadow: inset -2px -2px 5px rgba(0,0,0,.35), inset 1px 1px 4px rgba(255,255,255,.3), 0 2px 8px rgba(0,0,0,.2);
+    text-shadow: 0 1px 2px rgba(0,0,0,.4);
+    animation: ballFloat 2.4s ease-in-out infinite;
+  }
+  @keyframes ballFloat {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+  }
+  .orbit-person {
+    font-size: 1.6rem; line-height: 1;
+    animation: ballFloat 2.4s ease-in-out infinite;
+  }
+  .orbit-wave {
+    font-size: 1.4rem; color: var(--accent);
+    animation: waveAnim 1.5s ease-in-out infinite;
+    letter-spacing: -2px;
+  }
+  @keyframes waveAnim {
+    0%,100% { opacity: .5; transform: scaleX(1); }
+    50%      { opacity: 1; transform: scaleX(1.15); }
+  }
+  .orbit-label {
+    font-size: .6rem; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .07em;
+  }
+  .orbit-arrow {
+    font-size: 1.1rem; color: var(--border); margin-top: -12px;
+  }
+  .orbit-caption {
+    text-align: center; font-size: .72rem;
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    color: var(--muted); margin-top: .6rem;
+  }
+
   /* ── Greeter info sections ── */
   .greeter-info {
     display: flex;
@@ -658,6 +713,49 @@
 
       <!-- Static info sections — inside chat, greeter prepended before these via JS -->
       <div class="greeter-info" id="greeter-info">
+
+        <!-- Agent orbit diagram -->
+        <div class="agent-orbit-wrap">
+          <div class="orbit-row">
+            <!-- Person -->
+            <div class="orbit-node">
+              <div class="orbit-person">🧑</div>
+              <div class="orbit-label">You</div>
+            </div>
+            <span class="orbit-arrow">›</span>
+            <!-- Greeter ball -->
+            <div class="orbit-node">
+              <div class="orbit-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);animation-delay:0s">G</div>
+              <div class="orbit-label">Greeter</div>
+            </div>
+            <span class="orbit-arrow">›</span>
+            <!-- Technical ball -->
+            <div class="orbit-node">
+              <div class="orbit-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);animation-delay:.3s">T</div>
+              <div class="orbit-label">Technical</div>
+            </div>
+            <span class="orbit-arrow">›</span>
+            <!-- GTM ball -->
+            <div class="orbit-node">
+              <div class="orbit-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);animation-delay:.6s">M</div>
+              <div class="orbit-label">GTM</div>
+            </div>
+            <span class="orbit-arrow">›</span>
+            <!-- Executive ball -->
+            <div class="orbit-node">
+              <div class="orbit-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);animation-delay:.9s">E</div>
+              <div class="orbit-label">Executive</div>
+            </div>
+            <span class="orbit-arrow">›</span>
+            <!-- Wave -->
+            <div class="orbit-node">
+              <div class="orbit-wave">～</div>
+              <div class="orbit-label">Response</div>
+            </div>
+          </div>
+          <div class="orbit-caption">Ask anything — the right specialist responds automatically</div>
+        </div>
+
         <div class="info-section">
           <div class="info-section-head">How Agents Transfer</div>
           <div class="info-section-body">
