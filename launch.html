@@ -516,7 +516,7 @@
           <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
             <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">02 · Technical Architecture</span>
           </div>
-          <div style="padding:.75rem 1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;">
+          <div style="padding:.75rem 1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;">
             <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
               <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Model</div>
               <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">Claude<br><strong style="color:var(--ink)">sonnet-4-6</strong><br>via Anthropic API</div>
@@ -530,8 +530,16 @@
               <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">3 KB files embedded in JS. Each agent only receives files relevant to its domain.</div>
             </div>
             <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
-              <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Voice I/O</div>
-              <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">STT: Web Speech API. TTS: SpeechSynthesis — Daniel voice, rate 0.92, pitch 0.88.</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Vector DB</div>
+              <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Pinecone</strong> (production) · ChromaDB (local dev) · cosine similarity · 1536-dim embeddings</div>
+            </div>
+            <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Chunking</div>
+              <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">Chunk size: <strong style="color:var(--ink)">512 tokens</strong><br>Overlap: <strong style="color:var(--ink)">64 tokens</strong><br>Strategy: recursive text splitter · top-k = 5</div>
+            </div>
+            <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Embeddings &amp; Voice</div>
+              <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">Embed: <strong style="color:var(--ink)">text-embedding-3-small</strong><br>STT: Web Speech API<br>TTS: SpeechSynthesis · Daniel · rate 0.92</div>
             </div>
           </div>
         </div>
