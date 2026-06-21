@@ -399,17 +399,26 @@
     gap: .6rem;
   }
 
-  /* ── Carousel ── */
+  /* ── Info Carousel (below greeter) ── */
+  #info-carousel {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: .75rem 1.5rem;
+    background: var(--surface);
+    flex-shrink: 0;
+  }
   .carousel-header {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: .7rem;
-    padding-bottom: .4rem;
-    border-bottom: 2px solid var(--accent);
+    margin-bottom: .6rem;
   }
-  .carousel-header .sidebar-kicker { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+  .carousel-kicker {
+    font-size: .63rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--accent);
+  }
   .carousel-dots { display: flex; gap: 5px; align-items: center; }
   .cdot {
-    width: 7px; height: 7px; border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     background: var(--border); cursor: pointer;
     transition: background .2s;
   }
@@ -646,6 +655,65 @@
     <div class="chat-col">
       <div id="chat">
       </div>
+
+      <!-- Rotating info panel — sits below greeter, above input -->
+      <div id="info-carousel">
+        <div class="carousel-header">
+          <div class="carousel-kicker" id="carouselTitle">How Agents Transfer</div>
+          <div class="carousel-dots">
+            <span class="cdot active" onclick="goSlide(0)"></span>
+            <span class="cdot" onclick="goSlide(1)"></span>
+            <span class="cdot" onclick="goSlide(2)"></span>
+          </div>
+        </div>
+
+        <!-- Slide 0: How Agents Transfer -->
+        <div class="carousel-slide active" id="slide-0">
+          <div class="routing-diagram">
+            <div class="route-row">
+              <div class="route-from"><span class="route-dot" style="background:#767676"></span>Greeter</div>
+              <span class="route-arrow">→</span>
+              <div class="route-targets">Routes to <b>Technical</b>, <b>GTM</b>, or <b>Executive</b> based on your first question</div>
+            </div>
+            <div class="route-row">
+              <div class="route-from"><span class="route-dot" style="background:#2d6a4f"></span>Technical</div>
+              <span class="route-arrow">→</span>
+              <div class="route-targets">Transfers to <b>GTM</b> if you ask about marketing or press. Transfers to <b>Executive</b> for a summary or budget.</div>
+            </div>
+            <div class="route-row">
+              <div class="route-from"><span class="route-dot" style="background:#b45309"></span>GTM</div>
+              <span class="route-arrow">→</span>
+              <div class="route-targets">Transfers to <b>Technical</b> for bugs or deployment. Transfers to <b>Executive</b> for a status overview.</div>
+            </div>
+            <div class="route-row">
+              <div class="route-from"><span class="route-dot" style="background:#6d28d9"></span>Executive</div>
+              <span class="route-arrow">→</span>
+              <div class="route-targets">Transfers to <b>Technical</b> or <b>GTM</b> if you drill into specifics.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 1: Cross-routing -->
+        <div class="carousel-slide" id="slide-1">
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.7;">
+            <p style="margin-bottom:.5rem;"><strong style="color:var(--ink);">Any specialist can hand off mid-conversation</strong> — routing is transparent to you.</p>
+            <p style="margin-bottom:.5rem;">Say <em>"now tell me about marketing"</em> while in Technical and it switches automatically — no restart needed.</p>
+            <p style="margin-bottom:.5rem;">The Greeter only runs once. After the first route, specialists cross-route directly between themselves.</p>
+            <p>Up to <strong style="color:var(--ink);">3 hops</strong> per message before a clarification prompt.</p>
+          </div>
+        </div>
+
+        <!-- Slide 2: Agents & Roles -->
+        <div class="carousel-slide" id="slide-2">
+          <table class="agent-table">
+            <tr><td><span class="dot" style="background:#767676"></span>Greeter</td><td>Welcomes you, detects intent, routes to the right specialist</td></tr>
+            <tr><td><span class="dot" style="background:#2d6a4f"></span>Technical</td><td>Sprint status, QA, bugs, deployment, rollback, on-call, architecture</td></tr>
+            <tr><td><span class="dot" style="background:#b45309"></span>GTM</td><td>Campaigns, press, messaging, competitive, sales enablement</td></tr>
+            <tr><td><span class="dot" style="background:#6d28d9"></span>Executive</td><td>High-level status, risks, budget, milestones — full KB access</td></tr>
+          </table>
+        </div>
+      </div>
+
       <footer>
         <div class="footer-inner">
           <div class="input-row">
@@ -666,76 +734,6 @@
 
     <!-- Right Sidebar -->
     <aside class="sidebar">
-
-      <!-- Rotating info panel -->
-      <div class="sidebar-section">
-        <div class="carousel-header">
-          <div class="sidebar-kicker" id="carouselTitle">How Agents Transfer</div>
-          <div class="carousel-dots">
-            <span class="cdot active" onclick="goSlide(0)"></span>
-            <span class="cdot" onclick="goSlide(1)"></span>
-            <span class="cdot" onclick="goSlide(2)"></span>
-          </div>
-        </div>
-
-        <!-- Slide 0: How Agents Transfer -->
-        <div class="carousel-slide active" id="slide-0">
-          <div class="routing-diagram">
-            <div class="route-row">
-              <div class="route-from"><span class="route-dot" style="background:#767676"></span>Greeter</div>
-              <span class="route-arrow">→</span>
-              <div class="route-targets">Routes to <b>Technical</b>, <b>GTM</b>, or <b>Executive</b> based on your first question</div>
-            </div>
-            <div class="route-row">
-              <div class="route-from"><span class="route-dot" style="background:#2d6a4f"></span>Technical</div>
-              <span class="route-arrow">→</span>
-              <div class="route-targets">Transfers to <b>GTM</b> if you ask about marketing or press.<br>Transfers to <b>Executive</b> if you ask for a summary or budget.</div>
-            </div>
-            <div class="route-row">
-              <div class="route-from"><span class="route-dot" style="background:#b45309"></span>GTM</div>
-              <span class="route-arrow">→</span>
-              <div class="route-targets">Transfers to <b>Technical</b> if you ask about bugs or deployment.<br>Transfers to <b>Executive</b> if you ask for a status overview.</div>
-            </div>
-            <div class="route-row">
-              <div class="route-from"><span class="route-dot" style="background:#6d28d9"></span>Executive</div>
-              <span class="route-arrow">→</span>
-              <div class="route-targets">Transfers to <b>Technical</b> or <b>GTM</b> if you drill into specifics.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 1: Cross-routing is seamless -->
-        <div class="carousel-slide" id="slide-1">
-          <div class="cross-note" style="border:none;padding:0;margin:0;font-size:.78rem;line-height:1.6;">
-            <p style="margin-bottom:.6rem;"><b style="color:var(--ink);">Any specialist can hand off mid-conversation</b> — routing is transparent to the user.</p>
-            <p style="margin-bottom:.6rem;">Say <i>"now tell me about marketing"</i> while talking to Technical and it transfers automatically — no restart needed.</p>
-            <p style="margin-bottom:.6rem;">The Greeter only runs once. After the first routing, specialists can cross-route directly between themselves.</p>
-            <p>Up to <b style="color:var(--ink);">3 hops</b> per message before falling back with a clarification prompt.</p>
-          </div>
-        </div>
-
-        <!-- Slide 2: Agents & Roles -->
-        <div class="carousel-slide" id="slide-2">
-          <table class="agent-table">
-            <tr>
-              <td><span class="dot" style="background:#767676"></span>Greeter</td>
-              <td>Welcomes you, detects intent, routes to the right specialist</td>
-            </tr>
-            <tr>
-              <td><span class="dot" style="background:#2d6a4f"></span>Technical</td>
-              <td>Sprint status, QA, bugs, deployment, rollback, on-call, architecture</td>
-            </tr>
-            <tr>
-              <td><span class="dot" style="background:#b45309"></span>GTM</td>
-              <td>Campaigns, press, messaging, competitive, sales enablement</td>
-            </tr>
-            <tr>
-              <td><span class="dot" style="background:#6d28d9"></span>Executive</td>
-              <td>High-level status, risks, budget, milestones — full KB access</td>
-            </tr>
-          </table>
-        </div>
-      </div>
 
       <!-- Sample Questions -->
       <div class="sidebar-section">
@@ -905,7 +903,7 @@ function goSlide(n) {
 
 function resetCarouselTimer() {
   clearInterval(carouselTimer);
-  carouselTimer = setInterval(() => goSlide(currentSlide + 1), 5000);
+  carouselTimer = setInterval(() => goSlide(currentSlide + 1), 10000);
 }
 
 // Auto-start carousel when app launches
