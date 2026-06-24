@@ -1184,7 +1184,7 @@
         </div>
         <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
           <input type="email" id="recipientEmail" placeholder="recipient@email.com" style="flex:1;min-width:200px;padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;font-family:'Inter',sans-serif;font-size:.75rem;outline:none;background:#fff;" />
-          <button id="sendBtn" onclick="sendEmail()" disabled style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;background:#2d6a4f;color:#fff;border:none;padding:.45rem 1rem;border-radius:6px;cursor:not-allowed;white-space:nowrap;opacity:.4;">Send via Gmail (with report)</button>
+          <button id="emailSendBtn" onclick="sendEmail()" disabled style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;background:#2d6a4f;color:#fff;border:none;padding:.45rem 1rem;border-radius:6px;cursor:not-allowed;white-space:nowrap;opacity:.4;">Send via Gmail (with report)</button>
         </div>
       </div>
     </div>
@@ -1390,7 +1390,7 @@ let isListening = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   const cb = document.getElementById('approveCheck');
-  const btn = document.getElementById('sendBtn');
+  const btn = document.getElementById('emailSendBtn');
   if (cb && btn) {
     cb.addEventListener('change', () => {
       btn.disabled = !cb.checked;
