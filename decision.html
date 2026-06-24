@@ -1490,10 +1490,15 @@ async function send() {
         return;
       }
 
-      if (route && route !== currentAgent) {
+      if (route && route !== currentAgent && clean.length < 80) {
         currentAgent = route;
         setAgent(currentAgent);
         continue;
+      }
+
+      if (route && route !== currentAgent) {
+        currentAgent = route;
+        setAgent(currentAgent);
       }
 
       thinking.remove();
@@ -1505,7 +1510,13 @@ async function send() {
     }
 
     thinking.remove();
-    addBotMsg("I'm having trouble routing your question — could you rephrase it?", currentAgent);
+    addBotMsg("Let me try answering that directly.", currentAgent);
+    const fallback = await callClaude(currentAgent, text);
+    const fallbackClean = fallback.replace(ROUTE_RE, '').trim();
+    addBotMsg(fallbackClean, currentAgent);
+    speak(fallbackClean);
+    history.push({ role: 'user', content: text });
+    history.push({ role: 'assistant', content: fallbackClean });
   } catch(e) {
     thinking.remove();
     addBotMsg(`Error: ${e.message}`, 'greeter');
