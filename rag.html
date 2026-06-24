@@ -868,6 +868,24 @@
       </div>
     </div>
 
+    <!-- Send after review -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:.75rem;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Review &amp; Send</span>
+      </div>
+      <div style="padding:.75rem 1rem;">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.65rem;">
+          <input type="checkbox" id="approveCheck" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;"/>
+          <label for="approveCheck" style="font-family:'Inter',sans-serif;font-size:.75rem;color:var(--ink);cursor:pointer;">I have reviewed this email and approve it for sending</label>
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+          <input type="email" id="recipientEmail" placeholder="recipient@company.com" style="flex:1;min-width:200px;padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;font-family:'Inter',sans-serif;font-size:.75rem;outline:none;background:#fff;" />
+          <button id="sendBtn" onclick="sendEmail()" disabled style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;background:#ccc;color:#fff;border:none;padding:.45rem 1rem;border-radius:6px;cursor:not-allowed;white-space:nowrap;">Send Email</button>
+        </div>
+        <div id="sendStatus" style="font-family:'Inter',sans-serif;font-size:.65rem;color:var(--muted);margin-top:.4rem;"></div>
+      </div>
+    </div>
+
   </div><!-- #tab-email -->
 
 </div><!-- #app -->
@@ -1066,6 +1084,29 @@ let apiKey = '';
 let currentAgent = 'greeter';
 let history = [];
 let isListening = false;
+
+// ── Review & Send ──
+document.getElementById('approveCheck').addEventListener('change', function() {
+  const btn = document.getElementById('sendBtn');
+  if (this.checked) {
+    btn.disabled = false;
+    btn.style.background = 'var(--accent)';
+    btn.style.cursor = 'pointer';
+  } else {
+    btn.disabled = true;
+    btn.style.background = '#ccc';
+    btn.style.cursor = 'not-allowed';
+  }
+});
+
+function sendEmail() {
+  const to = document.getElementById('recipientEmail').value.trim();
+  if (!to) { document.getElementById('sendStatus').textContent = 'Please enter a recipient email.'; return; }
+  const subj = encodeURIComponent(document.getElementById('email-subject').textContent);
+  const body = encodeURIComponent(document.getElementById('email-content').innerText);
+  window.open(`mailto:${to}?subject=${subj}&body=${body}`, '_blank');
+  document.getElementById('sendStatus').innerHTML = '✓ Email client opened for <strong>' + esc(to) + '</strong>. Review and hit Send in your email app.';
+}
 let recognition = null;
 const ROUTE_RE = /ROUTE:\s*(finance|market|executive|end)/i;
 
