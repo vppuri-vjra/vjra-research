@@ -1655,7 +1655,13 @@ function toggleVoice() {
   if (!voiceActivated) {
     voiceActivated = true;
     const greeterText = "Welcome to the Multi-Agent Decision Pipeline. I can help you understand the pipeline methodology, analyze the decision, critique the recommendation, or get the executive summary. What would you like to explore?";
-    speak(greeterText);
+    const utt = new SpeechSynthesisUtterance(greeterText);
+    utt.rate = 0.92; utt.pitch = 0.88; utt.volume = 1.0;
+    const v = getNarratorVoice();
+    if (v) utt.voice = v;
+    utt.onend = () => startListening();
+    window.speechSynthesis.speak(utt);
+    return;
   }
   isListening ? stopListening() : startListening();
 }
@@ -1676,7 +1682,7 @@ function startListening() {
     const t = Array.from(e.results).map(r => r[0].transcript).join('');
     document.getElementById('msg').value = t;
     autoResize(document.getElementById('msg'));
-    if (e.results[0].isFinal) stopListening();
+    if (e.results[0].isFinal) { stopListening(); send(); }
   };
   recognition.onerror  = () => stopListening();
   recognition.onend    = () => stopListening();
