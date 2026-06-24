@@ -1116,6 +1116,62 @@
       </div>
     </div>
 
+    <!-- Attached Report -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:.75rem;">
+      <div onclick="document.getElementById('reportBody').style.display=document.getElementById('reportBody').style.display==='none'?'block':'none';this.querySelector('.toggle-arrow').textContent=document.getElementById('reportBody').style.display==='none'?'▶':'▼'" style="background:var(--surface);padding:.55rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">📎 Attached — Monthly Financial Standing Report (June 2026)</span>
+        <span class="toggle-arrow" style="font-size:.7rem;color:var(--muted);">▶</span>
+      </div>
+      <div id="reportBody" style="display:none;padding:1rem 1.25rem;font-size:.78rem;color:#2b2b2b;line-height:1.75;max-height:60vh;overflow-y:auto;">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:var(--ink);margin-bottom:.5rem;font-weight:400;">Executive Summary</h3>
+        <p>In June 2026, NovaCart remains a strong player in the consumer electronics market, benefiting from its diversified product portfolio. Despite challenges in the broader market, such as rising memory prices and a potential slowdown in smartphone demand, NovaCart's strategic focus on subscription services and smart home devices has positioned it well for sustained growth.</p>
+
+        <h3 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ink);margin:1rem 0 .4rem;font-weight:400;">Internal Performance Snapshot</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem;">
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem .65rem;">
+            <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;color:var(--ink);margin-bottom:.15rem;">NovaPhone X1</div>
+            <div style="font-size:.7rem;color:var(--muted);line-height:1.5;">Revenue: $1.62B (FY2024) · Margin: 38%<br>~1.9M units · Cautious outlook</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem .65rem;">
+            <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;color:var(--ink);margin-bottom:.15rem;">NovaHome SmartHub Pro</div>
+            <div style="font-size:.7rem;color:var(--muted);line-height:1.5;">$320.3M aggregate (3Y) · 9,618 units/wk<br>Stable · Memory price pressure</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem .65rem;">
+            <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;color:var(--ink);margin-bottom:.15rem;">NovaFit Active Watch</div>
+            <div style="font-size:.7rem;color:var(--muted);line-height:1.5;">$444.5M aggregate (3Y) · 9,581 units/wk<br>Consistent · Health market tailwind</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem .65rem;">
+            <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;color:var(--ink);margin-bottom:.15rem;">NovaCart Essentials</div>
+            <div style="font-size:.7rem;color:var(--muted);line-height:1.5;">$19.2M aggregate (3Y) · 9,731 units/wk<br>4.1% churn · Strong recurring revenue</div>
+          </div>
+        </div>
+
+        <h3 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ink);margin:1rem 0 .4rem;font-weight:400;">External Market Context</h3>
+        <ul style="padding-left:1.2rem;color:var(--muted);font-size:.75rem;line-height:1.7;">
+          <li>Semiconductor market projected at <strong style="color:var(--ink);">$975B</strong> in 2026, driven by AI infrastructure</li>
+          <li>Memory prices surged <strong style="color:var(--ink);">~4×</strong>, further 50% increases expected Q1–Q2 2026</li>
+          <li>Smartphone and PC sales expected to <strong style="color:var(--ink);">decline</strong> due to memory costs</li>
+          <li>AI chip demand strong but concentrated risk — ROI uncertainty</li>
+        </ul>
+
+        <h3 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ink);margin:1rem 0 .4rem;font-weight:400;">Correlated Insights & Risks</h3>
+        <div style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.5rem;">
+          <div style="font-size:.72rem;padding:.35rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Memory price spikes could squeeze NovaHome SmartHub Pro margins</div>
+          <div style="font-size:.72rem;padding:.35rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Smartphone demand softness threatens NovaPhone X1 revenue</div>
+          <div style="font-size:.72rem;padding:.35rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">AI chip demand aligns with NovaCart's AI-driven product focus</div>
+        </div>
+
+        <h3 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ink);margin:1rem 0 .4rem;font-weight:400;">Recommendations</h3>
+        <ol style="padding-left:1.2rem;color:var(--muted);font-size:.75rem;line-height:1.8;">
+          <li><strong style="color:var(--ink);">Enhance cost management</strong> for memory-dependent products (SmartHub Pro)</li>
+          <li><strong style="color:var(--ink);">Diversify revenue</strong> via subscription expansion to offset smartphone decline</li>
+          <li><strong style="color:var(--ink);">Strategic marketing</strong> to sustain NovaPhone X1 market share</li>
+          <li><strong style="color:var(--ink);">Invest in AI & smart home</strong> innovations to capture emerging opportunities</li>
+          <li><strong style="color:var(--ink);">Monitor market dynamics</strong> — semiconductor and memory supply chain shifts</li>
+        </ol>
+      </div>
+    </div>
+
     <!-- Send after review -->
     <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:.75rem;">
       <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
