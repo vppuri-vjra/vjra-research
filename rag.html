@@ -1078,11 +1078,7 @@
     <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;flex:1;display:flex;flex-direction:column;">
       <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
         <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Email Preview — June 2026</span>
-        <div style="display:flex;align-items:center;gap:.4rem;">
-          <button onclick="regenerateEmail()" style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:600;background:var(--accent);color:#fff;border:none;padding:.35rem .6rem;border-radius:5px;cursor:pointer;white-space:nowrap;">Regenerate with Claude</button>
-          <input type="email" id="recipientEmail" placeholder="recipient@email.com" style="width:170px;padding:.35rem .5rem;border:1px solid var(--border);border-radius:5px;font-family:'Inter',sans-serif;font-size:.6rem;outline:none;background:#fff;" />
-          <button onclick="sendEmail()" style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:600;background:#2d6a4f;color:#fff;border:none;padding:.35rem .6rem;border-radius:5px;cursor:pointer;white-space:nowrap;">Send via Gmail</button>
-        </div>
+        <button onclick="regenerateEmail()" style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:600;background:var(--accent);color:#fff;border:none;padding:.3rem .7rem;border-radius:5px;cursor:pointer;">Regenerate with Claude</button>
       </div>
       <div id="email-body" style="padding:1rem 1.25rem;flex:1;overflow-y:auto;">
 
@@ -1173,6 +1169,23 @@
           <li><strong style="color:var(--ink);">Invest in AI & smart home</strong> innovations to capture emerging opportunities</li>
           <li><strong style="color:var(--ink);">Monitor market dynamics</strong> — semiconductor and memory supply chain shifts</li>
         </ol>
+      </div>
+    </div>
+
+    <!-- Review & Send -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:.75rem;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Review &amp; Send</span>
+      </div>
+      <div style="padding:.75rem 1rem;">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.65rem;">
+          <input type="checkbox" id="approveCheck" onchange="document.getElementById('sendBtn').disabled=!this.checked;document.getElementById('sendBtn').style.opacity=this.checked?'1':'.4';document.getElementById('sendBtn').style.cursor=this.checked?'pointer':'not-allowed'" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;"/>
+          <label for="approveCheck" style="font-family:'Inter',sans-serif;font-size:.75rem;color:var(--ink);cursor:pointer;">I have reviewed this email and approve it for sending</label>
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+          <input type="email" id="recipientEmail" placeholder="recipient@email.com" style="flex:1;min-width:200px;padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;font-family:'Inter',sans-serif;font-size:.75rem;outline:none;background:#fff;" />
+          <button id="sendBtn" onclick="sendEmail()" disabled style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;background:#2d6a4f;color:#fff;border:none;padding:.45rem 1rem;border-radius:6px;cursor:not-allowed;white-space:nowrap;opacity:.4;">Send via Gmail (with report)</button>
+        </div>
       </div>
     </div>
 
