@@ -119,6 +119,15 @@
   .card-model {
     font-size: .58rem; color: var(--muted);
   }
+  .card-repo {
+    font-family: 'Inter', sans-serif;
+    font-size: .55rem; color: #a8a29e;
+    display: block; margin-top: .25rem;
+  }
+  .card-repo code {
+    font-size: .55rem; background: var(--surface); padding: 1px 4px;
+    border-radius: 3px; color: var(--muted);
+  }
 
   /* Research section */
   .research-card {
@@ -188,7 +197,7 @@
       </div>
       <div class="card-footer">
         <span class="card-cta">Launch Command Center &rarr;</span>
-        <span class="card-model">claude-sonnet-4-6</span>
+        <div><span class="card-model">claude-sonnet-4-6</span><span class="card-repo"><code>vppuri-vjra/product-launch-command-center</code></span></div>
       </div>
     </a>
 
@@ -214,7 +223,7 @@
       </div>
       <div class="card-footer">
         <span class="card-cta">Knowledge Agent &rarr;</span>
-        <span class="card-model">claude-sonnet-4-6</span>
+        <div><span class="card-model">claude-sonnet-4-6</span><span class="card-repo"><code>vppuri-vjra/rag-knowledge-agent</code></span></div>
       </div>
     </a>
 
@@ -241,7 +250,7 @@
       </div>
       <div class="card-footer">
         <span class="card-cta">Decision Agent &rarr;</span>
-        <span class="card-model">claude-sonnet-4-5</span>
+        <div><span class="card-model">claude-sonnet-4-5</span><span class="card-repo"><code>vppuri-vjra/vp-multiagent-decision-pipeline</code></span></div>
       </div>
     </a>
 
