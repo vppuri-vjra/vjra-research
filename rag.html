@@ -1387,6 +1387,7 @@ let apiKey = '';
 let currentAgent = 'greeter';
 let history = [];
 let isListening = false;
+let voiceActivated = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   const cb = document.getElementById('approveCheck');
@@ -1718,6 +1719,11 @@ function esc(s) {
 
 // ── Voice input (Web Speech API) ─────────────────────────────────
 function toggleVoice() {
+  if (!voiceActivated) {
+    voiceActivated = true;
+    const greeterText = "Welcome to the NovaCart RAG Knowledge Agent. I can help with internal product finance data, external market intelligence, or a synthesized executive briefing. What would you like to know?";
+    speak(greeterText);
+  }
   isListening ? stopListening() : startListening();
 }
 

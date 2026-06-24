@@ -1334,6 +1334,7 @@ let apiKey = '';
 let currentAgent = 'greeter';
 let history = [];
 let isListening = false;
+let voiceActivated = false;
 let recognition = null;
 const ROUTE_RE = /ROUTE:\s*(planner|analyst|critic|executive|end)/i;
 
@@ -1651,6 +1652,11 @@ function esc(s) {
 
 // ── Voice input (Web Speech API) ─────────────────────────────────
 function toggleVoice() {
+  if (!voiceActivated) {
+    voiceActivated = true;
+    const greeterText = "Welcome to the Multi-Agent Decision Pipeline. I can help you understand the pipeline methodology, analyze the decision, critique the recommendation, or get the executive summary. What would you like to explore?";
+    speak(greeterText);
+  }
   isListening ? stopListening() : startListening();
 }
 

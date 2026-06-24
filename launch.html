@@ -1374,6 +1374,7 @@ let apiKey = '';
 let currentAgent = 'greeter';
 let history = [];
 let isListening = false;
+let voiceActivated = false;
 let recognition = null;
 const ROUTE_RE = /ROUTE:\s*(technical|gtm|executive|end)/i;
 
@@ -1681,6 +1682,11 @@ function esc(s) {
 
 // ── Voice input (Web Speech API) ─────────────────────────────────
 function toggleVoice() {
+  if (!voiceActivated) {
+    voiceActivated = true;
+    const greeterText = "Hi! Welcome to the Project Nightingale Launch Command Center. I can help with technical readiness, marketing updates, or an executive briefing. What are you looking for today?";
+    speak(greeterText);
+  }
   isListening ? stopListening() : startListening();
 }
 
