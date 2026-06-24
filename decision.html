@@ -860,6 +860,161 @@
       </div>
     </div>
 
+    <!-- Decision Brief (Input) -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;">
+      <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.toggle-arrow').textContent=this.nextElementSibling.style.display==='none'?'▶':'▼'" style="background:var(--surface);padding:.55rem 1rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">📋 Input — Decision Brief</span>
+        <span class="toggle-arrow" style="font-size:.7rem;color:var(--muted);">▼</span>
+      </div>
+      <div style="padding:.75rem 1rem;font-size:.78rem;color:#2b2b2b;line-height:1.7;border-top:1px solid var(--border);">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink);margin-bottom:.4rem;">Decision Brief — Premium Subscription Tier</div>
+        <p>We are considering launching a Premium Subscription Tier for NovaCart's top-performing product line. The subscription would offer priority shipping, exclusive discounts, and early access to new products. Target: increase CLV by 15% within 6 months. Current blended CLV: ~$1,420. Rollout: 5% customer cohort pilot with kill switch.</p>
+        <p style="margin-top:.4rem;font-weight:600;color:var(--ink);">Key questions:</p>
+        <ul style="padding-left:1.2rem;color:var(--muted);margin:.2rem 0;">
+          <li>Can current revenue base support the investment?</li>
+          <li>Which SKUs should anchor the subscription?</li>
+          <li>What are conversion and weekly sales trends to justify timing?</li>
+        </ul>
+        <p style="margin-top:.4rem;"><strong style="color:var(--ink);">Options:</strong> (A) Launch pilot Q3 with top 2 SKUs · (B) Delay until full analysis · (C) Free-tier first</p>
+        <p><strong style="color:var(--ink);">Stakeholders:</strong> VP of Product, Finance Lead, Operations · <strong style="color:var(--ink);">Deadline:</strong> 2 weeks</p>
+      </div>
+    </div>
+
+    <!-- Per-Agent Outputs -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;">
+      <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.toggle-arrow').textContent=this.nextElementSibling.style.display==='none'?'▶':'▼'" style="background:var(--surface);padding:.55rem 1rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">🔗 Agent-by-Agent Outputs (8 steps)</span>
+        <span class="toggle-arrow" style="font-size:.7rem;color:var(--muted);">▶</span>
+      </div>
+      <div style="display:none;border-top:1px solid var(--border);">
+
+        <!-- Step 1: Planner -->
+        <div style="border-bottom:1px solid var(--border);">
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">1</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Planner</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">→ TASK_DECOMPOSITION, MISSING_INFO, DECISION_CRITERIA</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.01</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            <strong style="color:var(--ink);">TASK_DECOMPOSITION:</strong> Validate CLV baseline, analyze SKU performance, model subscription economics, assess operational readiness, design pilot framework.<br>
+            <strong style="color:var(--ink);">MISSING_INFO:</strong> Actual CLV calculation methodology, current repeat purchase rates, billing platform capabilities, competitor subscription offerings, customer willingness-to-pay data.<br>
+            <strong style="color:var(--ink);">DECISION_CRITERIA:</strong> Baseline CLV ≥$1,200, positive unit economics at ≥1 price point, billing feasibility <4 weeks, sufficient sample size for 5% pilot.
+          </div>
+        </div>
+
+        <!-- Step 2: Researcher -->
+        <div style="border-bottom:1px solid var(--border);">
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">2</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Researcher</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">→ FACTS, ASSUMPTIONS, UNKNOWNS, RISK_TRIGGERS</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.02</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            <strong style="color:var(--ink);">FACTS:</strong> Blended CLV ~$1,420, 15% uplift target, 5% pilot with kill switch, priority shipping + discounts + early access.<br>
+            <strong style="color:var(--ink);">ASSUMPTIONS:</strong> CLV figure is accurate, current infrastructure can support subscriptions, 5% cohort provides statistical power, customers want this tier.<br>
+            <strong style="color:var(--ink);">UNKNOWNS:</strong> Billing platform readiness, actual margin impact of priority shipping, competitor response timeline, customer price sensitivity.<br>
+            <strong style="color:var(--ink);">RISK_TRIGGERS:</strong> CLV baseline proves inaccurate, billing requires >8 week rebuild, priority shipping costs exceed subscription revenue.
+          </div>
+        </div>
+
+        <!-- Step 3a: Analyzer A -->
+        <div style="border-bottom:1px solid var(--border);">
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">3a</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Analyzer A</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">Customer/Revenue lens</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.04</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            Recommends Option A (Q3 pilot) — fastest path to market learning. Top 2 SKUs by conversion rate should anchor. 15% CLV uplift is achievable if subscription reduces churn and increases purchase frequency. Key concern: need validated baseline before scaling. Suggests starting with NovaPhone X1 + NovaFit Active Watch as anchor SKUs based on sales velocity.
+          </div>
+        </div>
+
+        <!-- Step 3b: Analyzer B -->
+        <div style="border-bottom:1px solid var(--border);">
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">3b</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Analyzer B</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">Risk/Privacy lens</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.04</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            Recommends Option B (delay + validate) — launching without validated economics is reckless. Key risks: $1,420 CLV may be fabricated, billing platform may need 6+ month rebuild, priority shipping costs could exceed revenue, cherry-picked pilots produce false positives. Requires Gate 0 CFO validation, randomized assignment, and explicit kill criteria.
+          </div>
+        </div>
+
+        <!-- Step 4: Synthesis -->
+        <div style="border-bottom:1px solid var(--border);">
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">4</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Synthesis</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">Merges A+B, resolves conflicts</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.06</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            Resolves A vs B conflict: adopts B's caution (validate first) but preserves A's speed objective. Modified Option B: 1-week Gate 0 (CFO validates baseline) → 2-week sprint (Engineering confirms billing, Analytics designs pilot) → conditional launch. Explicit conflict resolution: A wants speed → addressed by compressing validation to 3 weeks; B wants safety → addressed by hard gates with kill authority.
+          </div>
+        </div>
+
+        <!-- Step 5: Critic -->
+        <div style="border-bottom:1px solid var(--border);">
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">5</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Critic</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">Red-team critique</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.04</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            Challenges: CLV measurement timeline mismatch (true CLV needs 12-24 months, pilot is 8-12 weeks). Cherry-picked pilot risk still present despite "randomization" claim. Cross-functional resource disruption not quantified. Competitive window risk understated. Missing: what happens if Gate 0 kills the initiative — is there a Plan B? ESCALATE: need explicit CEO escalation path if CFO kills at Gate 0.
+          </div>
+        </div>
+
+        <!-- Step 6: Reviser -->
+        <div style="border-bottom:1px solid var(--border);">
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">6</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Reviser</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">Addresses critique + ESCALATE</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.07</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            Addresses all Critic points: adds leading-indicator approach for CLV measurement gap (purchase frequency, AOV as proxies with 6-month checkpoint). Changes pilot to true randomized assignment. Adds CEO escalation path if Gate 0 fails. Quantifies cross-functional disruption. Adds ESCALATE flag: CFO GO/NO-GO at Gate 0, CEO notification on kill decision.
+          </div>
+        </div>
+
+        <!-- Step 7: Confidence Scorer -->
+        <div style="border-bottom:1px solid var(--border);">
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">7</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Confidence Scorer</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">Score + rationale</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.02</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            <strong style="color:var(--ink);">Score: 55/100 (Moderate-Low)</strong><br>
+            Why not higher: baseline CLV unvalidated, billing feasibility unknown, competitive timeline unclear, true CLV unmeasurable in pilot window.<br>
+            Would increase to 75+ with: Finance-confirmed CLV methodology, Engineering billing assessment within 1 week, and competitive intelligence on rival subscription plans.
+          </div>
+        </div>
+
+        <!-- Step 8: Publisher -->
+        <div>
+          <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600;flex-shrink:0;">8</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--ink);">Publisher</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:var(--muted);">Final paste-ready artifact</span>
+            <span style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;margin-left:auto;">$0.07</span>
+          </div>
+          <div style="display:none;padding:.5rem 1rem .75rem;font-size:.7rem;color:var(--muted);line-height:1.6;background:#fafaf8;">
+            Formats the revised memo into final Decision Memo structure: RECOMMENDATION, OPTIONS_CONSIDERED, TRADEOFFS, RISKS_AND_MITIGATIONS, ASSUMPTIONS_AND_UNKNOWNS, CONFIDENCE_REPORT. Appends cost breakdown. Output: <code style="font-size:.6rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">final_decision_brief.md</code>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Decision Memo preview -->
     <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;flex:1;display:flex;flex-direction:column;">
       <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
