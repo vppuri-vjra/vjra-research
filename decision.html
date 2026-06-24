@@ -151,6 +151,7 @@
   }
   .tab-panel.active { display: flex; }
   #tab-memo { overflow-y: auto; }
+  #tab-memo.active { display: block !important; }
 
   #tab-overview {
     overflow-y: auto;
@@ -874,7 +875,7 @@
   </div><!-- #tab-chat -->
 
   <!-- Tab 3: Decision Memo -->
-  <div id="tab-memo" class="tab-panel" style="flex-direction:column;padding:1.25rem;overflow-y:auto;">
+  <div id="tab-memo" class="tab-panel" style="padding:1.25rem;">
 
     <!-- How it works -->
     <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;">
