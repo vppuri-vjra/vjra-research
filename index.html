@@ -3,89 +3,238 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>vjra.us — Research</title>
-<meta name="description" content="External knowledge sources curated for the NovaCart Product Finance Reporting Agent.">
+<title>vjra.us — AI Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
   :root {
     --accent: #b85042;
     --ink: #1a1a2e;
     --muted: #767676;
+    --bg: #f8f4ee;
+    --surface: #f4f3f0;
+    --border: #e8e6e1;
+    --green: #2d6a4f;
+    --amber: #b45309;
+    --purple: #6d28d9;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    max-width: 760px; margin: 0 auto; padding: 0 1.5rem 4rem;
-    color: #2b2b2b; line-height: 1.6; background: #fdfdfb;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #2b2b2b;
+    line-height: 1.6;
+    min-height: 100vh;
   }
-  header.site-header {
+  header {
     border-bottom: 4px solid var(--accent);
-    padding: 3rem 0 1.5rem;
-    margin-bottom: 2rem;
+    padding: 2.5rem 2rem 1.5rem;
+    text-align: center;
+    background: var(--bg);
   }
   .kicker {
-    text-transform: uppercase; letter-spacing: .12em; font-size: .75rem;
-    font-weight: 700; color: var(--accent); margin-bottom: .75rem;
+    text-transform: uppercase; letter-spacing: .14em; font-size: .7rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .4rem;
   }
   h1 {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 2.4rem; line-height: 1.2; color: var(--ink); margin: 0 0 .75rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 2.2rem; color: var(--ink); font-weight: 400;
+    margin-bottom: .4rem;
   }
-  .lede { font-size: 1.05rem; color: #444; margin: 0; max-width: 56ch; }
-  h2 {
-    font-size: 1.1rem; text-transform: uppercase; letter-spacing: .08em;
-    color: var(--muted); margin: 2.5rem 0 1rem; font-weight: 700;
+  .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: .82rem; color: var(--muted); max-width: 50ch; margin: 0 auto;
   }
-  .article-list { list-style: none; padding: 0; margin: 0; }
-  .article-card {
-    display: block; padding: 1.25rem 1.5rem; margin-bottom: 1rem;
-    border: 1px solid #eee; border-radius: 8px; text-decoration: none;
-    color: inherit; transition: border-color .15s, box-shadow .15s;
+  main {
+    max-width: 900px; margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
   }
-  .article-card:hover { border-color: var(--accent); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
-  .article-card .article-title {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 1.25rem; color: var(--ink); margin: 0 0 .35rem; font-weight: 700;
+  .section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: .6rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .12em; color: var(--accent); margin-bottom: .75rem;
   }
-  .article-card .article-meta {
-    font-size: .8rem; color: var(--muted);
+  .projects {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin-bottom: 2rem;
   }
-  .article-card .article-meta span:not(:last-child)::after {
-    content: "•"; margin-left: .6rem; color: #ccc;
+  .project-card {
+    border: 1px solid var(--border); border-radius: 12px;
+    background: #fff; text-decoration: none; color: inherit;
+    overflow: hidden; transition: border-color .2s, box-shadow .2s;
+    display: flex; flex-direction: column;
   }
-  .article-card .read-more {
-    display: inline-block; margin-top: .6rem; font-size: .85rem;
-    font-weight: 600; color: var(--accent);
+  .project-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(0,0,0,.06);
   }
-  footer.page-footer {
-    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #eee;
-    font-size: .8rem; color: #999;
+  .card-header {
+    padding: 1.25rem 1.25rem .75rem;
+    display: flex; align-items: center; gap: .75rem;
+  }
+  .card-balls {
+    display: flex; gap: -4px;
+  }
+  .card-ball {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: 'Cormorant Garamond', serif;
+    font-weight: 600; font-size: .75rem;
+    box-shadow: inset -1px -1px 3px rgba(0,0,0,.3), inset 1px 1px 3px rgba(255,255,255,.2), 0 1px 4px rgba(0,0,0,.15);
+    margin-left: -6px;
+  }
+  .card-ball:first-child { margin-left: 0; }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem; color: var(--ink); font-weight: 400;
+  }
+  .card-body {
+    padding: 0 1.25rem 1rem;
+    flex: 1;
+  }
+  .card-desc {
+    font-size: .75rem; color: var(--muted); line-height: 1.55;
+    margin-bottom: .65rem;
+  }
+  .card-tags {
+    display: flex; flex-wrap: wrap; gap: .35rem;
+  }
+  .card-tag {
+    font-size: .58rem; font-weight: 600; padding: .15rem .45rem;
+    border-radius: 3px; background: var(--surface); color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .card-footer {
+    padding: .65rem 1.25rem;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-cta {
+    font-family: 'Inter', sans-serif;
+    font-size: .7rem; font-weight: 600; color: var(--accent);
+  }
+  .card-model {
+    font-size: .58rem; color: var(--muted);
+  }
+
+  /* Research section */
+  .research-card {
+    border: 1px solid var(--border); border-radius: 10px;
+    background: #fff; text-decoration: none; color: inherit;
+    padding: 1rem 1.25rem; display: block;
+    transition: border-color .15s;
+  }
+  .research-card:hover { border-color: var(--accent); }
+  .research-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem; color: var(--ink); margin-bottom: .25rem;
+  }
+  .research-meta {
+    font-size: .7rem; color: var(--muted);
+  }
+  .research-meta span:not(:last-child)::after {
+    content: "·"; margin: 0 .4rem; color: var(--border);
+  }
+
+  footer {
+    text-align: center; padding: 1.5rem;
+    font-size: .7rem; color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    .projects { grid-template-columns: 1fr; }
+    h1 { font-size: 1.6rem; }
+    header { padding: 1.5rem 1rem 1rem; }
   }
 </style>
 </head>
 <body>
-<header class="site-header">
-  <div class="kicker">vjra.us / research</div>
-  <h1>Research Library</h1>
-  <p class="lede">External knowledge sources curated for the NovaCart Product Finance Reporting Agent — industry outlooks and market reports used to ground its Monthly Financial Standing Report.</p>
+
+<header>
+  <div class="kicker">vjra.us</div>
+  <h1>AI Projects & Research</h1>
+  <p class="subtitle">Multi-agent systems, RAG pipelines, and applied AI — built with Claude, Pinecone, and OpenAI.</p>
 </header>
 
-<h2>Articles</h2>
-<ul class="article-list">
-  <li>
-    <a class="article-card" href="/research/2026-semiconductor-industry-outlook-deloitte-insights.html">
-      <p class="article-title">2026 Global Semiconductor Industry Outlook</p>
-      <div class="article-meta">
-        <span>Deloitte Insights</span>
-        <span>11-min read</span>
-        <span>05 February 2026</span>
-      </div>
-      <span class="read-more">Read article &rarr;</span>
-    </a>
-  </li>
-</ul>
+<main>
 
-<footer class="page-footer">
-  Curated for the <strong>novacart-ext</strong> Pinecone namespace, NovaCart Product Finance Reporting Agent.
+  <div class="section-label">Projects</div>
+  <div class="projects">
+
+    <!-- Project Nightingale -->
+    <a class="project-card" href="/launch.html">
+      <div class="card-header">
+        <div class="card-balls">
+          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">T</div>
+          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">M</div>
+          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+        </div>
+        <div class="card-title">Project Nightingale</div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">Multi-agent voice + text AI Launch Command Center. 4 specialist agents (Technical, GTM, Executive) route stakeholder questions to the right domain automatically.</div>
+        <div class="card-tags">
+          <span class="card-tag">Multi-Agent</span>
+          <span class="card-tag">Voice AI</span>
+          <span class="card-tag">Claude API</span>
+          <span class="card-tag">ROUTE: Signal</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Launch Command Center &rarr;</span>
+        <span class="card-model">claude-sonnet-4-6</span>
+      </div>
+    </a>
+
+    <!-- NovaCart RAG -->
+    <a class="project-card" href="/rag.html">
+      <div class="card-header">
+        <div class="card-balls">
+          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">F</div>
+          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">M</div>
+          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+        </div>
+        <div class="card-title">NovaCart RAG Agent</div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">RAG-powered knowledge agent that ingests 7 sources into Pinecone, auto-generates Monthly Financial Standing Reports, and drafts stakeholder emails.</div>
+        <div class="card-tags">
+          <span class="card-tag">RAG Pipeline</span>
+          <span class="card-tag">Pinecone</span>
+          <span class="card-tag">531 Vectors</span>
+          <span class="card-tag">GPT-4o + Claude</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Knowledge Agent &rarr;</span>
+        <span class="card-model">claude-sonnet-4-6</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Research Library</div>
+  <a class="research-card" href="/research/2026-semiconductor-industry-outlook-deloitte-insights.html">
+    <div class="research-title">2026 Global Semiconductor Industry Outlook</div>
+    <div class="research-meta">
+      <span>Deloitte Insights</span>
+      <span>11-min read</span>
+      <span>05 February 2026</span>
+    </div>
+  </a>
+
+</main>
+
+<footer>
+  vjra.us — Vipin Puri · AI Projects & Research
 </footer>
+
 </body>
 </html>
