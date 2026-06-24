@@ -1728,9 +1728,13 @@ function startListening() {
   recognition = new SR();
   recognition.lang = 'en-US';
   recognition.interimResults = true;
+  recognition.continuous = false;
+
+  let gotResult = false;
 
   recognition.onstart = () => {
     isListening = true;
+    gotResult = false;
     document.getElementById('voiceBtn').classList.add('recording');
     setVoiceStatus('🎤 Listening...');
   };
@@ -1738,10 +1742,10 @@ function startListening() {
     const t = Array.from(e.results).map(r => r[0].transcript).join('');
     document.getElementById('msg').value = t;
     autoResize(document.getElementById('msg'));
-    if (e.results[0].isFinal) { stopListening(); send(); }
+    if (e.results[0].isFinal) { gotResult = true; stopListening(); send(); }
   };
-  recognition.onerror  = () => stopListening();
-  recognition.onend    = () => stopListening();
+  recognition.onerror = (e) => { if (e.error !== 'no-speech') stopListening(); };
+  recognition.onend = () => { if (!gotResult) stopListening(); };
   recognition.start();
 }
 
