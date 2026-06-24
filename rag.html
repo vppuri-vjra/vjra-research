@@ -558,21 +558,69 @@
             </div>
           </div>
 
+          <!-- EXTRACTION PATHS (3 ingestion paths) -->
+          <div style="border:1px solid #ddd8d0;border-radius:10px;padding:.75rem 1rem;background:#fff;margin-bottom:.5rem;box-shadow:0 1px 3px rgba(0,0,0,.04);">
+            <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem;">Document Extraction Paths</div>
+            <div class="card-grid-3" style="padding:0;gap:.5rem;">
+
+              <!-- .docx path -->
+              <div style="border:1px solid rgba(45,106,79,.3);border-radius:7px;padding:.5rem .6rem;background:#f0fdf6;">
+                <div style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:#2d6a4f;margin-bottom:.3rem;">📄 .docx Files <span style="font-weight:400;color:#767676;">(5 docs)</span></div>
+                <div style="font-size:.58rem;color:#767676;line-height:1.55;">
+                  <strong style="color:#1a1a2e;">Tool:</strong> MarkItDown<br>
+                  <code style="font-size:.55rem;background:#e8f5e9;padding:1px 3px;border-radius:2px;color:#2d6a4f;">MarkItDown().convert(path).text_content</code><br>
+                  Converts .docx → plain text<br>
+                  <strong style="color:#1a1a2e;">Docs:</strong> Product Catalog, Annual Report, 3 market outlook reports
+                </div>
+              </div>
+
+              <!-- Jira path -->
+              <div style="border:1px solid rgba(180,83,9,.3);border-radius:7px;padding:.5rem .6rem;background:#fffbf0;">
+                <div style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:#92400e;margin-bottom:.3rem;">🎫 Jira Epic <span style="font-weight:400;color:#767676;">(KAN-196)</span></div>
+                <div style="font-size:.58rem;color:#767676;line-height:1.55;">
+                  <strong style="color:#1a1a2e;">Tool:</strong> Jira REST API<br>
+                  <code style="font-size:.55rem;background:#fef3c7;padding:1px 3px;border-radius:2px;color:#92400e;">GET /rest/api/3/issue/KAN-196</code><br>
+                  <strong style="color:#1a1a2e;">Description:</strong> ADF → <code style="font-size:.55rem;background:#fef3c7;padding:1px 3px;border-radius:2px;color:#92400e;">adf_to_text()</code> flattens to plain text<br>
+                  <strong style="color:#1a1a2e;">Attachment:</strong> .md file fetched via content URL (Basic auth)<br>
+                  624-row weekly sales data (156 wks × 4 SKUs)
+                </div>
+              </div>
+
+              <!-- HTML/vjra.us path -->
+              <div style="border:1px solid rgba(109,40,217,.3);border-radius:7px;padding:.5rem .6rem;background:#f8f5ff;">
+                <div style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:#5b21b6;margin-bottom:.3rem;">🌐 vjra.us Page <span style="font-weight:400;color:#767676;">(live HTML)</span></div>
+                <div style="font-size:.58rem;color:#767676;line-height:1.55;">
+                  <strong style="color:#1a1a2e;">Tool:</strong> MarkItDown + urllib<br>
+                  <code style="font-size:.55rem;background:#ede9fe;padding:1px 3px;border-radius:2px;color:#5b21b6;">fetch_url_text(url)</code><br>
+                  urllib GET → temp file → <code style="font-size:.55rem;background:#ede9fe;padding:1px 3px;border-radius:2px;color:#5b21b6;">MarkItDown().convert()</code><br>
+                  <strong style="color:#1a1a2e;">Source:</strong> Deloitte 2026 semiconductor outlook<br>
+                  Re-ingestion pulls live content (not stale copy)
+                </div>
+              </div>
+
+            </div>
+            <div style="margin-top:.45rem;font-family:'Inter',sans-serif;font-size:.55rem;color:#a8a29e;text-align:center;">All 3 paths converge into the same chunk → embed → upsert pipeline below</div>
+          </div>
+
+          <!-- connector -->
+          <div style="display:flex;justify-content:center;"><div style="width:1px;height:14px;background:rgba(45,106,79,.3);"></div></div>
+
           <!-- STEP 2: INGEST -->
           <div style="border:1px solid rgba(45,106,79,.35);border-radius:10px;padding:.75rem 1rem;background:rgba(255,255,255,.7);margin-bottom:.5rem;box-shadow:0 1px 4px rgba(0,0,0,.05);">
             <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;">
               <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#1a1a2e;">2. Ingest</span>
-              <span style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;">Extract → Chunk (1500/200) → Embed (text-embedding-3-large) → Upsert Pinecone</span>
+              <span style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;">Chunk (1500/200) → Embed (text-embedding-3-large, 1024-dim) → Upsert Pinecone</span>
             </div>
-            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-              <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Extract text</span>
-              <span style="color:#ddd8d0;">→</span>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.35rem;">
               <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Chunk 1500/200</span>
               <span style="color:#ddd8d0;">→</span>
               <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Embed 1024-dim</span>
               <span style="color:#ddd8d0;">→</span>
-              <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Upsert</span>
+              <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Delete stale vectors</span>
+              <span style="color:#ddd8d0;">→</span>
+              <span style="font-family:'Inter',sans-serif;font-size:.58rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Upsert (batch 100)</span>
             </div>
+            <div style="font-family:'Inter',sans-serif;font-size:.55rem;color:#a8a29e;line-height:1.5;">Idempotent: deletes existing <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">{doc_id}-chunk*</code> before re-upserting — no duplicates, handles shrinking docs</div>
           </div>
 
           <!-- connector to Pinecone -->
