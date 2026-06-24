@@ -1720,19 +1720,9 @@ function setVoiceStatus(msg) {
 }
 
 // ── Voice output (Web Speech Synthesis) ──────────────────────────
-// Male narrator preference order: Daniel (UK, deep/warm), Alex (macOS),
-// Google UK English Male, Tom, Fred — then fallback to any en-US male
-const MALE_VOICE_PREFS = [
-  'Daniel',               // macOS/iOS — British, warm, deep
-  'Google UK English Male',
-  'Alex',                 // macOS — neutral American male
-  'Tom',                  // macOS
-  'Fred',                 // macOS
-  'Google US English',    // Chrome — often male-leaning
-  'Aaron',                // macOS Ventura+
-  'Arthur',               // macOS — British male
-  'Gordon',
-  'Reed',
+const VOICE_PREFS = [
+  'Alex', 'Google US English', 'Daniel', 'Tom', 'Fred',
+  'Aaron', 'Gordon', 'Reed', 'Samantha',
 ];
 
 let _narratorVoice = null;
@@ -1740,7 +1730,7 @@ let _narratorVoice = null;
 function getNarratorVoice() {
   if (_narratorVoice) return _narratorVoice;
   const voices = speechSynthesis.getVoices();
-  for (const pref of MALE_VOICE_PREFS) {
+  for (const pref of VOICE_PREFS) {
     const v = voices.find(v => v.name.includes(pref));
     if (v) { _narratorVoice = v; return v; }
   }

@@ -1757,8 +1757,8 @@ function setVoiceStatus(msg) {
 }
 
 // ── Voice output (Web Speech Synthesis) ──────────────────────────
-const MALE_VOICE_PREFS = [
-  'Daniel', 'Google UK English Male', 'Alex', 'Tom', 'Fred',
+const VOICE_PREFS = [
+  'Alex', 'Google US English', 'Daniel', 'Tom', 'Fred',
   'Google US English', 'Aaron', 'Arthur', 'Gordon', 'Reed',
 ];
 
@@ -1767,7 +1767,7 @@ let _narratorVoice = null;
 function getNarratorVoice() {
   if (_narratorVoice) return _narratorVoice;
   const voices = speechSynthesis.getVoices();
-  for (const pref of MALE_VOICE_PREFS) {
+  for (const pref of VOICE_PREFS) {
     const v = voices.find(v => v.name.includes(pref));
     if (v) { _narratorVoice = v; return v; }
   }
