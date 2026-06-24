@@ -436,6 +436,7 @@
   <div class="tab-bar">
     <button class="tab active" onclick="switchTab('overview')">Business Problem &amp; Solution</button>
     <button class="tab" onclick="switchTab('chat')">Knowledge Agent</button>
+    <button class="tab" onclick="switchTab('email')">Draft Email</button>
   </div>
 
   <!-- Tab 1: Overview -->
@@ -804,6 +805,71 @@
     </aside>
   </div>
   </div><!-- #tab-chat -->
+
+  <!-- Tab 3: Draft Email -->
+  <div id="tab-email" class="tab-panel" style="flex-direction:column;padding:1.25rem;">
+
+    <!-- How it works -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">How This Email Is Generated</span>
+      </div>
+      <div style="padding:.75rem 1rem;font-size:.78rem;color:var(--muted);line-height:1.65;">
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:.5rem;">
+          <span style="background:#f0fdf4;border:1px solid #4ade80;padding:.2rem .5rem;border-radius:4px;font-size:.65rem;font-weight:600;color:#166534;">Monthly Report</span>
+          <span style="color:var(--border);">→</span>
+          <span style="background:#fffbeb;border:1px solid #fbbf24;padding:.2rem .5rem;border-radius:4px;font-size:.65rem;font-weight:600;color:#92400e;">GPT-4o (temp 0.3)</span>
+          <span style="color:var(--border);">→</span>
+          <span style="background:#f5f3ff;border:1px solid #a78bfa;padding:.2rem .5rem;border-radius:4px;font-size:.65rem;font-weight:600;color:#5b21b6;">Stakeholder Email</span>
+        </div>
+        The synthesized Monthly Financial Standing Report is passed to <strong style="color:var(--ink);">GPT-4o</strong> with an email prompt that extracts the top 3 takeaways and formats a concise stakeholder message. Sending is <strong style="color:var(--ink);">manual</strong> — the draft is for human review before dispatch.
+      </div>
+    </div>
+
+    <!-- Email preview -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;flex:1;display:flex;flex-direction:column;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Email Preview — June 2026</span>
+        <button onclick="regenerateEmail()" style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:600;background:var(--accent);color:#fff;border:none;padding:.3rem .7rem;border-radius:5px;cursor:pointer;">Regenerate with Claude</button>
+      </div>
+      <div id="email-body" style="padding:1rem 1.25rem;flex:1;overflow-y:auto;">
+
+        <!-- Subject line -->
+        <div style="margin-bottom:.75rem;padding-bottom:.65rem;border-bottom:1px solid var(--border);">
+          <div style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;">Subject</div>
+          <div id="email-subject" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ink);">Key Insights from June 2026 Monthly Financial Standing Report</div>
+        </div>
+
+        <!-- To / From -->
+        <div style="display:flex;gap:1.5rem;margin-bottom:.75rem;padding-bottom:.65rem;border-bottom:1px solid var(--border);">
+          <div>
+            <span style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">From</span>
+            <div style="font-size:.75rem;color:var(--ink);margin-top:.1rem;">NovaCart Product Finance Reporting Agent</div>
+          </div>
+          <div>
+            <span style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">To</span>
+            <div style="font-size:.75rem;color:var(--ink);margin-top:.1rem;">Leadership Stakeholders</div>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div id="email-content" style="font-size:.82rem;color:#2b2b2b;line-height:1.75;">
+          <p>Dear Stakeholders,</p>
+          <p>I hope this message finds you well. As we review NovaCart's financial performance for June 2026, I wanted to highlight a few critical insights from our latest report.</p>
+          <ul style="margin:.5rem 0;padding-left:1.2rem;">
+            <li style="margin-bottom:.4rem;">NovaCart's strategic focus on subscription services and smart home devices has positioned us well for sustained growth, despite challenges like rising memory prices and a potential slowdown in smartphone demand.</li>
+            <li style="margin-bottom:.4rem;">The NovaPhone X1, while historically strong, faces a cautious outlook due to anticipated declines in smartphone demand. Strategic marketing efforts will be essential to maintain market share.</li>
+            <li style="margin-bottom:.4rem;">Our NovaHome SmartHub Pro and NovaFit Active Watch continue to perform steadily, but rising memory prices could pressure margins, necessitating careful cost management.</li>
+          </ul>
+          <p>The full report is attached for your review. Please feel free to reach out with any questions or for further discussion.</p>
+          <p style="margin-top:.75rem;">Best regards,<br><strong>NovaCart Product Finance Reporting Agent</strong></p>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- #tab-email -->
+
 </div><!-- #app -->
 
 <script>
@@ -1013,10 +1079,46 @@ function toggleSidebar() {
 // ── Tab switching ─────────────────────────────────────────────────
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', (i === 0 && name === 'overview') || (i === 1 && name === 'chat'));
+    t.classList.toggle('active', (i === 0 && name === 'overview') || (i === 1 && name === 'chat') || (i === 2 && name === 'email'));
   });
   document.getElementById('tab-overview').classList.toggle('active', name === 'overview');
   document.getElementById('tab-chat').classList.toggle('active', name === 'chat');
+  document.getElementById('tab-email').classList.toggle('active', name === 'email');
+}
+
+async function regenerateEmail() {
+  if (!apiKey) { alert('Enter your API key first.'); return; }
+  const subj = document.getElementById('email-subject');
+  const body = document.getElementById('email-content');
+  subj.textContent = 'Generating...';
+  body.innerHTML = '<div class="thinking"><b></b><b></b><b></b></div>';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 800,
+        system: 'You are a product finance reporting agent. Given a monthly financial standing report, draft a concise stakeholder email. Output ONLY the email — start with "Subject: ..." on the first line, then a blank line, then the email body. Keep it to 3 bullet takeaways max. Professional tone.',
+        messages: [{ role: 'user', content: 'Draft a stakeholder email from this report:\n\n' + KB_REPORT }],
+      }),
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || 'Error generating email.';
+    const lines = text.split('\n');
+    const subjLine = lines[0].replace(/^Subject:\s*/i, '');
+    const emailBody = lines.slice(1).join('\n').trim();
+    subj.textContent = subjLine;
+    body.innerHTML = esc(emailBody).replace(/\n/g, '<br>');
+  } catch (e) {
+    subj.textContent = 'Error';
+    body.innerHTML = esc(e.message);
+  }
 }
 
 // ── Boot ──────────────────────────────────────────────────────────
