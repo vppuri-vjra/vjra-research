@@ -1379,8 +1379,10 @@ function sendEmail() {
   const to = document.getElementById('recipientEmail').value.trim();
   if (!to) { alert('Please enter a recipient email.'); return; }
   const subj = encodeURIComponent(document.getElementById('email-subject').textContent);
-  const body = encodeURIComponent(document.getElementById('email-content').innerText);
-  window.open(`https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(to)}&su=${subj}&body=${body}`, '_blank');
+  const emailText = document.getElementById('email-content').innerText;
+  const reportText = document.getElementById('reportBody').innerText;
+  const fullBody = encodeURIComponent(emailText + '\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nATTACHED: Monthly Financial Standing Report — June 2026\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n' + reportText);
+  window.open(`https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(to)}&su=${subj}&body=${fullBody}`, '_blank');
 }
 let recognition = null;
 const ROUTE_RE = /ROUTE:\s*(finance|market|executive|end)/i;
