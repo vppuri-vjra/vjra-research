@@ -1498,7 +1498,6 @@ function greet() {
   d.innerHTML = `${agentAvatar('greeter')}<div class="bubble"><div class="agent-tag greeter">Greeter</div><div>${esc(text)}</div></div>`;
   chat.insertBefore(d, info);
   setAgent('greeter');
-  speak(text);
 }
 
 // ── Claude API call ───────────────────────────────────────────────
