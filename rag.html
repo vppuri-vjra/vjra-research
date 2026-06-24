@@ -880,7 +880,7 @@
         </div>
         <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
           <input type="email" id="recipientEmail" placeholder="recipient@company.com" style="flex:1;min-width:200px;padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;font-family:'Inter',sans-serif;font-size:.75rem;outline:none;background:#fff;" />
-          <button id="sendBtn" onclick="sendEmail()" disabled style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;background:#ccc;color:#fff;border:none;padding:.45rem 1rem;border-radius:6px;cursor:not-allowed;white-space:nowrap;">Send Email</button>
+          <button id="sendBtn" onclick="sendEmail()" style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;background:var(--accent);color:#fff;border:none;padding:.45rem 1rem;border-radius:6px;cursor:pointer;white-space:nowrap;">Send via Gmail</button>
         </div>
         <div id="sendStatus" style="font-family:'Inter',sans-serif;font-size:.65rem;color:var(--muted);margin-top:.4rem;"></div>
       </div>
@@ -1100,12 +1100,15 @@ document.getElementById('approveCheck').addEventListener('change', function() {
 });
 
 function sendEmail() {
+  const approved = document.getElementById('approveCheck').checked;
+  if (!approved) { document.getElementById('sendStatus').textContent = 'Please approve the email first.'; return; }
   const to = document.getElementById('recipientEmail').value.trim();
   if (!to) { document.getElementById('sendStatus').textContent = 'Please enter a recipient email.'; return; }
   const subj = encodeURIComponent(document.getElementById('email-subject').textContent);
   const body = encodeURIComponent(document.getElementById('email-content').innerText);
-  window.open(`mailto:${to}?subject=${subj}&body=${body}`, '_blank');
-  document.getElementById('sendStatus').innerHTML = '✓ Email client opened for <strong>' + esc(to) + '</strong>. Review and hit Send in your email app.';
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(to)}&su=${subj}&body=${body}`;
+  window.open(gmailUrl, '_blank');
+  document.getElementById('sendStatus').innerHTML = '✓ Gmail compose opened for <strong>' + esc(to) + '</strong>';
 }
 let recognition = null;
 const ROUTE_RE = /ROUTE:\s*(finance|market|executive|end)/i;
