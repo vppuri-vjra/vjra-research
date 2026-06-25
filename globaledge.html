@@ -150,6 +150,8 @@
     flex-direction: column;
   }
   .tab-panel.active { display: flex; }
+  #tab-eval { overflow-y: auto; }
+  #tab-eval.active { display: block !important; }
 
   #tab-overview {
     overflow-y: auto;
@@ -845,7 +847,7 @@
   </div><!-- #tab-chat -->
 
   <!-- Tab 3: Evaluation Dashboard -->
-  <div id="tab-eval" class="tab-panel" style="flex-direction:column;padding:1.25rem;overflow-y:auto;">
+  <div id="tab-eval" class="tab-panel" style="padding:1.25rem;">
 
     <!-- How Responses Are Evaluated -->
     <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;">
