@@ -912,40 +912,37 @@
       </div>
     </div>
 
-    <!-- Example Evaluation Result -->
+    <!-- Query Selector -->
     <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">📋 Click a Test Query to See Evaluation</span>
+      </div>
+      <div style="padding:.5rem .75rem;display:flex;flex-direction:column;gap:.3rem;">
+        <div class="eval-q" onclick="showEval(0)" style="padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:.72rem;color:var(--ink);line-height:1.5;transition:border-color .15s;">
+          <strong style="color:var(--accent);margin-right:.3rem;">Q1:</strong> Based on this week's news sentiment around Amazon, would you classify the current signal as bullish or bearish, and does the price data support that?
+        </div>
+        <div class="eval-q" onclick="showEval(1)" style="padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:.72rem;color:var(--ink);line-height:1.5;transition:border-color .15s;">
+          <strong style="color:var(--accent);margin-right:.3rem;">Q2:</strong> Should I invest in Apple right now? I heard Tim Cook is stepping down — is that a red flag? How's the stock been doing?
+        </div>
+        <div class="eval-q" onclick="showEval(2)" style="padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:.72rem;color:var(--ink);line-height:1.5;transition:border-color .15s;">
+          <strong style="color:var(--accent);margin-right:.3rem;">Q3:</strong> Is now a good time to buy Bitcoin? News is saying it just crossed $78k — am I too late?
+        </div>
+        <div class="eval-q" onclick="showEval(3)" style="padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:.72rem;color:var(--ink);line-height:1.5;transition:border-color .15s;">
+          <strong style="color:var(--accent);margin-right:.3rem;">Q4:</strong> J.P. Morgan is calling for the S&P 500 to hit 7,600 on AI earnings. Is that realistic? Should I buy in now or wait?
+        </div>
+        <div class="eval-q" onclick="showEval(4)" style="padding:.45rem .65rem;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:.72rem;color:var(--ink);line-height:1.5;transition:border-color .15s;">
+          <strong style="color:var(--accent);margin-right:.3rem;">Q5:</strong> Nvidia is leading the AI rally. How has NVDA's stock been performing compared to the news sentiment?
+        </div>
+      </div>
+    </div>
+
+    <!-- Evaluation Result (dynamic) -->
+    <div id="eval-result" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;display:none;">
       <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Example Evaluation Result</span>
-        <button onclick="regenerateEval()" style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:600;background:var(--accent);color:#fff;border:none;padding:.3rem .7rem;border-radius:5px;cursor:pointer;">Regenerate Evaluation</button>
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Evaluation Result</span>
+        <button onclick="regenerateEval()" style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:600;background:var(--accent);color:#fff;border:none;padding:.3rem .7rem;border-radius:5px;cursor:pointer;">Regenerate with Claude</button>
       </div>
-      <div id="eval-body" style="padding:1rem 1.25rem;">
-
-        <div style="margin-bottom:.75rem;">
-          <div style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;">Question</div>
-          <div id="eval-question" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink);">What are Apple's key risk factors from the latest 10-Q?</div>
-        </div>
-
-        <div style="margin-bottom:.75rem;">
-          <div style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;">Answer Snippet</div>
-          <div id="eval-answer" style="font-size:.78rem;color:var(--muted);line-height:1.6;background:var(--surface);border-radius:6px;padding:.5rem .75rem;">Based on Apple's Q2 2025 10-Q filing, the key risk factors include: (1) Supply chain concentration in Greater China with significant manufacturing exposure, (2) Foreign currency headwinds from strong dollar impact on international revenue, (3) Regulatory pressure from EU Digital Markets Act compliance costs, (4) Competition in AI requiring significant R&amp;D investment, and (5) Consumer spending sensitivity to macroeconomic conditions...</div>
-        </div>
-
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.75rem;">
-          <div id="eval-scores" style="display:flex;gap:.5rem;flex-wrap:wrap;">
-            <span style="font-family:'Inter',sans-serif;font-size:.6rem;background:#f0fdf4;border:1px solid #4ade80;padding:.2rem .5rem;border-radius:4px;color:#166534;font-weight:600;">Relevance: 5</span>
-            <span style="font-family:'Inter',sans-serif;font-size:.6rem;background:#f0fdf4;border:1px solid #4ade80;padding:.2rem .5rem;border-radius:4px;color:#166534;font-weight:600;">Groundedness: 5</span>
-            <span style="font-family:'Inter',sans-serif;font-size:.6rem;background:#fffbeb;border:1px solid #fbbf24;padding:.2rem .5rem;border-radius:4px;color:#92400e;font-weight:600;">Accuracy: 4</span>
-            <span style="font-family:'Inter',sans-serif;font-size:.6rem;background:#fffbeb;border:1px solid #fbbf24;padding:.2rem .5rem;border-radius:4px;color:#92400e;font-weight:600;">Completeness: 4</span>
-            <span style="font-family:'Inter',sans-serif;font-size:.6rem;background:#f0fdf4;border:1px solid #4ade80;padding:.2rem .5rem;border-radius:4px;color:#166534;font-weight:600;">Risk Awareness: 5</span>
-          </div>
-        </div>
-
-        <div style="display:flex;gap:1rem;align-items:center;">
-          <span id="eval-verdict" style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;background:#f0fdf4;border:1px solid #4ade80;padding:.25rem .7rem;border-radius:5px;color:#166534;">PASS</span>
-          <span id="eval-sources" style="font-family:'Inter',sans-serif;font-size:.6rem;color:var(--muted);">Sources cited: 3</span>
-        </div>
-
-      </div>
+      <div id="eval-body" style="padding:1rem 1.25rem;"></div>
     </div>
 
   </div><!-- #tab-eval -->
@@ -1158,20 +1155,106 @@ function switchTab(name) {
 }
 
 // ── Regenerate Evaluation ─────────────────────────────────────────
+const EVAL_DATA = [
+  {
+    q: "Based on this week's news sentiment around Amazon, would you classify the current signal as bullish or bearish, and does the price data support that?",
+    answer: "Based on retrieved news articles, sentiment around Amazon this week is moderately bullish — driven by strong AWS growth projections and positive analyst upgrades. Price data shows AMZN trading at $186.40, up 3.2% over the past 5 trading days, supporting the bullish signal. However, concerns about rising logistics costs and antitrust scrutiny in the EU represent downside risks that brokers should disclose to clients.",
+    scores: { relevance: 9, groundedness: 8, accuracy: 8, completeness: 8, risk_awareness: 9 },
+    verdict: "Pass", sources: 4,
+    comments: "Strong response with good balance of bullish/bearish signals. Properly cited price data and news sources. Risk awareness was well-handled with EU antitrust mention."
+  },
+  {
+    q: "Should I invest in Apple right now? I heard Tim Cook is stepping down — is that a red flag? How's the stock been doing, and is there anything I should be worried about with the company's financials or risks?",
+    answer: "Based on available data, there is no confirmed report of Tim Cook stepping down — this may be unverified speculation. AAPL is trading at $198.50 with stable performance. From the 10-Q filing: Apple reported strong revenue but flagged key risks including supply chain concentration in Greater China, foreign currency headwinds, EU Digital Markets Act compliance costs, and increased R&D spending for AI. The company maintains strong cash reserves but faces margin pressure from services competition.",
+    scores: { relevance: 10, groundedness: 9, accuracy: 9, completeness: 9, risk_awareness: 10 },
+    verdict: "Pass", sources: 5,
+    comments: "Excellent response. Correctly identified the Tim Cook rumor as unverified. Comprehensive coverage of 10-Q risk factors. Strong risk awareness with specific regulatory and supply chain concerns."
+  },
+  {
+    q: "Is now a good time to buy Bitcoin? News is saying it just crossed $78k — am I too late? What's the price trend looked like over the last few months, and what's driving the current rally?",
+    answer: "BTC-USD is currently trading at $67,850 based on our latest price data — the $78k figure referenced may be from a different time period or source. Recent news attributes the crypto rally to institutional adoption, spot Bitcoin ETF inflows, and the upcoming halving cycle. Price trend shows significant upward momentum over the past quarter. However, crypto remains highly volatile — regulatory uncertainty, potential ETF outflows, and macroeconomic shifts represent material risks. This is not personalized investment advice.",
+    scores: { relevance: 9, groundedness: 8, accuracy: 7, completeness: 8, risk_awareness: 10 },
+    verdict: "Pass", sources: 3,
+    comments: "Good response noting the price discrepancy between user's claim and retrieved data. Strong risk disclosure and appropriate caveat about not providing investment advice. Accuracy slightly lower due to limited historical trend data."
+  },
+  {
+    q: "J.P. Morgan is calling for the S&P 500 to hit 7,600 on AI earnings. Is that realistic? Should I buy in now or wait?",
+    answer: "Based on retrieved news, there are multiple analyst forecasts for the S&P 500 driven by AI earnings optimism. The index has shown strong momentum supported by mega-cap tech earnings. However, the retrieved context does not contain a specific J.P. Morgan 7,600 target — this claim cannot be verified from our knowledge base. Key risks include: concentration in a narrow group of AI stocks, potential earnings deceleration, and Federal Reserve rate policy uncertainty. Any investment decision should consider individual risk tolerance and diversification.",
+    scores: { relevance: 8, groundedness: 9, accuracy: 8, completeness: 7, risk_awareness: 9 },
+    verdict: "Pass", sources: 3,
+    comments: "Appropriately flagged that the specific J.P. Morgan target couldn't be verified in the knowledge base. Good groundedness — didn't fabricate data. Completeness could improve with more sector-level analysis."
+  },
+  {
+    q: "I read in the news that Nvidia is leading the AI rally. How has NVDA's stock been performing compared to the news sentiment?",
+    answer: "News sentiment around Nvidia is overwhelmingly positive — multiple articles cite NVDA as the primary beneficiary of the AI infrastructure boom, with strong data center revenue growth and dominant market share in AI accelerator chips. NVDA stock price data shows significant upward momentum, trading near all-time highs. The positive news sentiment and price performance are highly correlated. Key risks: valuation concerns at current multiples, potential demand normalization as AI capex cycles, and export restrictions to China impacting revenue.",
+    scores: { relevance: 10, groundedness: 8, accuracy: 8, completeness: 9, risk_awareness: 9 },
+    verdict: "Pass", sources: 4,
+    comments: "Strong correlation analysis between news sentiment and price data. Good risk awareness with valuation and export restriction concerns. Groundedness solid with multiple source citations."
+  }
+];
+
+let currentEvalIdx = 0;
+
+function showEval(idx) {
+  currentEvalIdx = idx;
+  const d = EVAL_DATA[idx];
+  const container = document.getElementById('eval-result');
+  container.style.display = 'block';
+
+  // Highlight selected query
+  document.querySelectorAll('.eval-q').forEach((el, i) => {
+    el.style.borderColor = i === idx ? 'var(--accent)' : 'var(--border)';
+    el.style.background = i === idx ? 'rgba(184,80,66,.04)' : '#fff';
+  });
+
+  function scorePill(name, score) {
+    const isHigh = score >= 8;
+    const bg = isHigh ? '#f0fdf4' : score >= 6 ? '#fffbeb' : '#fef2f2';
+    const border = isHigh ? '#4ade80' : score >= 6 ? '#fbbf24' : '#f87171';
+    const color = isHigh ? '#166534' : score >= 6 ? '#92400e' : '#7f1d1d';
+    return `<span style="font-family:'Inter',sans-serif;font-size:.6rem;background:${bg};border:1px solid ${border};padding:.2rem .5rem;border-radius:4px;color:${color};font-weight:600;">${name}: ${score}/10</span>`;
+  }
+
+  const pass = d.verdict === 'Pass';
+  const overall = ((d.scores.relevance + d.scores.groundedness + d.scores.accuracy + d.scores.completeness + d.scores.risk_awareness) / 5).toFixed(1);
+
+  document.getElementById('eval-body').innerHTML = `
+    <div style="margin-bottom:.75rem;">
+      <div style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;">Query ${idx+1}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink);">${d.q}</div>
+    </div>
+    <div style="margin-bottom:.75rem;">
+      <div style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;">Generated Answer</div>
+      <div style="font-size:.78rem;color:var(--muted);line-height:1.65;background:var(--surface);border-radius:6px;padding:.6rem .8rem;">${d.answer}</div>
+    </div>
+    <div style="margin-bottom:.75rem;">
+      <div style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;">LLM-as-Judge Scores</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        ${scorePill('Relevance', d.scores.relevance)}
+        ${scorePill('Groundedness', d.scores.groundedness)}
+        ${scorePill('Accuracy', d.scores.accuracy)}
+        ${scorePill('Completeness', d.scores.completeness)}
+        ${scorePill('Risk Awareness', d.scores.risk_awareness)}
+      </div>
+    </div>
+    <div style="display:flex;gap:1rem;align-items:center;margin-bottom:.75rem;">
+      <span style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;background:${pass?'#f0fdf4':'#fef2f2'};border:1px solid ${pass?'#4ade80':'#f87171'};padding:.25rem .7rem;border-radius:5px;color:${pass?'#166534':'#7f1d1d'};">${d.verdict.toUpperCase()}</span>
+      <span style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:var(--ink);">Overall: ${overall}/10</span>
+      <span style="font-family:'Inter',sans-serif;font-size:.6rem;color:var(--muted);">Sources cited: ${d.sources}</span>
+    </div>
+    <div style="font-size:.72rem;color:var(--muted);line-height:1.6;padding:.5rem .7rem;background:var(--surface);border-radius:6px;border-left:3px solid var(--accent);">
+      <strong style="color:var(--ink);">Judge Comments:</strong> ${d.comments}
+    </div>
+  `;
+
+  container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
 async function regenerateEval() {
   if (!apiKey) { alert('Enter your API key first.'); return; }
-  const questionEl = document.getElementById('eval-question');
-  const answerEl = document.getElementById('eval-answer');
-  const scoresEl = document.getElementById('eval-scores');
-  const verdictEl = document.getElementById('eval-verdict');
-  const sourcesEl = document.getElementById('eval-sources');
-
-  answerEl.innerHTML = '<div class="thinking"><b></b><b></b><b></b></div>';
-  scoresEl.innerHTML = '';
-  verdictEl.textContent = 'Evaluating...';
-  verdictEl.style.background = 'var(--surface)';
-  verdictEl.style.borderColor = 'var(--border)';
-  verdictEl.style.color = 'var(--muted)';
+  const d = EVAL_DATA[currentEvalIdx];
+  const body = document.getElementById('eval-body');
+  body.innerHTML = '<div class="thinking"><b></b><b></b><b></b></div>';
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1185,51 +1268,25 @@ async function regenerateEval() {
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 800,
-        system: `You are an LLM-as-a-Judge evaluating a RAG financial intelligence system. Given a question and context, generate a mock evaluation result.
+        system: `You are the GlobalEdge Financial Intelligence Assistant answering a broker's question. Then you are also the LLM-as-a-Judge evaluating your own answer.
 
-Output EXACTLY this JSON format (no markdown, no code fences):
-{"question":"<a financial question>","answer":"<a 2-3 sentence answer citing sources>","relevance":<1-5>,"groundedness":<1-5>,"accuracy":<1-5>,"completeness":<1-5>,"risk_awareness":<1-5>,"verdict":"PASS or FAIL","sources_cited":<number>}
-
-Make the question about financial markets, stocks, or SEC filings. The answer should reference specific data from financial news, stock prices, or Apple's 10-Q. Scores should be realistic (mostly 4-5, occasionally 3). Vary the question each time.`,
-        messages: [{ role: 'user', content: 'Generate a new evaluation result for the GlobalEdge Financial Intelligence system. Pick a different financial topic each time.' }],
+Output EXACTLY this JSON (no markdown, no code fences):
+{"answer":"<2-4 sentence grounded answer citing sources>","relevance":<1-10>,"groundedness":<1-10>,"accuracy":<1-10>,"completeness":<1-10>,"risk_awareness":<1-10>,"verdict":"Pass or Needs Improvement","sources_cited":<number>,"comments":"<1-2 sentence judge commentary>"}`,
+        messages: [{ role: 'user', content: d.q }],
       }),
     });
     const data = await res.json();
     const text = data.content?.[0]?.text || '';
     const result = JSON.parse(text);
 
-    questionEl.textContent = result.question;
-    answerEl.textContent = result.answer;
-
-    const metrics = [
-      { name: 'Relevance', score: result.relevance },
-      { name: 'Groundedness', score: result.groundedness },
-      { name: 'Accuracy', score: result.accuracy },
-      { name: 'Completeness', score: result.completeness },
-      { name: 'Risk Awareness', score: result.risk_awareness },
-    ];
-
-    scoresEl.innerHTML = metrics.map(m => {
-      const isHigh = m.score >= 4;
-      const bg = isHigh ? '#f0fdf4' : '#fffbeb';
-      const border = isHigh ? '#4ade80' : '#fbbf24';
-      const color = isHigh ? '#166534' : '#92400e';
-      return `<span style="font-family:'Inter',sans-serif;font-size:.6rem;background:${bg};border:1px solid ${border};padding:.2rem .5rem;border-radius:4px;color:${color};font-weight:600;">${m.name}: ${m.score}</span>`;
-    }).join('');
-
-    const pass = result.verdict === 'PASS';
-    verdictEl.textContent = result.verdict;
-    verdictEl.style.background = pass ? '#f0fdf4' : '#fef2f2';
-    verdictEl.style.borderColor = pass ? '#4ade80' : '#f87171';
-    verdictEl.style.color = pass ? '#166534' : '#7f1d1d';
-    sourcesEl.textContent = `Sources cited: ${result.sources_cited}`;
-
+    EVAL_DATA[currentEvalIdx].answer = result.answer;
+    EVAL_DATA[currentEvalIdx].scores = { relevance: result.relevance, groundedness: result.groundedness, accuracy: result.accuracy, completeness: result.completeness, risk_awareness: result.risk_awareness };
+    EVAL_DATA[currentEvalIdx].verdict = result.verdict;
+    EVAL_DATA[currentEvalIdx].sources = result.sources_cited;
+    EVAL_DATA[currentEvalIdx].comments = result.comments;
+    showEval(currentEvalIdx);
   } catch (e) {
-    answerEl.textContent = 'Error generating evaluation: ' + e.message;
-    verdictEl.textContent = 'ERROR';
-    verdictEl.style.background = '#fef2f2';
-    verdictEl.style.borderColor = '#f87171';
-    verdictEl.style.color = '#7f1d1d';
+    body.innerHTML = '<div style="color:#b85042;">Error: ' + e.message + '</div>';
   }
 }
 
