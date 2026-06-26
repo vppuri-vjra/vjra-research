@@ -1121,6 +1121,57 @@
             </div>
           </div>
 
+          <!-- ── SEQUENTIAL FLOW ── -->
+          <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+            <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">End-to-End Flow — How a Question Gets Answered</div>
+
+            <div style="display:flex;flex-direction:column;gap:.3rem;">
+
+              <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+                <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:var(--accent);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
+                <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">User Input</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">— Voice (Web Speech API STT) or text input captured in the chat bar</span></div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+                <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#767676;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
+                <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Greeter Agent</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">— Classifies intent from the question. Emits <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;color:#b85042;">ROUTE:technical</code>, <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;color:#b85042;">ROUTE:gtm</code>, or <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;color:#b85042;">ROUTE:executive</code></span></div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+                <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:var(--accent);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
+                <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">JS Route Parser</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">— Regex <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">ROUTE_RE</code> extracts the signal. Switches <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">currentAgent</code> and updates the agent pill in the header</span></div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+                <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#2d6a4f;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</span>
+                <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">KB Scoping</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">— <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">buildKB(agent)</code> selects only the KB files this agent is allowed to see (Technical → KB_TECHNICAL + KB_LAUNCH)</span></div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+                <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#2d6a4f;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</span>
+                <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">System Prompt Assembly</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">— Agent's system prompt + scoped KB + global rules concatenated into the <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">system</code> parameter</span></div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+                <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#6d28d9;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">6</span>
+                <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Claude API Call</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">— <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">fetch('https://api.anthropic.com/v1/messages')</code> with <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">claude-sonnet-4-6</code>, <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">anthropic-dangerous-direct-browser-access: true</code></span></div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+                <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#6d28d9;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">7</span>
+                <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Response Parsing</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">— Check for <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">ROUTE:</code> signal in response. If present → cross-route to another agent (up to 3 hops). If not → display answer</span></div>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+                <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#b45309;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">8</span>
+                <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Render + Speak</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">— Agent avatar + response bubble rendered in chat. TTS speaks the answer via SpeechSynthesis (Alex voice, rate 0.92). History updated for conversation continuity</span></div>
+              </div>
+
+            </div>
+
+            <div style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;text-align:center;margin-top:.4rem;">Production extension: Steps 4-5 would be replaced by Pinecone vector retrieval (index: <code style="font-size:.5rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">nightingale-launch</code>, top-k=5, text-embedding-3-small) via <code style="font-size:.5rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">scripts/query_pinecone.py</code></div>
+          </div>
+
           </div><!-- /dark container -->
         </div>
 
