@@ -175,7 +175,7 @@
       <div class="card-grid-2">
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">The Problem</div>
-          <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">A VP of Engineering needs biweekly portfolio health reports across <strong style="color:var(--ink)">5+ Jira projects</strong>. Today this means manually exporting Jira, reviewing 50+ epics for RAG status, writing an exec narrative, formatting slides &mdash; <strong style="color:var(--ink)">4+ hours of TPM time every 2 weeks</strong>. Plus daily monitoring for escalations happens ad-hoc.</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">A VP of Engineering needs weekly portfolio health reports across <strong style="color:var(--ink)">5+ Jira projects</strong>. Today this means manually exporting Jira, reviewing 50+ epics for RAG status, writing an exec narrative, formatting slides &mdash; <strong style="color:var(--ink)">4+ hours of TPM time every week</strong>. Plus daily monitoring for escalations happens ad-hoc.</div>
         </div>
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">The Solution</div>
@@ -191,7 +191,7 @@
             </div>
             <div style="font-size:.73rem;display:flex;gap:6px;align-items:baseline;">
               <span style="width:7px;height:7px;border-radius:50%;background:#6d28d9;flex-shrink:0;margin-top:3px;display:inline-block;"></span>
-              <span style="color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Biweekly Report Generator</strong> &mdash; exports Jira &rarr; Claude analysis &rarr; 5-slide PPTX deck</span>
+              <span style="color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Weekly Report Generator</strong> &mdash; exports Jira &rarr; Claude analysis &rarr; 5-slide PPTX deck</span>
             </div>
           </div>
           <div style="font-size:.72rem;color:var(--muted);margin-top:.5rem;font-style:italic;">Total cost: ~$0.05/run</div>
@@ -208,7 +208,7 @@
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">Why Not Manual Reports?</div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">4+ hours of TPM time every 2 weeks</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">4+ hours of TPM time every week</div>
             <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">RAG classification is subjective and inconsistent</div>
             <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Escalations caught too late &mdash; after the meeting, not before</div>
             <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">No audit trail of what changed between reports</div>
@@ -250,7 +250,7 @@
         </div>
         <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
           <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Agent 3</div>
-          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">run_biweekly_report.py</code><br>Jira CSV &rarr; Claude &rarr; 5-slide PPTX</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">run_weekly_report.py</code><br>Jira CSV &rarr; Claude &rarr; 5-slide PPTX</div>
         </div>
         <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
           <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Output</div>
@@ -323,7 +323,7 @@
                 <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:var(--accent);">meeting_notes.txt</div>
               </div>
             </div>
-            <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;line-height:1.5;">Auto-updated from live Jira data via Claude &mdash; 2 items per section (risks, wins, decisions). Fed into both escalation agent &amp; biweekly report as context.</div>
+            <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;line-height:1.5;">Auto-updated from live Jira data via Claude &mdash; 2 items per section (risks, wins, decisions). Fed into both escalation agent &amp; weekly report as context.</div>
           </div>
           <!-- Delta Email output -->
           <div style="border:1px dashed rgba(45,106,79,.5);border-radius:9px;padding:.65rem .7rem;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);">
@@ -342,7 +342,7 @@
         <div style="border-top:1px solid #e8e6e1;margin:.75rem 0;"></div>
 
         <!-- ── BIWEEKLY PIPELINE ── -->
-        <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.6rem;">Biweekly Pipeline (Agent 3)</div>
+        <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.6rem;">Weekly Pipeline (Agent 3)</div>
 
         <!-- Jira CSV + Meeting Notes sources -->
         <div style="display:flex;justify-content:center;gap:.75rem;margin-bottom:.5rem;">
@@ -365,11 +365,11 @@
         <!-- connector -->
         <div style="display:flex;justify-content:center;"><div style="width:1px;height:22px;background:linear-gradient(to bottom,#ddd8d0,#6d28d9);position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#6d28d9;box-shadow:0 0 5px rgba(109,40,217,.4);"></div></div></div>
 
-        <!-- Agent 3: Biweekly Report -->
+        <!-- Agent 3: Weekly Report -->
         <div style="border:1px solid rgba(109,40,217,.35);border-radius:10px;padding:.75rem 1rem;background:rgba(109,40,217,.04);margin-bottom:.5rem;display:flex;align-items:center;gap:.9rem;position:relative;box-shadow:0 1px 4px rgba(0,0,0,.05);">
           <div style="width:42px;height:42px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);box-shadow:inset -2px -2px 5px rgba(0,0,0,.4),inset 1px 1px 4px rgba(255,255,255,.25),0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;text-shadow:0 1px 2px rgba(0,0,0,.5);">3</div>
           <div style="flex:1;">
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#1a1a2e;margin-bottom:.1rem;">Biweekly Report Generator <span style="font-style:normal;font-size:.72rem;color:#6d28d9;font-family:'Inter',sans-serif;font-weight:500;">&middot; run_biweekly_report.py</span></div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#1a1a2e;margin-bottom:.1rem;">Weekly Report Generator <span style="font-style:normal;font-size:.72rem;color:#6d28d9;font-family:'Inter',sans-serif;font-weight:500;">&middot; run_weekly_report.py</span></div>
             <div style="font-family:'Inter',sans-serif;font-size:.65rem;color:#767676;">Jira CSV &rarr; Claude API (RAG analysis + exec narrative) &rarr; pptxgenjs &rarr; 5-slide PPTX</div>
           </div>
           <div style="position:absolute;right:.75rem;top:.55rem;background:#f0ece6;border:1px solid #ddd8d0;border-radius:4px;padding:.2rem .45rem;font-family:'Inter',sans-serif;font-size:.58rem;color:#a8a29e;letter-spacing:.3px;">claude-sonnet-4-6</div>
@@ -414,7 +414,7 @@
               <tbody>
                 <tr><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#2d6a4f;font-weight:600;">Jira Monitor</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;"><code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">jira_monitor.py</code></td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Daily 8:08 AM</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Jira REST API snapshots</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Delta email + JSON snapshot</td></tr>
                 <tr><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#b45309;font-weight:600;">Escalation Agent</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;"><code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">escalation_agent.py</code></td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Daily (after monitor)</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Jira snapshot + triggers</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">VP escalation email draft</td></tr>
-                <tr><td style="padding:.3rem .6rem;color:#6d28d9;font-weight:600;">Biweekly Report</td><td style="padding:.3rem .6rem;"><code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">run_biweekly_report.py</code></td><td style="padding:.3rem .6rem;color:#767676;">Biweekly (manual/scheduled)</td><td style="padding:.3rem .6rem;color:#767676;">Jira CSV export</td><td style="padding:.3rem .6rem;color:#767676;">5-slide PPTX + JSON analysis</td></tr>
+                <tr><td style="padding:.3rem .6rem;color:#6d28d9;font-weight:600;">Weekly Report</td><td style="padding:.3rem .6rem;"><code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">run_weekly_report.py</code></td><td style="padding:.3rem .6rem;color:#767676;">Weekly (manual/scheduled)</td><td style="padding:.3rem .6rem;color:#767676;">Jira CSV export</td><td style="padding:.3rem .6rem;color:#767676;">5-slide PPTX + JSON analysis</td></tr>
               </tbody>
             </table>
           </div>
@@ -548,7 +548,7 @@
           <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">Cost</div>
           <div class="card-grid-2" style="padding:0;gap:.4rem;">
             <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.5rem .6rem;">
-              <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#1a1a2e;margin-bottom:.2rem;">Biweekly Report</div>
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#1a1a2e;margin-bottom:.2rem;">Weekly Report</div>
               <div style="font-size:.55rem;color:#767676;line-height:1.65;">
                 <strong style="color:var(--ink);">~$0.05 per run</strong><br>
                 1,500&ndash;2,500 tokens per Claude call
@@ -591,7 +591,7 @@
 
             <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
               <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#6d28d9;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</span>
-              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">CSV Export</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Export Jira data as CSV for biweekly report generation</span></div>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">CSV Export</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Export Jira data as CSV for weekly report generation</span></div>
             </div>
 
             <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
