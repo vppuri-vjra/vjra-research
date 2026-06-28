@@ -295,13 +295,14 @@
           </div>
         </div>
 
-        <!-- fan-out to Agent 2 + Delta Email -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.3rem;padding:0 .5rem;">
+        <!-- fan-out to Agent 2 + Delta Email + Meeting Notes -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.3rem;padding:0 .5rem;">
           <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(180,83,9,.5),rgba(180,83,9,.15));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#b45309;box-shadow:0 0 4px rgba(180,83,9,.4);"></div></div></div>
+          <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(184,80,66,.5),rgba(184,80,66,.15));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#b85042;box-shadow:0 0 4px rgba(184,80,66,.4);"></div></div></div>
           <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(45,106,79,.5),rgba(45,106,79,.15));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#2d6a4f;box-shadow:0 0 4px rgba(45,106,79,.4);"></div></div></div>
         </div>
 
-        <div class="card-grid-2" style="gap:.5rem;margin-bottom:.75rem;padding:0 .5rem;">
+        <div class="card-grid-3" style="gap:.5rem;margin-bottom:.75rem;padding:0 .5rem;">
           <!-- Agent 2: Escalation -->
           <div style="border:1px solid rgba(180,83,9,.4);border-radius:9px;padding:.65rem .7rem;background:#fffbf0;box-shadow:0 1px 3px rgba(0,0,0,.05);">
             <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
@@ -311,7 +312,18 @@
                 <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#b45309;">escalation_agent.py</div>
               </div>
             </div>
-            <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;line-height:1.5;">Red/Critical triggers &rarr; VP escalation email draft</div>
+            <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;line-height:1.5;">Snapshot + meeting notes &rarr; Red/Critical triggers &rarr; VP escalation email draft</div>
+          </div>
+          <!-- Meeting Notes -->
+          <div style="border:1px solid rgba(184,80,66,.4);border-radius:9px;padding:.65rem .7rem;background:rgba(184,80,66,.04);box-shadow:0 1px 3px rgba(0,0,0,.05);">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+              <span style="font-size:1.1rem;">&#x1F4DD;</span>
+              <div>
+                <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--ink);line-height:1.1;">Meeting Notes</div>
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:var(--accent);">meeting_notes.txt</div>
+              </div>
+            </div>
+            <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;line-height:1.5;">Auto-updated from live Jira data via Claude &mdash; 2 items per section (risks, wins, decisions). Fed into both escalation agent &amp; biweekly report as context.</div>
           </div>
           <!-- Delta Email output -->
           <div style="border:1px dashed rgba(45,106,79,.5);border-radius:9px;padding:.65rem .7rem;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);">
@@ -332,13 +344,20 @@
         <!-- ── BIWEEKLY PIPELINE ── -->
         <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.6rem;">Biweekly Pipeline (Agent 3)</div>
 
-        <!-- Jira CSV source -->
-        <div style="display:flex;justify-content:center;margin-bottom:.5rem;">
+        <!-- Jira CSV + Meeting Notes sources -->
+        <div style="display:flex;justify-content:center;gap:.75rem;margin-bottom:.5rem;">
           <div style="display:inline-flex;align-items:center;gap:.5rem;border:1px solid #ddd8d0;border-radius:32px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:.5rem 1.2rem;">
             <span style="font-size:1rem;">&#x1F4C4;</span>
             <div>
               <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:#1a1a2e;">Jira CSV Export</div>
               <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;">5+ projects &middot; 50+ epics</div>
+            </div>
+          </div>
+          <div style="display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(184,80,66,.3);border-radius:32px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:.5rem 1.2rem;">
+            <span style="font-size:1rem;">&#x1F4DD;</span>
+            <div>
+              <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:#1a1a2e;">meeting_notes.txt</div>
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;">Auto-updated from Jira &middot; risks &middot; wins</div>
             </div>
           </div>
         </div>
