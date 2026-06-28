@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VP Portfolio Health Report Generator · vjra.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+    --bg: #f8f4ee;
+    --surface: #f4f3f0;
+    --border: #e8e6e1;
+    --green: #2d6a4f;
+    --amber: #b45309;
+    --purple: #6d28d9;
+    --blue: #1d4ed8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #2b2b2b;
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 4px solid var(--accent);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .7rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .2rem;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.7rem; color: var(--ink); font-weight: 400;
+    letter-spacing: .01em;
+  }
+  .agent-pill {
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: .75rem;
+    background: var(--surface);
+  }
+  .agent-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+  }
+  .agent-label { color: var(--muted); }
+  .agent-label strong { color: var(--ink); }
+
+  /* ── Main layout ── */
+  #app {
+    flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  /* ── Tab bar ── */
+  .tab-bar {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .tab {
+    padding: .7rem 1.5rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    letter-spacing: .01em;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── Tab panels ── */
+  .tab-panel {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .tab-panel.active { display: flex; }
+
+  /* ── Card grid classes ── */
+  .card-grid-2 {
+    padding: .75rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem 1.5rem;
+  }
+  .card-grid-3 {
+    padding: .75rem 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .6rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    header { padding: .9rem 1rem; }
+    h1 { font-size: 1.1rem; }
+    .agent-pill { display: none; }
+    .tab-panel { padding: 1rem; }
+    .tab { padding: .6rem .9rem; font-size: .75rem; }
+    .card-grid-2 { grid-template-columns: 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+    h1 { font-size: 1rem; }
+    .tab { padding: .55rem .7rem; font-size: .72rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">vjra.us / portfolio</div>
+    <h1>VP Portfolio Health Report</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <a href="/" style="font-size:.75rem;color:var(--muted);text-decoration:none;">&larr; Research Library</a>
+    <div class="agent-pill">
+      <div class="agent-dot"></div>
+      <div class="agent-label">Agent: <strong>3-Agent Pipeline</strong></div>
+    </div>
+  </div>
+</header>
+
+<div id="app">
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('architecture')">Architecture &amp; Pipeline</button>
+    <button class="tab" onclick="switchTab('samples')">Sample Outputs</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- Tab 1: Architecture & Pipeline                                 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div id="tab-architecture" class="tab-panel active">
+
+    <!-- Card 01 · Business Problem -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">01 &middot; Business Problem</span>
+      </div>
+      <div class="card-grid-2">
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">The Problem</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">A VP of Engineering needs biweekly portfolio health reports across <strong style="color:var(--ink)">5+ Jira projects</strong>. Today this means manually exporting Jira, reviewing 50+ epics for RAG status, writing an exec narrative, formatting slides &mdash; <strong style="color:var(--ink)">4+ hours of TPM time every 2 weeks</strong>. Plus daily monitoring for escalations happens ad-hoc.</div>
+        </div>
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">The Solution</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:.45rem;">A <strong style="color:var(--ink)">3-agent automated pipeline</strong>:</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:.73rem;display:flex;gap:6px;align-items:baseline;">
+              <span style="width:7px;height:7px;border-radius:50%;background:#2d6a4f;flex-shrink:0;margin-top:3px;display:inline-block;"></span>
+              <span style="color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Daily Jira Monitor</strong> &mdash; detects changes and emails delta reports</span>
+            </div>
+            <div style="font-size:.73rem;display:flex;gap:6px;align-items:baseline;">
+              <span style="width:7px;height:7px;border-radius:50%;background:#b45309;flex-shrink:0;margin-top:3px;display:inline-block;"></span>
+              <span style="color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Escalation Agent</strong> &mdash; identifies Red/Critical triggers, drafts VP-ready escalation emails</span>
+            </div>
+            <div style="font-size:.73rem;display:flex;gap:6px;align-items:baseline;">
+              <span style="width:7px;height:7px;border-radius:50%;background:#6d28d9;flex-shrink:0;margin-top:3px;display:inline-block;"></span>
+              <span style="color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Biweekly Report Generator</strong> &mdash; exports Jira &rarr; Claude analysis &rarr; 5-slide PPTX deck</span>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:.5rem;font-style:italic;">Total cost: ~$0.05/run</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 02 · Solution Description -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">02 &middot; Solution Description</span>
+      </div>
+      <div class="card-grid-2">
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">Why Not Manual Reports?</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">4+ hours of TPM time every 2 weeks</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">RAG classification is subjective and inconsistent</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Escalations caught too late &mdash; after the meeting, not before</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">No audit trail of what changed between reports</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">Why 3-Agent Pipeline?</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Daily monitoring catches issues within 24 hours</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Escalation agent drafts VP emails with specific triggers</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Claude generates consistent RAG analysis + exec narrative</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Full audit trail via JSON + snapshots</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 03 · Technical Architecture -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">03 &middot; Technical Architecture</span>
+      </div>
+      <div class="card-grid-3">
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Model</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">Claude<br><strong style="color:var(--ink)">claude-sonnet-4-6</strong><br>Anthropic SDK<br>max_tokens=16000</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Data</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">Jira REST API (KAN project)<br>CSV export<br>Daily JSON snapshots</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Agent 1</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">jira_monitor.py</code><br>Daily delta detection<br>Email report</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Agent 2</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">escalation_agent.py</code><br>Red/Critical triggers<br>VP email draft</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Agent 3</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">run_biweekly_report.py</code><br>Jira CSV &rarr; Claude &rarr; 5-slide PPTX</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Output</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">PPTX deck<br>JSON audit trail<br>Escalation emails</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 04 · System Architecture Diagram -->
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.55rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">04 &middot; System Architecture</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.82rem;color:var(--muted);">3-agent Jira &rarr; PPTX pipeline</span>
+      </div>
+
+      <!-- Cream diagram container -->
+      <div style="background:#e8e0d4;padding:1.5rem 1.25rem 1.25rem;">
+
+        <!-- ── DAILY PIPELINE ── -->
+        <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.6rem;">Daily Pipeline (Agents 1 &amp; 2)</div>
+
+        <!-- Jira API source -->
+        <div style="display:flex;justify-content:center;margin-bottom:.5rem;">
+          <div style="display:inline-flex;align-items:center;gap:.5rem;border:1px solid #ddd8d0;border-radius:32px;overflow:hidden;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:.5rem 1.2rem;">
+            <span style="font-size:1rem;">&#x1F4CA;</span>
+            <div>
+              <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:#1a1a2e;">Jira REST API</div>
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;">KAN project &middot; daily pull</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- connector -->
+        <div style="display:flex;justify-content:center;"><div style="width:1px;height:22px;background:linear-gradient(to bottom,#ddd8d0,#b85042);position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#b85042;box-shadow:0 0 5px rgba(184,80,66,.4);"></div></div></div>
+
+        <!-- Agent 1: Jira Monitor -->
+        <div style="border:1px solid rgba(45,106,79,.35);border-radius:10px;padding:.75rem 1rem;background:rgba(45,106,79,.04);margin-bottom:.5rem;display:flex;align-items:center;gap:.9rem;position:relative;box-shadow:0 1px 4px rgba(0,0,0,.05);">
+          <div style="width:42px;height:42px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);box-shadow:inset -2px -2px 5px rgba(0,0,0,.4),inset 1px 1px 4px rgba(255,255,255,.25),0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;text-shadow:0 1px 2px rgba(0,0,0,.5);">1</div>
+          <div style="flex:1;">
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#1a1a2e;margin-bottom:.1rem;">Jira Monitor <span style="font-style:normal;font-size:.72rem;color:#2d6a4f;font-family:'Inter',sans-serif;font-weight:500;">&middot; jira_monitor.py</span></div>
+            <div style="font-family:'Inter',sans-serif;font-size:.65rem;color:#767676;">Compares today's snapshot vs yesterday &rarr; detects new/changed/resolved issues &rarr; emails daily delta report</div>
+          </div>
+        </div>
+
+        <!-- fan-out to Agent 2 + Delta Email -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.3rem;padding:0 .5rem;">
+          <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(180,83,9,.5),rgba(180,83,9,.15));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#b45309;box-shadow:0 0 4px rgba(180,83,9,.4);"></div></div></div>
+          <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(45,106,79,.5),rgba(45,106,79,.15));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#2d6a4f;box-shadow:0 0 4px rgba(45,106,79,.4);"></div></div></div>
+        </div>
+
+        <div class="card-grid-2" style="gap:.5rem;margin-bottom:.75rem;padding:0 .5rem;">
+          <!-- Agent 2: Escalation -->
+          <div style="border:1px solid rgba(180,83,9,.4);border-radius:9px;padding:.65rem .7rem;background:#fffbf0;box-shadow:0 1px 3px rgba(0,0,0,.05);">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+              <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);box-shadow:inset -1px -1px 4px rgba(0,0,0,.3),0 1px 5px rgba(180,83,9,.2);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:.9rem;">2</div>
+              <div>
+                <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:#92400e;line-height:1.1;">Escalation Agent</div>
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#b45309;">escalation_agent.py</div>
+              </div>
+            </div>
+            <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;line-height:1.5;">Red/Critical triggers &rarr; VP escalation email draft</div>
+          </div>
+          <!-- Delta Email output -->
+          <div style="border:1px dashed rgba(45,106,79,.5);border-radius:9px;padding:.65rem .7rem;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
+              <span style="font-size:1.1rem;">&#x1F4E7;</span>
+              <div>
+                <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--ink);line-height:1.1;">Delta Email</div>
+                <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:var(--muted);">Daily change summary</div>
+              </div>
+            </div>
+            <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;line-height:1.5;">New issues &middot; status changes &middot; priority shifts</div>
+          </div>
+        </div>
+
+        <!-- Separator -->
+        <div style="border-top:1px solid #e8e6e1;margin:.75rem 0;"></div>
+
+        <!-- ── BIWEEKLY PIPELINE ── -->
+        <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.6rem;">Biweekly Pipeline (Agent 3)</div>
+
+        <!-- Jira CSV source -->
+        <div style="display:flex;justify-content:center;margin-bottom:.5rem;">
+          <div style="display:inline-flex;align-items:center;gap:.5rem;border:1px solid #ddd8d0;border-radius:32px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:.5rem 1.2rem;">
+            <span style="font-size:1rem;">&#x1F4C4;</span>
+            <div>
+              <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:#1a1a2e;">Jira CSV Export</div>
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;">5+ projects &middot; 50+ epics</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- connector -->
+        <div style="display:flex;justify-content:center;"><div style="width:1px;height:22px;background:linear-gradient(to bottom,#ddd8d0,#6d28d9);position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#6d28d9;box-shadow:0 0 5px rgba(109,40,217,.4);"></div></div></div>
+
+        <!-- Agent 3: Biweekly Report -->
+        <div style="border:1px solid rgba(109,40,217,.35);border-radius:10px;padding:.75rem 1rem;background:rgba(109,40,217,.04);margin-bottom:.5rem;display:flex;align-items:center;gap:.9rem;position:relative;box-shadow:0 1px 4px rgba(0,0,0,.05);">
+          <div style="width:42px;height:42px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);box-shadow:inset -2px -2px 5px rgba(0,0,0,.4),inset 1px 1px 4px rgba(255,255,255,.25),0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;text-shadow:0 1px 2px rgba(0,0,0,.5);">3</div>
+          <div style="flex:1;">
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#1a1a2e;margin-bottom:.1rem;">Biweekly Report Generator <span style="font-style:normal;font-size:.72rem;color:#6d28d9;font-family:'Inter',sans-serif;font-weight:500;">&middot; run_biweekly_report.py</span></div>
+            <div style="font-family:'Inter',sans-serif;font-size:.65rem;color:#767676;">Jira CSV &rarr; Claude API (RAG analysis + exec narrative) &rarr; pptxgenjs &rarr; 5-slide PPTX</div>
+          </div>
+          <div style="position:absolute;right:.75rem;top:.55rem;background:#f0ece6;border:1px solid #ddd8d0;border-radius:4px;padding:.2rem .45rem;font-family:'Inter',sans-serif;font-size:.58rem;color:#a8a29e;letter-spacing:.3px;">claude-sonnet-4-6</div>
+        </div>
+
+        <!-- fan-out to outputs -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.3rem;padding:0 .5rem;">
+          <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(109,40,217,.5),rgba(109,40,217,.15));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#6d28d9;box-shadow:0 0 4px rgba(109,40,217,.4);"></div></div></div>
+          <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(45,106,79,.5),rgba(45,106,79,.15));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#2d6a4f;box-shadow:0 0 4px rgba(45,106,79,.4);"></div></div></div>
+          <div style="display:flex;justify-content:center;"><div style="width:1px;height:20px;background:linear-gradient(to bottom,rgba(180,83,9,.5),rgba(180,83,9,.15));position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#b45309;box-shadow:0 0 4px rgba(180,83,9,.4);"></div></div></div>
+        </div>
+
+        <div class="card-grid-3" style="gap:.5rem;margin-bottom:.5rem;">
+          <div style="border:1px dashed rgba(109,40,217,.5);border-radius:7px;padding:.55rem .65rem;background:#fff;">
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.06em;color:#6d28d9;margin-bottom:.25rem;">5-SLIDE PPTX</div>
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;line-height:1.5;">VP_Portfolio_YYYY-MM-DD.pptx<br>Cover &middot; Snapshot &middot; Decisions &middot; Wins &middot; Narrative</div>
+          </div>
+          <div style="border:1px dashed rgba(45,106,79,.5);border-radius:7px;padding:.55rem .65rem;background:#fff;">
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.06em;color:#2d6a4f;margin-bottom:.25rem;">JSON AUDIT</div>
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;line-height:1.5;">VP_Analysis_YYYY-MM-DD.json<br>Full Claude analysis + RAG data</div>
+          </div>
+          <div style="border:1px dashed rgba(180,83,9,.5);border-radius:7px;padding:.55rem .65rem;background:#fff;">
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.06em;color:#b45309;margin-bottom:.25rem;">ESCALATION</div>
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:#767676;line-height:1.5;">escalation_draft.json<br>VP email draft if triggers fire</div>
+          </div>
+        </div>
+
+        <!-- ── AGENT MANIFEST ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">Agent Manifest</div>
+          <div style="background:#fff;border:1px solid #e8e6e1;border-radius:8px;overflow:hidden;">
+            <table style="width:100%;font-family:'Inter',sans-serif;font-size:.58rem;border-collapse:collapse;">
+              <thead>
+                <tr style="background:var(--surface);">
+                  <th style="text-align:left;padding:.4rem .6rem;font-weight:700;color:var(--ink);border-bottom:1px solid #e8e6e1;">Agent</th>
+                  <th style="text-align:left;padding:.4rem .6rem;font-weight:700;color:var(--ink);border-bottom:1px solid #e8e6e1;">Script</th>
+                  <th style="text-align:left;padding:.4rem .6rem;font-weight:700;color:var(--ink);border-bottom:1px solid #e8e6e1;">Trigger</th>
+                  <th style="text-align:left;padding:.4rem .6rem;font-weight:700;color:var(--ink);border-bottom:1px solid #e8e6e1;">Input</th>
+                  <th style="text-align:left;padding:.4rem .6rem;font-weight:700;color:var(--ink);border-bottom:1px solid #e8e6e1;">Output</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#2d6a4f;font-weight:600;">Jira Monitor</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;"><code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">jira_monitor.py</code></td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Daily 8:08 AM</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Jira REST API snapshots</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Delta email + JSON snapshot</td></tr>
+                <tr><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#b45309;font-weight:600;">Escalation Agent</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;"><code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">escalation_agent.py</code></td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Daily (after monitor)</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">Jira snapshot + triggers</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">VP escalation email draft</td></tr>
+                <tr><td style="padding:.3rem .6rem;color:#6d28d9;font-weight:600;">Biweekly Report</td><td style="padding:.3rem .6rem;"><code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">run_biweekly_report.py</code></td><td style="padding:.3rem .6rem;color:#767676;">Biweekly (manual/scheduled)</td><td style="padding:.3rem .6rem;color:#767676;">Jira CSV export</td><td style="padding:.3rem .6rem;color:#767676;">5-slide PPTX + JSON analysis</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── PPTX SLIDE CONTENTS ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">PPTX Slide Contents &mdash; 5 Slides</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;">
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:var(--accent);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Cover</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Title, date, project scope</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#2d6a4f;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Snapshot</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; RAG KPIs + project-level table (Red/Amber/Green counts per project)</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#b45309;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Decisions</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Escalations, blockers, items needing VP decision</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#6d28d9;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Wins + Risk</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Completed milestones, upcoming risks, dependency status</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:var(--accent);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Narrative</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Claude-generated executive summary, 3-5 sentences, VP-ready</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ESCALATION TRIGGERS ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">Escalation Triggers</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;">
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">New issue with <strong>Highest</strong> or <strong>Critical</strong> priority detected</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Issue overdue by <strong>3+ days</strong> (past due date)</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Priority <strong>escalated overnight</strong> (e.g. Medium &rarr; Highest)</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;"><strong>3+ overdue issues</strong> in the same project area</div>
+          </div>
+        </div>
+
+        <!-- ── SCHEDULED TASKS ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">Scheduled Tasks (Claude Code Routines)</div>
+          <div style="background:#fff;border:1px solid #e8e6e1;border-radius:8px;overflow:hidden;">
+            <table style="width:100%;font-family:'Inter',sans-serif;font-size:.58rem;border-collapse:collapse;">
+              <thead>
+                <tr style="background:var(--surface);">
+                  <th style="text-align:left;padding:.4rem .6rem;font-weight:700;color:var(--ink);border-bottom:1px solid #e8e6e1;">Task</th>
+                  <th style="text-align:left;padding:.4rem .6rem;font-weight:700;color:var(--ink);border-bottom:1px solid #e8e6e1;">Schedule</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:var(--ink);font-weight:600;">Jira daily dummy injector</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">7:00 AM daily</td></tr>
+                <tr><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:var(--ink);font-weight:600;">Daily portfolio health dashboard report</td><td style="padding:.3rem .6rem;border-bottom:1px solid #f4f3f0;color:#767676;">8:08 AM daily</td></tr>
+                <tr><td style="padding:.3rem .6rem;color:var(--ink);font-weight:600;">Risk and dependency report</td><td style="padding:.3rem .6rem;color:#767676;">8:00 AM Mondays</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── ENVIRONMENT & CONFIG ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">Environment &amp; Config</div>
+          <div class="card-grid-2" style="padding:0;gap:.4rem;">
+            <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.5rem .6rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#1a1a2e;margin-bottom:.2rem;">API &amp; Model</div>
+              <div style="font-size:.55rem;color:#767676;line-height:1.65;">
+                <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">ANTHROPIC_API_KEY</code><br>
+                Model: <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">claude-sonnet-4-6</code><br>
+                Anthropic Python SDK
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.5rem .6rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#1a1a2e;margin-bottom:.2rem;">Jira</div>
+              <div style="font-size:.55rem;color:#767676;line-height:1.65;">
+                <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">JIRA_BASE_URL</code><br>
+                <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">JIRA_EMAIL</code><br>
+                <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">JIRA_API_TOKEN</code>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.5rem .6rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#1a1a2e;margin-bottom:.2rem;">Email</div>
+              <div style="font-size:.55rem;color:#767676;line-height:1.65;">
+                <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">GMAIL_USER</code><br>
+                <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">GMAIL_APP_PASSWORD</code><br>
+                SMTP via Gmail
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.5rem .6rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#1a1a2e;margin-bottom:.2rem;">GitHub</div>
+              <div style="font-size:.55rem;color:#767676;line-height:1.65;">
+                Repo: <a href="https://github.com/vppuri-vjra/vp-report-generator" style="color:var(--accent);text-decoration:none;font-size:.52rem;">vppuri-vjra/vp-report-generator</a><br>
+                GitHub Actions for CI
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── OUTPUT ARTIFACTS ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">Output Artifacts</div>
+          <div style="display:flex;flex-direction:column;gap:.25rem;">
+            <div style="display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid #e8e6e1;border-radius:5px;padding:.35rem .6rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#6d28d9;flex-shrink:0;"></span>
+              <code style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#6d28d9;">VP_Portfolio_YYYY-MM-DD.pptx</code>
+              <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:#767676;margin-left:auto;">5-slide executive deck</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid #e8e6e1;border-radius:5px;padding:.35rem .6rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#2d6a4f;flex-shrink:0;"></span>
+              <code style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#2d6a4f;">VP_Analysis_YYYY-MM-DD.json</code>
+              <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:#767676;margin-left:auto;">Full Claude analysis + RAG data</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid #e8e6e1;border-radius:5px;padding:.35rem .6rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#b45309;flex-shrink:0;"></span>
+              <code style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#b45309;">snapshots/jira_YYYY-MM-DD.json</code>
+              <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:#767676;margin-left:auto;">Daily Jira state snapshot</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid #e8e6e1;border-radius:5px;padding:.35rem .6rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>
+              <code style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--accent);">escalation_draft.json</code>
+              <span style="font-family:'Inter',sans-serif;font-size:.55rem;color:#767676;margin-left:auto;">VP escalation email draft</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── COST ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">Cost</div>
+          <div class="card-grid-2" style="padding:0;gap:.4rem;">
+            <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.5rem .6rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#1a1a2e;margin-bottom:.2rem;">Biweekly Report</div>
+              <div style="font-size:.55rem;color:#767676;line-height:1.65;">
+                <strong style="color:var(--ink);">~$0.05 per run</strong><br>
+                1,500&ndash;2,500 tokens per Claude call
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.5rem .6rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#1a1a2e;margin-bottom:.2rem;">Daily Monitor + Escalation</div>
+              <div style="font-size:.55rem;color:#767676;line-height:1.65;">
+                <strong style="color:var(--ink);">~$0.02/day</strong><br>
+                Snapshot comparison + trigger check
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SEQUENTIAL FLOW ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">End-to-End Flow &mdash; 8 Steps</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;">
+
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:var(--accent);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Jira API Pull</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Fetch current issues from Jira REST API (KAN project), save as JSON snapshot</span></div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#2d6a4f;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Snapshot Compare</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Diff today's snapshot vs yesterday's &mdash; detect new issues, status changes, priority shifts</span></div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#2d6a4f;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Delta Email</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Email daily change summary to stakeholders via Gmail SMTP</span></div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#b45309;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Escalation Check</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Scan snapshot for Red/Critical triggers &mdash; if any fire, draft VP escalation email</span></div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#6d28d9;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">CSV Export</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Export Jira data as CSV for biweekly report generation</span></div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#6d28d9;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">6</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Claude Analysis</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Send CSV to Claude API for RAG classification, risk analysis, and executive narrative generation</span></div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:#6d28d9;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">7</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">PPTX Build</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Generate 5-slide PPTX deck from Claude's structured analysis using pptxgenjs</span></div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:.6rem;background:#fff;border:1px solid #e8e6e1;border-radius:6px;padding:.5rem .7rem;">
+              <span style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:#fff;background:var(--accent);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">8</span>
+              <div><span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;color:var(--ink);">Auto-Open / Email</span><span style="font-size:.55rem;color:#767676;margin-left:.3rem;">&mdash; Open PPTX locally or email to VP with attached deck and JSON audit trail</span></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /cream container -->
+    </div><!-- /card 04 -->
+
+  </div><!-- #tab-architecture -->
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- Tab 2: Sample Outputs                                          -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div id="tab-samples" class="tab-panel">
+
+    <!-- Section 1: Slide Deck Structure -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Slide Deck Structure &mdash; 5 Slides</span>
+      </div>
+      <div style="padding:1rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:.6rem;">
+
+          <!-- Slide 1 -->
+          <div style="flex:1;min-width:140px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;">
+            <div style="background:var(--accent);padding:.35rem .5rem;color:#fff;font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;">SLIDE 1 &middot; Cover</div>
+            <div style="padding:.5rem;font-size:.6rem;color:var(--muted);line-height:1.5;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:.25rem;">VP Portfolio Health Report</div>
+              <div>June 28, 2026</div>
+              <div>Projects: KAN, PLAT, INFRA, DATA, MOBILE</div>
+              <div style="margin-top:.2rem;font-style:italic;color:#a8a29e;">Generated by Claude Agent Pipeline</div>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div style="flex:1;min-width:140px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;">
+            <div style="background:#2d6a4f;padding:.35rem .5rem;color:#fff;font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;">SLIDE 2 &middot; Snapshot</div>
+            <div style="padding:.5rem;font-size:.6rem;color:var(--muted);line-height:1.5;">
+              <div style="display:flex;gap:.4rem;margin-bottom:.3rem;">
+                <span style="background:#f0fdf4;border:1px solid #4ade80;border-radius:4px;padding:.15rem .3rem;font-weight:700;color:#14532d;">G: 12</span>
+                <span style="background:#fffbf0;border:1px solid #f59e0b;border-radius:4px;padding:.15rem .3rem;font-weight:700;color:#92400e;">A: 5</span>
+                <span style="background:#fef2f2;border:1px solid #f87171;border-radius:4px;padding:.15rem .3rem;font-weight:700;color:#7f1d1d;">R: 2</span>
+              </div>
+              <div style="font-size:.55rem;">KAN: 8G 2A 1R<br>PLAT: 4G 3A 1R<br>INFRA: all green</div>
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div style="flex:1;min-width:140px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;">
+            <div style="background:#b45309;padding:.35rem .5rem;color:#fff;font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;">SLIDE 3 &middot; Decisions</div>
+            <div style="padding:.5rem;font-size:.6rem;color:var(--muted);line-height:1.5;">
+              <div style="font-size:.55rem;margin-bottom:.15rem;color:#7f1d1d;font-weight:600;">Needs VP Decision:</div>
+              <div style="font-size:.55rem;">&bull; KAN-234: API migration blocked on vendor<br>&bull; PLAT-89: Infra budget increase request<br>&bull; DATA-156: Schema change timeline</div>
+            </div>
+          </div>
+
+          <!-- Slide 4 -->
+          <div style="flex:1;min-width:140px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;">
+            <div style="background:#6d28d9;padding:.35rem .5rem;color:#fff;font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;">SLIDE 4 &middot; Wins + Risk</div>
+            <div style="padding:.5rem;font-size:.6rem;color:var(--muted);line-height:1.5;">
+              <div style="font-size:.55rem;color:#14532d;font-weight:600;">Wins:</div>
+              <div style="font-size:.55rem;">&bull; MOBILE sprint 8 completed on time<br>&bull; INFRA migration 100% done</div>
+              <div style="font-size:.55rem;color:#7f1d1d;font-weight:600;margin-top:.2rem;">Risks:</div>
+              <div style="font-size:.55rem;">&bull; KAN vendor dependency<br>&bull; DATA team at capacity</div>
+            </div>
+          </div>
+
+          <!-- Slide 5 -->
+          <div style="flex:1;min-width:140px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;">
+            <div style="background:var(--accent);padding:.35rem .5rem;color:#fff;font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;">SLIDE 5 &middot; Narrative</div>
+            <div style="padding:.5rem;font-size:.6rem;color:var(--muted);line-height:1.5;">
+              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.72rem;color:var(--ink);line-height:1.55;">"Portfolio is largely on track with 12 of 19 epics Green. Two Red items in KAN require VP decision on vendor timeline. INFRA migration completed ahead of schedule. Recommend focusing next sprint on clearing the 5 Amber items before Q3 planning."</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Escalation Email Example -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Escalation Email Example</span>
+      </div>
+      <div style="padding:1rem;">
+        <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;font-family:'Inter',sans-serif;">
+          <div style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.75rem;font-size:.7rem;color:var(--muted);">
+            <div><strong style="color:var(--ink);">To:</strong> vp-engineering@company.com</div>
+            <div><strong style="color:var(--ink);">Subject:</strong> <span style="color:#7f1d1d;font-weight:600;">ESCALATION: 2 Critical Issues Detected &mdash; KAN Project</span></div>
+            <div><strong style="color:var(--ink);">From:</strong> portfolio-agent@company.com (automated)</div>
+          </div>
+          <div style="border-top:1px solid var(--border);padding-top:.75rem;font-size:.72rem;color:#2b2b2b;line-height:1.7;">
+            <p style="margin-bottom:.5rem;">Good morning,</p>
+            <p style="margin-bottom:.5rem;">The daily portfolio scan detected <strong style="color:#7f1d1d;">2 escalation triggers</strong> requiring your attention:</p>
+            <div style="margin-bottom:.5rem;">
+              <div style="font-size:.68rem;padding:.35rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;margin-bottom:.25rem;line-height:1.45;"><strong>KAN-234</strong> &mdash; API vendor contract expired. Priority escalated from Medium to Highest overnight. Blocking 3 downstream tasks.</div>
+              <div style="font-size:.68rem;padding:.35rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;"><strong>KAN-267</strong> &mdash; Security patch overdue by 4 days. Originally due June 24. Assigned to: J. Park.</div>
+            </div>
+            <p style="margin-bottom:.5rem;"><strong>Recommended action:</strong> Schedule 15-min sync with KAN lead (K. Matsumoto) to unblock vendor decision.</p>
+            <p style="font-size:.65rem;color:var(--muted);font-style:italic;">This email was auto-generated by the Portfolio Health Agent. Full snapshot: snapshots/jira_2026-06-28.json</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Delta Report Example -->
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.5rem 1rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Delta Report Example &mdash; Daily Change Summary</span>
+      </div>
+      <div style="padding:1rem;">
+        <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;font-family:'Inter',sans-serif;">
+          <div style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.75rem;font-size:.7rem;color:var(--muted);">
+            <div><strong style="color:var(--ink);">To:</strong> tpm-team@company.com</div>
+            <div><strong style="color:var(--ink);">Subject:</strong> Daily Portfolio Delta &mdash; June 28, 2026</div>
+          </div>
+          <div style="border-top:1px solid var(--border);padding-top:.75rem;font-size:.72rem;color:#2b2b2b;line-height:1.7;">
+
+            <!-- New Issues -->
+            <div style="margin-bottom:.6rem;">
+              <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#2d6a4f;margin-bottom:.3rem;">New Issues (3)</div>
+              <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:.5rem .6rem;font-size:.65rem;line-height:1.6;">
+                <div><strong>KAN-301</strong> &mdash; Add rate limiting to public API (Medium, To Do)</div>
+                <div><strong>PLAT-112</strong> &mdash; Dashboard performance regression (High, In Progress)</div>
+                <div><strong>DATA-170</strong> &mdash; ETL pipeline timeout on large datasets (Medium, To Do)</div>
+              </div>
+            </div>
+
+            <!-- Status Changes -->
+            <div style="margin-bottom:.6rem;">
+              <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#b45309;margin-bottom:.3rem;">Status Changes (5)</div>
+              <div style="background:#fffbf0;border:1px solid #fed7aa;border-radius:6px;padding:.5rem .6rem;font-size:.65rem;line-height:1.6;">
+                <div><strong>KAN-289</strong> &mdash; In Progress &rarr; Done</div>
+                <div><strong>KAN-291</strong> &mdash; To Do &rarr; In Progress</div>
+                <div><strong>MOBILE-45</strong> &mdash; In Review &rarr; Done</div>
+                <div><strong>MOBILE-48</strong> &mdash; To Do &rarr; In Progress</div>
+                <div><strong>INFRA-78</strong> &mdash; In Progress &rarr; Done</div>
+              </div>
+            </div>
+
+            <!-- Resolved -->
+            <div>
+              <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#767676;margin-bottom:.3rem;">Resolved (2)</div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.5rem .6rem;font-size:.65rem;line-height:1.6;">
+                <div><strong>KAN-289</strong> &mdash; User authentication refactor (completed)</div>
+                <div><strong>INFRA-78</strong> &mdash; Database migration to v3 (completed)</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- #tab-samples -->
+
+</div><!-- #app -->
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && name === 'architecture') || (i === 1 && name === 'samples'));
+  });
+  document.getElementById('tab-architecture').classList.toggle('active', name === 'architecture');
+  document.getElementById('tab-samples').classList.toggle('active', name === 'samples');
+}
+</script>
+</body>
+</html>
