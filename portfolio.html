@@ -397,6 +397,66 @@
           </div>
         </div>
 
+        <!-- ── MEETING NOTES FORMAT ── -->
+        <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
+          <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">meeting_notes.txt — Format &amp; Auto-Update</div>
+
+          <div class="card-grid-2" style="padding:0;gap:.5rem;margin-bottom:.5rem;">
+            <!-- Format -->
+            <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.6rem .7rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--ink);margin-bottom:.3rem;">📄 File Format</div>
+              <div style="font-size:.55rem;color:#767676;line-height:1.6;font-family:'Inter',monospace;">
+                <div style="background:#f8f4ee;border:1px solid #e8e6e1;border-radius:4px;padding:.4rem .5rem;font-family:monospace;font-size:.52rem;color:#1a1a2e;line-height:1.7;white-space:pre-wrap;">## Weekly TPM Sync — YYYY-MM-DD
+
+### Attendees
+Alice Chen, Tom Nguyen, Sarah Kim...
+
+---
+
+### Risks Raised
+1. CLOUD-003 vendor contract unsigned...
+   Owner: Sarah Kim. Likelihood: High.
+   Impact: Critical.
+   Mitigation: escalate to CPO...
+
+2. DATA-001 had 3 pipeline failures...
+   Owner: Data Eng 2. Likelihood: High.
+   Mitigation: freeze upstream changes...
+
+---
+
+### Dependencies Discussed
+- PROD-002 blocked by CLOUD-003...
+- SEC-002 shares resources with CLOUD-003...
+
+---
+
+### Key Wins
+1. PROD-001 hit 100K beta users...
+2. INT-001 CI/CD pipeline 40% faster...</div>
+              </div>
+            </div>
+
+            <!-- Auto-update -->
+            <div style="background:#fff;border:1px solid #e8e6e1;border-radius:7px;padding:.6rem .7rem;">
+              <div style="font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;color:var(--ink);margin-bottom:.3rem;">🔄 Auto-Update via Claude</div>
+              <div style="font-size:.55rem;color:#767676;line-height:1.65;">
+                <strong style="color:var(--ink);">Step 0b</strong> in <code style="font-size:.52rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">run_weekly_report.py</code>:<br><br>
+                Before generating the report, the script calls Claude with the live Jira DataFrame to <strong style="color:var(--ink);">auto-generate 2 fresh items per section</strong>:<br><br>
+                <div style="display:flex;flex-direction:column;gap:.2rem;">
+                  <span style="font-size:.52rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Risks Raised — 2 items from overdue/critical issues</span>
+                  <span style="font-size:.52rem;background:#fffbf0;border:1px solid rgba(180,83,9,.3);padding:.15rem .4rem;border-radius:3px;color:#92400e;">Dependencies — 2 items from blocked/linked issues</span>
+                  <span style="font-size:.52rem;background:#f8f5ff;border:1px solid rgba(109,40,217,.3);padding:.15rem .4rem;border-radius:3px;color:#5b21b6;">Key Wins — 2 items from recently resolved/completed</span>
+                </div>
+                <br>
+                The updated file is then read by both the <strong style="color:var(--ink);">escalation agent</strong> (context for VP email drafts) and the <strong style="color:var(--ink);">report generator</strong> (risk register slides).
+              </div>
+            </div>
+          </div>
+
+          <div style="font-family:'Inter',sans-serif;font-size:.52rem;color:#a8a29e;text-align:center;">Each entry includes: issue key, description, owner, likelihood, impact, mitigation, and dates — providing full traceability</div>
+        </div>
+
         <!-- ── AGENT MANIFEST ── -->
         <div style="border-top:1px solid #e8e6e1;padding-top:.75rem;margin-top:.75rem;">
           <div style="font-family:'Inter',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.12em;color:#a8a29e;text-transform:uppercase;text-align:center;margin-bottom:.55rem;">Agent Manifest</div>
