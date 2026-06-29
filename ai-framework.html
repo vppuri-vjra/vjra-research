@@ -1298,6 +1298,137 @@
       </div>
     </div>
 
+    <!-- Sample Report: Code Review -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Sample Report — Code Review</span>
+      </div>
+      <div style="padding:.75rem 1rem;">
+        <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:var(--muted);margin-bottom:.5rem;">Week of June 23–27, 2026 · 7 AI-generated code review outputs reviewed</div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.65rem;">
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">71%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Correct</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b45309;">29%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Partial</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">12 min</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg review</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b45309;">0.81</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg AI conf</div>
+          </div>
+        </div>
+
+        <table style="width:100%;font-size:.62rem;border-collapse:collapse;font-family:'Inter',sans-serif;margin-bottom:.5rem;">
+          <thead><tr style="border-bottom:2px solid var(--border);">
+            <th style="text-align:left;padding:.3rem .4rem;">Output</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Release</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Accuracy</th>
+            <th style="text-align:center;padding:.3rem .4rem;">AI Conf</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Review</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Errors</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Signal</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">CR-2026-031</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.90</td><td style="text-align:center;">8 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">CR-2026-032</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.87</td><td style="text-align:center;">9 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">CR-2026-033</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Partial</span></td><td style="text-align:center;">0.73</td><td style="text-align:center;">18 min</td><td style="padding:.3rem .4rem;font-size:.55rem;color:#92400e;">Missing biz context</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">CR-2026-034</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.85</td><td style="text-align:center;">10 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">CR-2026-035</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Partial</span></td><td style="text-align:center;">0.69</td><td style="text-align:center;">20 min</td><td style="padding:.3rem .4rem;font-size:.55rem;color:#92400e;">Incomplete, Wrong tone</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">CR-2026-036</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.84</td><td style="text-align:center;">9 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr><td style="padding:.3rem .4rem;">CR-2026-037</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.82</td><td style="text-align:center;">11 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+          </tbody>
+        </table>
+
+        <div style="padding:.5rem .65rem;background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;font-size:.62rem;color:#92400e;">
+          <strong>Recommendation:</strong> Code Review trending positive (71% correct, up from 55% last month). Partials have low AI confidence (0.69–0.73) — well-calibrated. Top errors: missing business context in review comments, incomplete coverage of edge cases. Stay in Phase 1 for 2 more weeks then reassess.
+        </div>
+      </div>
+    </div>
+
+    <!-- Sample Report: Testing & QA -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Sample Report — Testing &amp; QA</span>
+      </div>
+      <div style="padding:.75rem 1rem;">
+        <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:var(--muted);margin-bottom:.5rem;">Week of June 23–27, 2026 · 10 AI-generated test outputs reviewed (Phase 2 — confidence routing active)</div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.65rem;">
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">90%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Correct</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b45309;">10%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Partial</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">6 min</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg review</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">0.91</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg AI conf</div>
+          </div>
+        </div>
+
+        <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:600;color:var(--ink);margin-bottom:.4rem;">Phase 2 Routing Breakdown</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;margin-bottom:.65rem;">
+          <div style="background:#dcfce7;border-radius:5px;padding:.4rem;text-align:center;">
+            <div style="font-size:.95rem;font-weight:700;color:#166534;">7</div>
+            <div style="font-size:.52rem;color:#166534;">High-conf auto-passed</div>
+          </div>
+          <div style="background:#fef3c7;border-radius:5px;padding:.4rem;text-align:center;">
+            <div style="font-size:.95rem;font-weight:700;color:#92400e;">2</div>
+            <div style="font-size:.52rem;color:#92400e;">Spot-checked (of 7)</div>
+          </div>
+          <div style="background:#f3e8ff;border-radius:5px;padding:.4rem;text-align:center;">
+            <div style="font-size:.95rem;font-weight:700;color:#6d28d9;">3</div>
+            <div style="font-size:.52rem;color:#6d28d9;">Low-conf full review</div>
+          </div>
+        </div>
+
+        <table style="width:100%;font-size:.62rem;border-collapse:collapse;font-family:'Inter',sans-serif;margin-bottom:.5rem;">
+          <thead><tr style="border-bottom:2px solid var(--border);">
+            <th style="text-align:left;padding:.3rem .4rem;">Output</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Release</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Routing</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Accuracy</th>
+            <th style="text-align:center;padding:.3rem .4rem;">AI Conf</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Routing Valid?</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Signal</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-081</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Spot check</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.93</td><td style="text-align:center;color:#2d6a4f;">✓ Correct</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P3</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-082</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Auto-passed</span></td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;">0.95</td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;color:#999;">—</td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-083</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#f3e8ff;color:#6d28d9;">Full review</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.78</td><td style="text-align:center;color:#b45309;">False positive</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P3</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-084</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Auto-passed</span></td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;">0.91</td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;color:#999;">—</td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-085</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Spot check</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.89</td><td style="text-align:center;color:#2d6a4f;">✓ Correct</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P3</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-086</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#f3e8ff;color:#6d28d9;">Full review</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Partial</span></td><td style="text-align:center;">0.74</td><td style="text-align:center;color:#2d6a4f;">✓ Correct</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-087</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Auto-passed</span></td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;">0.92</td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;color:#999;">—</td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-088</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#f3e8ff;color:#6d28d9;">Full review</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.80</td><td style="text-align:center;color:#b45309;">False positive</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P3</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">TEST-2026-089</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Auto-passed</span></td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;">0.94</td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;color:#999;">—</td></tr>
+            <tr><td style="padding:.3rem .4rem;">TEST-2026-090</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Auto-passed</span></td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;">0.90</td><td style="text-align:center;color:#999;">—</td><td style="text-align:center;color:#999;">—</td></tr>
+          </tbody>
+        </table>
+
+        <div style="padding:.5rem .65rem;background:#dcfce7;border:1px solid #86efac;border-radius:6px;font-size:.62rem;color:#166534;margin-bottom:.5rem;">
+          <strong>Recommendation:</strong> Testing & QA performing excellently in Phase 2. 90% accuracy, confidence well-calibrated (0.91 avg). Routing working correctly — 2 false positives (correct outputs flagged for review unnecessarily) suggest threshold could be raised from 0.85 to 0.88. 4 of 5 reviewed outputs signal "Ready P3".
+        </div>
+
+        <div style="padding:.5rem .65rem;background:var(--surface);border-radius:6px;font-size:.62rem;color:var(--muted);">
+          <strong style="color:var(--ink);">Phase 2 insight:</strong> 7 of 10 outputs auto-passed without human review. Only 5 required human time (2 spot checks + 3 full reviews). <strong style="color:var(--ink);">Human effort reduced by 50%</strong> vs Phase 1 (10 reviews → 5).
+        </div>
+      </div>
+    </div>
+
     <!-- Cross-SDLC Summary -->
     <div class="card">
       <div class="card-header">
