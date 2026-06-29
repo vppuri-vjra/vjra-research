@@ -388,6 +388,7 @@
     <button class="tab" onclick="switchTab('jira')">Jira Project Setup</button>
     <button class="tab" onclick="switchTab('forms')">Review Forms</button>
     <button class="tab" onclick="switchTab('reporting')">Reporting</button>
+    <button class="tab" onclick="switchTab('liveforms')">Forms (Interactive)</button>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -1462,6 +1463,158 @@
 
   </div><!-- end tab-reporting -->
 
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- Tab 5: Interactive Forms                                        -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div id="tab-liveforms" class="tab-panel">
+
+    <!-- Phase selector buttons -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Select Phase Form</span>
+      </div>
+      <div style="padding:.75rem 1rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+        <button class="phase-form-btn" onclick="showPhaseForm(1)" style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;padding:.4rem .8rem;border-radius:6px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:#fff;">Phase 1 — Full Review</button>
+        <button class="phase-form-btn" onclick="showPhaseForm(2)" style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;padding:.4rem .8rem;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);">Phase 2 — Confidence Routing</button>
+        <button class="phase-form-btn" onclick="showPhaseForm(3)" style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;padding:.4rem .8rem;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);">Phase 3 — Exception-Based</button>
+        <button class="phase-form-btn" onclick="showPhaseForm(4)" style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;padding:.4rem .8rem;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);">Phase 4 — Strategic Oversight</button>
+      </div>
+    </div>
+
+    <!-- Phase 1 Form -->
+    <div id="form-phase-1" class="phase-form-content" style="margin-top:.75rem;">
+      <iframe srcdoc='
+        <style>
+          :root{--color-text-primary:#1a1a2e;--color-text-secondary:#767676;--color-text-success:#166534;--color-text-warning:#92400e;--color-text-danger:#991b1b;--color-background-primary:#fff;--color-background-secondary:#f4f3f0;--color-background-success:#dcfce7;--color-background-warning:#fef3c7;--color-background-danger:#fee2e2;--color-border-tertiary:#e8e6e1;--color-border-secondary:#ccc;--color-border-success:#86efac;--border-radius-md:6px;--border-radius-lg:10px;}
+          *{box-sizing:border-box;margin:0;padding:0;}body{font-family:-apple-system,system-ui,sans-serif;color:#1a1a2e;line-height:1.5;padding:.5rem;}
+          input,select,textarea{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid #e8e6e1;border-radius:6px;width:100%;background:#fff;color:#1a1a2e;}
+          input:focus,select:focus,textarea:focus{outline:none;border-color:#b85042;}
+          button{font-family:inherit;font-size:12px;padding:8px 16px;border:1px solid #e8e6e1;border-radius:6px;background:#b85042;color:#fff;cursor:pointer;font-weight:600;}
+          button:hover{background:#a04038;}
+          .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+        </style>
+        <h2 class="sr-only">Phase 1 human enabler review form</h2>
+        <div style="max-width:620px;margin:0 auto;padding:.5rem 0;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;">
+          <div><p style="font-size:13px;font-weight:500;margin:0;">AI output review — Phase 1</p><p style="font-size:11px;color:#767676;margin:4px 0 0;">Full review · Complete for every AI output</p></div>
+          <span style="background:#f4f3f0;border:1px solid #e8e6e1;border-radius:6px;padding:3px 8px;font-size:10px;color:#767676;">Form #001</span>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;">
+          <p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 1 — Output Details</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Reviewer name</label><input type="text" placeholder="e.g. Vipin Puri"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Review date</label><input type="date"/></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Release name</label><input type="text" placeholder="e.g. v3.1, Sprint 14"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Output ID</label><input type="text" placeholder="e.g. PRD-2026-047"/></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">SDLC step</label><select><option>Select step</option><option>Requirements &amp; PRD</option><option>Planning</option><option>Architecture</option><option>Development</option><option>Code review</option><option>Testing &amp; QA</option><option>Security</option><option>Deployment</option><option>Monitoring</option><option>Reporting</option></select></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Output category</label><select><option>Select category</option><option>PRD</option><option>User story</option><option>Acceptance criteria</option><option>Tech spec</option><option>Exec summary</option><option>Compliance req</option></select></div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;">
+          <p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 2 — Accuracy</p>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e8e6e1;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="acc1"/><span><b style="color:#166534;">Correct</b> — accurate, complete, ready to use</span></label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e8e6e1;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="acc1"/><span><b style="color:#92400e;">Partially correct</b> — mostly right, needs corrections</span></label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e8e6e1;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="acc1"/><span><b style="color:#991b1b;">Incorrect</b> — wrong, requires full rewrite</span></label>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;">
+          <p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 3 — Correction Type</p>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="cor1"/> No correction</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="cor1"/> Minor edit (&lt;20%)</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="cor1"/> Moderate edit (20-60%)</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="cor1"/> Full rewrite (&gt;60%)</label>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;">
+          <p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 4 — Confidence</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">AI confidence (0-1)</label><input type="number" min="0" max="1" step="0.01" placeholder="0.87"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Your confidence</label><select><option>Select</option><option>High</option><option>Medium</option><option>Low</option><option>None</option></select></div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;">
+          <p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 5 — Time</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Review time (min)</label><input type="number" placeholder="15"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Correction time (min)</label><input type="number" placeholder="5"/></div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;">
+          <p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 6 — Error Types</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <label style="font-size:11px;cursor:pointer;"><input type="checkbox"/> Factual inaccuracy</label>
+            <label style="font-size:11px;cursor:pointer;"><input type="checkbox"/> Missing business context</label>
+            <label style="font-size:11px;cursor:pointer;"><input type="checkbox"/> Incomplete output</label>
+            <label style="font-size:11px;cursor:pointer;"><input type="checkbox"/> Wrong tone/format</label>
+            <label style="font-size:11px;cursor:pointer;"><input type="checkbox"/> Compliance gap</label>
+            <label style="font-size:11px;cursor:pointer;"><input type="checkbox"/> Contradicts prior</label>
+            <label style="font-size:11px;cursor:pointer;"><input type="checkbox"/> Hallucination</label>
+            <label style="font-size:11px;cursor:pointer;"><input type="checkbox"/> Security concern</label>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;">
+          <p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 7 — Feedback</p>
+          <div style="margin-bottom:8px;"><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">What was wrong?</label><textarea placeholder="Describe errors..." style="min-height:60px;resize:vertical;"></textarea></div>
+          <div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">What was good?</label><textarea placeholder="Describe positives..." style="min-height:50px;resize:vertical;"></textarea></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;">
+          <p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 8 — Phase Signal</p>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="sig1"/><b style="color:#166534;">Ready for Phase 2</b></label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="sig1"/><b style="color:#92400e;">Not yet</b></label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="sig1"/><b style="color:#991b1b;">Regression</b></label>
+          </div>
+        </div>
+        <button style="width:100%;">Submit Phase 1 Review</button>
+        </div>
+      ' style="width:100%;height:1200px;border:1px solid var(--border);border-radius:10px;background:#fff;"></iframe>
+    </div>
+
+    <!-- Phase 2 Form -->
+    <div id="form-phase-2" class="phase-form-content" style="display:none;margin-top:.75rem;">
+      <iframe srcdoc='
+        <style>:root{--color-text-primary:#1a1a2e;--color-text-secondary:#767676;--color-text-success:#166534;--color-text-warning:#92400e;--color-text-danger:#991b1b;--color-background-primary:#fff;--color-background-secondary:#f4f3f0;--color-border-tertiary:#e8e6e1;--border-radius-md:6px;--border-radius-lg:10px;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:-apple-system,system-ui,sans-serif;color:#1a1a2e;line-height:1.5;padding:.5rem;}input,select,textarea{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid #e8e6e1;border-radius:6px;width:100%;background:#fff;}input:focus,select:focus{outline:none;border-color:#b85042;}button{font-family:inherit;font-size:12px;padding:8px 16px;border:1px solid #e8e6e1;border-radius:6px;background:#b85042;color:#fff;cursor:pointer;font-weight:600;}</style>
+        <div style="max-width:620px;margin:0 auto;padding:.5rem 0;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:1rem;"><div><p style="font-size:13px;font-weight:500;margin:0;">AI output review — Phase 2</p><p style="font-size:11px;color:#767676;margin:4px 0 0;">Confidence-based routing · Spot checks + low-confidence review</p></div><span style="background:#f4f3f0;border:1px solid #e8e6e1;border-radius:6px;padding:3px 8px;font-size:10px;color:#767676;">Form #001</span></div>
+        <div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:10px;padding:8px 12px;margin-bottom:.75rem;font-size:11px;color:#92400e;"><b>Phase 2:</b> High-confidence (≥0.85) = spot check. Low-confidence (&lt;0.85) = full review.</div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 1 — Output Details</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Reviewer</label><input type="text" placeholder="Name"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Date</label><input type="date"/></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Release</label><input type="text" placeholder="v3.1"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Output ID</label><input type="text" placeholder="PRD-2026-047"/></div></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 2 — Routing Reason</p><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e8e6e1;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="route2"/><b style="color:#166534;">Spot check</b> — high confidence</label><label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e8e6e1;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="route2"/><b style="color:#92400e;">Low confidence</b> — full review</label><label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e8e6e1;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="route2"/><b style="color:#991b1b;">System flagged</b></label><label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e8e6e1;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="route2"/>Human initiated</label></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 3 — Routing Validation</p><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="rval2"/><b style="color:#166534;">Correctly routed</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="rval2"/><b style="color:#991b1b;">False positive</b> — should have passed</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="rval2"/><b style="color:#991b1b;">False negative</b> — should have been flagged</label></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 4 — Accuracy</p><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="acc2"/><b style="color:#166534;">Correct</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="acc2"/><b style="color:#92400e;">Partially correct</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="acc2"/><b style="color:#991b1b;">Incorrect</b></label></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 5 — Threshold</p><select><option>No change needed</option><option>Lower threshold</option><option>Raise threshold</option><option>Not enough data</option></select></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 6 — Phase Signal</p><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="sig2"/><b style="color:#166534;">Ready for Phase 3</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="sig2"/><b style="color:#92400e;">Not yet</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="sig2"/><b style="color:#991b1b;">Regression → Phase 1</b></label></div></div>
+        <button style="width:100%;">Submit Phase 2 Review</button>
+        </div>
+      ' style="width:100%;height:1100px;border:1px solid var(--border);border-radius:10px;background:#fff;"></iframe>
+    </div>
+
+    <!-- Phase 3 Form -->
+    <div id="form-phase-3" class="phase-form-content" style="display:none;margin-top:.75rem;">
+      <iframe srcdoc='
+        <style>:root{--color-text-primary:#1a1a2e;--color-text-secondary:#767676;--color-text-success:#166534;--color-text-warning:#92400e;--color-text-danger:#991b1b;--color-border-tertiary:#e8e6e1;--border-radius-md:6px;--border-radius-lg:10px;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:-apple-system,system-ui,sans-serif;color:#1a1a2e;line-height:1.5;padding:.5rem;}input,select,textarea{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid #e8e6e1;border-radius:6px;width:100%;background:#fff;}input:focus,select:focus{outline:none;border-color:#b85042;}button{font-family:inherit;font-size:12px;padding:8px 16px;border:1px solid #e8e6e1;border-radius:6px;background:#b85042;color:#fff;cursor:pointer;font-weight:600;}</style>
+        <div style="max-width:620px;margin:0 auto;padding:.5rem 0;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:1rem;"><div><p style="font-size:13px;font-weight:500;margin:0;">AI output review — Phase 3</p><p style="font-size:11px;color:#767676;margin:4px 0 0;">Exception-based · Only for flagged or escalated outputs</p></div><span style="background:#f4f3f0;border:1px solid #e8e6e1;border-radius:6px;padding:3px 8px;font-size:10px;color:#767676;">Form #001</span></div>
+        <div style="background:#dcfce7;border:1px solid #86efac;border-radius:10px;padding:8px 12px;margin-bottom:.75rem;font-size:11px;color:#166534;"><b>Phase 3:</b> AI runs autonomously. This form is only for exceptions — AI self-flags, stakeholder escalations, rule triggers, or random samples.</div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 1 — Output Details</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Reviewer</label><input type="text"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Date</label><input type="date"/></div></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 2 — Exception Trigger</p><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="trig3"/><b style="color:#991b1b;">AI self-flagged</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="trig3"/><b style="color:#991b1b;">Rule-based flag</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="trig3"/><b style="color:#92400e;">Stakeholder escalation</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="trig3"/>Peer review flag</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="trig3"/>Random sample</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="trig3"/>Audit trigger</label></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 3 — Exception Validity</p><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="val3"/><b style="color:#991b1b;">Valid exception</b> — real problem</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="val3"/><b style="color:#92400e;">False alarm</b> — output was fine</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="val3"/><b style="color:#991b1b;">Missed exception</b> — should have been caught</label></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 4 — Impact</p><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="imp3"/><b style="color:#991b1b;">High</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="imp3"/><b style="color:#92400e;">Medium</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="imp3"/>Low</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="imp3"/><b style="color:#166534;">No impact</b></label></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 5 — Root Cause</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><label style="font-size:11px;"><input type="checkbox"/> Model drift</label><label style="font-size:11px;"><input type="checkbox"/> Novel input</label><label style="font-size:11px;"><input type="checkbox"/> Regulatory change</label><label style="font-size:11px;"><input type="checkbox"/> Domain gap</label><label style="font-size:11px;"><input type="checkbox"/> Classifier gap</label><label style="font-size:11px;"><input type="checkbox"/> Guardrail miss</label><label style="font-size:11px;"><input type="checkbox"/> Hallucination</label><label style="font-size:11px;"><input type="checkbox"/> Data quality</label></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 6 — Remediation</p><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="rem3"/><b style="color:#991b1b;">Revert to Phase 2</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="rem3"/>Feed to training</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="rem3"/>Update flag rules</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="rem3"/><b style="color:#991b1b;">Escalate to leadership</b></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="rem3"/>No action needed</label></div></div>
+        <button style="width:100%;">Submit Phase 3 Exception</button>
+        </div>
+      ' style="width:100%;height:1150px;border:1px solid var(--border);border-radius:10px;background:#fff;"></iframe>
+    </div>
+
+    <!-- Phase 4 Form -->
+    <div id="form-phase-4" class="phase-form-content" style="display:none;margin-top:.75rem;">
+      <iframe srcdoc='
+        <style>:root{--color-text-primary:#1a1a2e;--color-text-secondary:#767676;--color-text-success:#166534;--color-text-warning:#92400e;--color-text-danger:#991b1b;--color-border-tertiary:#e8e6e1;--border-radius-md:6px;--border-radius-lg:10px;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:-apple-system,system-ui,sans-serif;color:#1a1a2e;line-height:1.5;padding:.5rem;}input,select,textarea{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid #e8e6e1;border-radius:6px;width:100%;background:#fff;}input:focus,select:focus{outline:none;border-color:#b85042;}button{font-family:inherit;font-size:12px;padding:8px 16px;border:1px solid #e8e6e1;border-radius:6px;background:#b85042;color:#fff;cursor:pointer;font-weight:600;}</style>
+        <div style="max-width:620px;margin:0 auto;padding:.5rem 0;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:1rem;"><div><p style="font-size:13px;font-weight:500;margin:0;">AI program governance — Phase 4</p><p style="font-size:11px;color:#767676;margin:4px 0 0;">Steady state · Monthly strategic oversight</p></div><span style="background:#f4f3f0;border:1px solid #e8e6e1;border-radius:6px;padding:3px 8px;font-size:10px;color:#767676;">Review #001</span></div>
+        <div style="background:#e0f2fe;border:1px solid #7dd3fc;border-radius:10px;padding:8px 12px;margin-bottom:.75rem;font-size:11px;color:#0369a1;"><b>Phase 4:</b> AI runs autonomously. This is a monthly strategic governance review — not a per-output review.</div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 1 — Review Details</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">AI program manager</label><input type="text" placeholder="Vipin Puri"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Review month</label><input type="month"/></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Steps in Phase 4</label><input type="number" placeholder="4"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Steps regressed</label><input type="number" placeholder="0"/></div></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 2 — Program Health</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">AI output quality</label><select><option>Select</option><option>Poor</option><option>Fair</option><option>Good</option><option>Excellent</option></select></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Exception rate</label><select><option>Select</option><option>High — concern</option><option>Moderate</option><option>Low — healthy</option><option>Minimal</option></select></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Regulatory alignment</label><select><option>Select</option><option>Gap identified</option><option>Monitoring</option><option>Aligned</option><option>Leading</option></select></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Team AI fluency</label><select><option>Select</option><option>Low</option><option>Developing</option><option>Proficient</option><option>Advanced</option></select></div></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 3 — Business Value</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Hours saved this month</label><input type="number" placeholder="320"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Outputs processed autonomously</label><input type="number" placeholder="1240"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Exception rate %</label><input type="number" step="0.1" placeholder="2.4"/></div><div><label style="font-size:11px;color:#767676;display:block;margin-bottom:3px;">Valid exception %</label><input type="number" step="0.1" placeholder="35"/></div></div></div>
+        <div style="background:#fff;border:1px solid #e8e6e1;border-radius:10px;padding:1rem;margin-bottom:.75rem;"><p style="font-size:11px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Section 4 — Executive Summary</p><div style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="stat4"/><b style="color:#166534;">Green</b> — operating as expected</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="stat4"/><b style="color:#92400e;">Amber</b> — monitoring, action planned</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;"><input type="radio" name="stat4"/><b style="color:#991b1b;">Red</b> — escalation required</label></div><textarea placeholder="One-paragraph executive summary for leadership..." style="min-height:80px;resize:vertical;"></textarea></div>
+        <button style="width:100%;">Submit Monthly Governance Review</button>
+        </div>
+      ' style="width:100%;height:1000px;border:1px solid var(--border);border-radius:10px;background:#fff;"></iframe>
+    </div>
+
+  </div><!-- end tab-liveforms -->
+
 </div><!-- end #app -->
 
 <script>
@@ -1470,6 +1623,16 @@ function switchTab(name) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   event.currentTarget.classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ── Live Forms: phase selector ──
+function showPhaseForm(phase) {
+  document.querySelectorAll('.phase-form-content').forEach(f => f.style.display = 'none');
+  document.querySelectorAll('.phase-form-btn').forEach(b => { b.style.background = 'var(--surface)'; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--border)'; });
+  document.getElementById('form-phase-' + phase).style.display = 'block';
+  event.currentTarget.style.background = 'var(--accent)';
+  event.currentTarget.style.color = '#fff';
+  event.currentTarget.style.borderColor = 'var(--accent)';
 }
 </script>
 
