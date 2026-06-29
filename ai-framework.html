@@ -592,7 +592,55 @@
       </div>
     </div>
 
-    <!-- Section 2: Issue Types -->
+    <!-- Issue Type Summary -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Issue Type Summary — Ticket Volume by Phase</span>
+      </div>
+      <div style="padding:.5rem .75rem;">
+        <table style="width:100%;font-size:.7rem;border-collapse:collapse;font-family:'Inter',sans-serif;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border);">
+              <th style="text-align:left;padding:.4rem .5rem;font-weight:700;color:var(--ink);">Issue Type</th>
+              <th style="text-align:left;padding:.4rem .5rem;font-weight:700;color:var(--ink);">When Created</th>
+              <th style="text-align:left;padding:.4rem .5rem;font-weight:700;color:var(--ink);">Who Fills</th>
+              <th style="text-align:right;padding:.4rem .5rem;font-weight:700;color:var(--ink);">Volume</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f4f3f0;">
+              <td style="padding:.4rem .5rem;"><span style="font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:3px;background:#dcfce7;color:#166534;">P1</span> Phase 1 Review</td>
+              <td style="padding:.4rem .5rem;color:var(--muted);">Every AI output generated</td>
+              <td style="padding:.4rem .5rem;color:var(--muted);">Any team member reviewing</td>
+              <td style="text-align:right;padding:.4rem .5rem;font-weight:600;color:var(--ink);">~24/mo</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f4f3f0;">
+              <td style="padding:.4rem .5rem;"><span style="font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:3px;background:#fef3c7;color:#92400e;">P2</span> Phase 2 Review</td>
+              <td style="padding:.4rem .5rem;color:var(--muted);">Spot-check or low-confidence routed</td>
+              <td style="padding:.4rem .5rem;color:var(--muted);">Reviewer assigned by routing</td>
+              <td style="text-align:right;padding:.4rem .5rem;font-weight:600;color:var(--ink);">~8/mo</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f4f3f0;">
+              <td style="padding:.4rem .5rem;"><span style="font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:3px;background:#f3e8ff;color:#6d28d9;">P3</span> Phase 3 Exception</td>
+              <td style="padding:.4rem .5rem;color:var(--muted);">AI self-flags, stakeholder escalates, rule triggers</td>
+              <td style="padding:.4rem .5rem;color:var(--muted);">Reviewer investigating exception</td>
+              <td style="text-align:right;padding:.4rem .5rem;font-weight:600;color:var(--ink);">~2/mo</td>
+            </tr>
+            <tr>
+              <td style="padding:.4rem .5rem;"><span style="font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:3px;background:#fee2e2;color:#991b1b;">P4</span> Phase 4 Governance</td>
+              <td style="padding:.4rem .5rem;color:var(--muted);">Monthly on the 1st (auto-created)</td>
+              <td style="padding:.4rem .5rem;color:var(--muted);">AI Program Manager</td>
+              <td style="text-align:right;padding:.4rem .5rem;font-weight:600;color:var(--ink);">1/mo</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:.6rem;color:var(--muted);margin-top:.5rem;padding:.4rem .6rem;background:var(--surface);border-radius:5px;line-height:1.5;">
+          <strong style="color:var(--ink);">ROI story:</strong> As each SDLC step matures from Phase 1 → 4, ticket volume drops from ~24 human reviews/month to 1 governance check — with data proving every transition.
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Issue Types (detailed) -->
     <div class="card">
       <div class="card-header">
         <span class="card-label">02 &middot; 4 Issue Types</span>
