@@ -654,6 +654,7 @@
           <div class="section-title" style="font-size:.58rem;margin-bottom:.25rem;">Custom Fields</div>
           <ul class="field-list">
             <li><strong>output_id</strong> &mdash; unique identifier for the AI output</li>
+            <li><strong>release_name</strong> &mdash; release or sprint this output belongs to (e.g. v3.1, Sprint 14, Q3 Launch)</li>
             <li><strong>sdlc_step</strong> &mdash; which SDLC step produced this output</li>
             <li><strong>output_category</strong> &mdash; type of output (PRD, user story, test plan, etc.)</li>
             <li><strong>accuracy</strong> &mdash; <code>Correct</code> | <code>Partial</code> | <code>Incorrect</code></li>
@@ -849,7 +850,7 @@
         <div style="font-size:.72rem;color:var(--muted);margin-bottom:.6rem;line-height:1.55;"><strong style="color:var(--ink);">Purpose:</strong> Capture accuracy, errors, and time for every AI output. Build baseline data for confidence calibration.<br><strong style="color:var(--ink);">When to fill out:</strong> Every time you review an AI-generated output during Phase 1.</div>
 
         <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:.75rem;">
-          <div class="form-section"><span class="form-section-name">1. Output Details</span><br><span class="form-section-desc">output_id, sdlc_step, output_category &mdash; identifies what was produced and where</span></div>
+          <div class="form-section"><span class="form-section-name">1. Output Details</span><br><span class="form-section-desc">output_id, release_name, sdlc_step, output_category &mdash; identifies what was produced and where</span></div>
           <div class="form-section"><span class="form-section-name">2. Accuracy Rating</span><br><span class="form-section-desc">Correct / Partial / Incorrect &mdash; the core quality signal</span></div>
           <div class="form-section"><span class="form-section-name">3. Correction Type</span><br><span class="form-section-desc">None / Minor / Moderate / Rewrite &mdash; how much effort to fix</span></div>
           <div class="form-section"><span class="form-section-name">4. AI Confidence</span><br><span class="form-section-desc">Record the model's self-reported confidence (0&ndash;1) for calibration tracking</span></div>
@@ -863,6 +864,7 @@
           <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">Sample Filled Entry</div>
           <div style="font-size:.68rem;color:var(--muted);line-height:1.6;">
             <strong style="color:var(--ink);">output_id:</strong> PRD-2024-0147 &nbsp;|&nbsp;
+            <strong style="color:var(--ink);">release_name:</strong> v3.1 &nbsp;|&nbsp;
             <strong style="color:var(--ink);">sdlc_step:</strong> Requirements &nbsp;|&nbsp;
             <strong style="color:var(--ink);">accuracy:</strong> Partial &nbsp;|&nbsp;
             <strong style="color:var(--ink);">correction_type:</strong> Minor &nbsp;|&nbsp;
@@ -889,7 +891,7 @@
         <div style="font-size:.72rem;color:var(--muted);margin-bottom:.6rem;line-height:1.55;"><strong style="color:var(--ink);">Purpose:</strong> Validate confidence-based routing. Track whether spot checks and full reviews are correctly assigned.<br><strong style="color:var(--ink);">When to fill out:</strong> Every time an output is routed for review (spot check or full review) during Phase 2.</div>
 
         <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:.75rem;">
-          <div class="form-section"><span class="form-section-name">1. Output Details</span><br><span class="form-section-desc">output_id, sdlc_step, output_category &mdash; same as Phase 1</span></div>
+          <div class="form-section"><span class="form-section-name">1. Output Details</span><br><span class="form-section-desc">output_id, release_name, sdlc_step, output_category &mdash; same as Phase 1</span></div>
           <div class="form-section"><span class="form-section-name">2. Routing Reason</span><br><span class="form-section-desc">Spot check / Low confidence / System flag / Manual &mdash; why this output was reviewed</span></div>
           <div class="form-section"><span class="form-section-name">3. Routing Validation</span><br><span class="form-section-desc">Correct / False positive / False negative &mdash; was the routing decision right?</span></div>
           <div class="form-section"><span class="form-section-name">4. Accuracy</span><br><span class="form-section-desc">Correct / Partial / Incorrect &mdash; same quality signal as Phase 1</span></div>
@@ -903,6 +905,7 @@
           <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.35rem;">Sample Filled Entry</div>
           <div style="font-size:.68rem;color:var(--muted);line-height:1.6;">
             <strong style="color:var(--ink);">output_id:</strong> TS-2024-0089 &nbsp;|&nbsp;
+            <strong style="color:var(--ink);">release_name:</strong> Sprint 14 &nbsp;|&nbsp;
             <strong style="color:var(--ink);">sdlc_step:</strong> Architecture &nbsp;|&nbsp;
             <strong style="color:var(--ink);">routing_reason:</strong> Spot check &nbsp;|&nbsp;
             <strong style="color:var(--ink);">routing_validation:</strong> Correct &nbsp;|&nbsp;
@@ -927,7 +930,7 @@
         <div style="font-size:.72rem;color:var(--muted);margin-bottom:.6rem;line-height:1.55;"><strong style="color:var(--ink);">Purpose:</strong> Document and investigate exceptions when AI operates autonomously. Track root causes and remediation.<br><strong style="color:var(--ink);">When to fill out:</strong> When an exception is triggered &mdash; AI self-flag, stakeholder escalation, rule-based trigger, or random sample.</div>
 
         <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:.75rem;">
-          <div class="form-section"><span class="form-section-name">1. Output Details</span><br><span class="form-section-desc">output_id, sdlc_step, output_category</span></div>
+          <div class="form-section"><span class="form-section-name">1. Output Details</span><br><span class="form-section-desc">output_id, release_name, sdlc_step, output_category</span></div>
           <div class="form-section"><span class="form-section-name">2. Exception Trigger</span><br><span class="form-section-desc">AI self-flag / Rule-based / Stakeholder / Peer / Random sample / Audit</span></div>
           <div class="form-section"><span class="form-section-name">3. Exception Validity</span><br><span class="form-section-desc">Valid / False alarm / Missed exception &mdash; was the flag warranted?</span></div>
           <div class="form-section"><span class="form-section-name">4. Accuracy</span><br><span class="form-section-desc">Correct / Partial / Incorrect</span></div>
