@@ -387,6 +387,7 @@
     <button class="tab active" onclick="switchTab('overview')">Framework Overview</button>
     <button class="tab" onclick="switchTab('jira')">Jira Project Setup</button>
     <button class="tab" onclick="switchTab('forms')">Review Forms</button>
+    <button class="tab" onclick="switchTab('reporting')">Reporting</button>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -1057,6 +1058,278 @@
     </details>
 
   </div><!-- end tab-forms -->
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- Tab 4: Reporting                                                -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div id="tab-reporting" class="tab-panel">
+
+    <!-- Flow Diagram -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Weekly Aggregation Flow</span>
+      </div>
+      <div style="padding:1rem;background:#e8e0d4;border-radius:0 0 8px 8px;">
+
+        <!-- Trigger -->
+        <div style="display:flex;justify-content:center;margin-bottom:.5rem;">
+          <div style="display:inline-flex;align-items:center;gap:.5rem;border:1px solid #ddd8d0;border-radius:32px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:.5rem 1.2rem;">
+            <span style="font-size:1rem;">⏰</span>
+            <div>
+              <div style="font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;color:#1a1a2e;">Every Friday (Scheduled)</div>
+              <div style="font-family:'Inter',sans-serif;font-size:.55rem;color:#767676;">weekly_ai_governance_report.py</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:center;"><div style="width:1px;height:18px;background:linear-gradient(to bottom,#ddd8d0,#b85042);position:relative;"><div style="position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#b85042;"></div></div></div>
+
+        <!-- JQL Query -->
+        <div style="border:1px solid rgba(45,106,79,.35);border-radius:10px;padding:.65rem 1rem;background:rgba(255,255,255,.7);margin-bottom:.5rem;box-shadow:0 1px 4px rgba(0,0,0,.05);">
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:#1a1a2e;margin-bottom:.2rem;">Step 1 — Query Jira</div>
+          <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;"><code style="font-size:.55rem;background:#e8e6e1;padding:1px 4px;border-radius:3px;">project = AIGOV AND created >= -7d</code> → pull all tickets from the week</div>
+        </div>
+
+        <div style="display:flex;justify-content:center;"><div style="width:1px;height:14px;background:rgba(45,106,79,.3);"></div></div>
+
+        <!-- Compute -->
+        <div style="border:1px solid rgba(109,40,217,.35);border-radius:10px;padding:.65rem 1rem;background:rgba(255,255,255,.7);margin-bottom:.5rem;box-shadow:0 1px 4px rgba(0,0,0,.05);">
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:#1a1a2e;margin-bottom:.2rem;">Step 2 — Compute per SDLC Step</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.3rem;">
+            <span style="font-size:.55rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Accuracy %</span>
+            <span style="font-size:.55rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Avg review time</span>
+            <span style="font-size:.55rem;background:#f0fdf6;border:1px solid rgba(45,106,79,.3);padding:.15rem .4rem;border-radius:3px;color:#2d6a4f;">Top error types</span>
+            <span style="font-size:.55rem;background:#fffbf0;border:1px solid rgba(180,83,9,.3);padding:.15rem .4rem;border-radius:3px;color:#92400e;">Confidence calibration</span>
+            <span style="font-size:.55rem;background:#fffbf0;border:1px solid rgba(180,83,9,.3);padding:.15rem .4rem;border-radius:3px;color:#92400e;">Phase signals</span>
+            <span style="font-size:.55rem;background:#fef2f2;border:1px solid rgba(184,80,66,.3);padding:.15rem .4rem;border-radius:3px;color:#b85042;">Regression flags</span>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:center;"><div style="width:1px;height:14px;background:rgba(109,40,217,.3);"></div></div>
+
+        <!-- Claude Analysis -->
+        <div style="border:1px solid rgba(184,80,66,.35);border-radius:10px;padding:.65rem 1rem;background:rgba(255,255,255,.7);margin-bottom:.5rem;box-shadow:0 1px 4px rgba(0,0,0,.05);">
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:#1a1a2e;margin-bottom:.2rem;">Step 3 — Claude Analysis</div>
+          <div style="font-family:'Inter',sans-serif;font-size:.6rem;color:#767676;">Aggregated data → Claude API → insights, recommendations, phase transition suggestions</div>
+        </div>
+
+        <div style="display:flex;justify-content:center;"><div style="width:1px;height:14px;background:rgba(184,80,66,.3);"></div></div>
+
+        <!-- Outputs -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;">
+          <div style="border:1px dashed rgba(45,106,79,.5);border-radius:7px;padding:.5rem .6rem;background:#fff;">
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#2d6a4f;">📧 Weekly Email</div>
+            <div style="font-size:.52rem;color:#767676;">TPM lead + AI program mgr</div>
+          </div>
+          <div style="border:1px dashed rgba(180,83,9,.5);border-radius:7px;padding:.5rem .6rem;background:#fff;">
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#b45309;">💬 Slack Summary</div>
+            <div style="font-size:.52rem;color:#767676;">#ai-governance channel</div>
+          </div>
+          <div style="border:1px dashed rgba(109,40,217,.5);border-radius:7px;padding:.5rem .6rem;background:#fff;">
+            <div style="font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;color:#6d28d9;">📊 Jira Dashboard</div>
+            <div style="font-size:.52rem;color:#767676;">Auto-updated via JQL filters</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sample Report: Requirements & PRD -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Sample Report — Requirements &amp; PRD</span>
+      </div>
+      <div style="padding:.75rem 1rem;">
+        <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:var(--muted);margin-bottom:.5rem;">Week of June 23–27, 2026 · 6 AI-generated PRDs reviewed</div>
+
+        <!-- KPIs -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.65rem;">
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">83%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Correct</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b45309;">17%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Partial</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">8 min</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg review</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">0.89</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg AI conf</div>
+          </div>
+        </div>
+
+        <!-- Detail table -->
+        <table style="width:100%;font-size:.62rem;border-collapse:collapse;font-family:'Inter',sans-serif;margin-bottom:.5rem;">
+          <thead><tr style="border-bottom:2px solid var(--border);">
+            <th style="text-align:left;padding:.3rem .4rem;">Output</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Release</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Accuracy</th>
+            <th style="text-align:center;padding:.3rem .4rem;">AI Conf</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Review</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Errors</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Signal</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">PRD-2026-062</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.91</td><td style="text-align:center;">6 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">PRD-2026-063</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.88</td><td style="text-align:center;">7 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">PRD-2026-064</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.93</td><td style="text-align:center;">5 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">PRD-2026-065</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Partial</span></td><td style="text-align:center;">0.72</td><td style="text-align:center;">15 min</td><td style="padding:.3rem .4rem;font-size:.55rem;color:#92400e;">Missing biz context, Compliance gap</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">PRD-2026-066</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.90</td><td style="text-align:center;">6 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr><td style="padding:.3rem .4rem;">PRD-2026-067</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.87</td><td style="text-align:center;">8 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+          </tbody>
+        </table>
+
+        <div style="padding:.5rem .65rem;background:#dcfce7;border:1px solid #86efac;border-radius:6px;font-size:.62rem;color:#166534;">
+          <strong>Recommendation:</strong> Requirements & PRD is ready for Phase 2. 5 of 6 reviews signal "Ready P2". Accuracy 83%, avg confidence 0.89 (well-calibrated). One partial had low confidence (0.72) — correctly self-flagged.
+        </div>
+      </div>
+    </div>
+
+    <!-- Sample Report: Architecture -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Sample Report — Architecture &amp; Design</span>
+      </div>
+      <div style="padding:.75rem 1rem;">
+        <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:var(--muted);margin-bottom:.5rem;">Week of June 23–27, 2026 · 4 AI-generated architecture outputs reviewed</div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.65rem;">
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b45309;">50%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Correct</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b45309;">50%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Partial</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b85042;">22 min</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg review</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b45309;">0.74</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg AI conf</div>
+          </div>
+        </div>
+
+        <table style="width:100%;font-size:.62rem;border-collapse:collapse;font-family:'Inter',sans-serif;margin-bottom:.5rem;">
+          <thead><tr style="border-bottom:2px solid var(--border);">
+            <th style="text-align:left;padding:.3rem .4rem;">Output</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Release</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Accuracy</th>
+            <th style="text-align:center;padding:.3rem .4rem;">AI Conf</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Review</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Errors</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Signal</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">ARCH-2026-018</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.82</td><td style="text-align:center;">15 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">ARCH-2026-019</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Partial</span></td><td style="text-align:center;">0.68</td><td style="text-align:center;">28 min</td><td style="padding:.3rem .4rem;font-size:.55rem;color:#92400e;">Missing biz context, Incomplete</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">ARCH-2026-020</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Partial</span></td><td style="text-align:center;">0.71</td><td style="text-align:center;">25 min</td><td style="padding:.3rem .4rem;font-size:.55rem;color:#92400e;">Incomplete, Wrong tone</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+            <tr><td style="padding:.3rem .4rem;">ARCH-2026-021</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.76</td><td style="text-align:center;">18 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+          </tbody>
+        </table>
+
+        <div style="padding:.5rem .65rem;background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;font-size:.62rem;color:#92400e;">
+          <strong>Recommendation:</strong> Architecture & Design needs more training. 50% accuracy, avg confidence only 0.74. Top errors: missing business context + incomplete outputs. AI correctly self-flags low confidence on partial results. Stay in Phase 1, focus prompt improvement on system design patterns.
+        </div>
+      </div>
+    </div>
+
+    <!-- Sample Report: Development -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Sample Report — Development &amp; Coding</span>
+      </div>
+      <div style="padding:.75rem 1rem;">
+        <div style="font-family:'Inter',sans-serif;font-size:.58rem;color:var(--muted);margin-bottom:.5rem;">Week of June 23–27, 2026 · 8 AI-generated code outputs reviewed</div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.65rem;">
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">75%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Correct</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b45309;">12%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Partial</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#b85042;">12%</div>
+            <div style="font-size:.55rem;color:var(--muted);">Incorrect</div>
+          </div>
+          <div style="background:var(--surface);border-radius:6px;padding:.5rem;text-align:center;">
+            <div style="font-size:1.2rem;font-weight:700;color:#2d6a4f;">10 min</div>
+            <div style="font-size:.55rem;color:var(--muted);">Avg review</div>
+          </div>
+        </div>
+
+        <table style="width:100%;font-size:.62rem;border-collapse:collapse;font-family:'Inter',sans-serif;margin-bottom:.5rem;">
+          <thead><tr style="border-bottom:2px solid var(--border);">
+            <th style="text-align:left;padding:.3rem .4rem;">Output</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Release</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Accuracy</th>
+            <th style="text-align:center;padding:.3rem .4rem;">AI Conf</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Review</th>
+            <th style="text-align:left;padding:.3rem .4rem;">Errors</th>
+            <th style="text-align:center;padding:.3rem .4rem;">Signal</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">DEV-2026-041</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.94</td><td style="text-align:center;">5 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">DEV-2026-042</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.91</td><td style="text-align:center;">7 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">DEV-2026-043</td><td style="padding:.3rem .4rem;">v3.1</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.88</td><td style="text-align:center;">8 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">DEV-2026-044</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.86</td><td style="text-align:center;">9 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">DEV-2026-045</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.92</td><td style="text-align:center;">6 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">DEV-2026-046</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Correct</span></td><td style="text-align:center;">0.89</td><td style="text-align:center;">7 min</td><td style="padding:.3rem .4rem;color:#999;">—</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .4rem;">DEV-2026-047</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Partial</span></td><td style="text-align:center;">0.71</td><td style="text-align:center;">18 min</td><td style="padding:.3rem .4rem;font-size:.55rem;color:#92400e;">Security concern</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Not yet</span></td></tr>
+            <tr><td style="padding:.3rem .4rem;">DEV-2026-048</td><td style="padding:.3rem .4rem;">Sprint 14</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fee2e2;color:#991b1b;">Incorrect</span></td><td style="text-align:center;">0.65</td><td style="text-align:center;">25 min</td><td style="padding:.3rem .4rem;font-size:.55rem;color:#991b1b;">Hallucination, Security concern</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fee2e2;color:#991b1b;">Regression</span></td></tr>
+          </tbody>
+        </table>
+
+        <div style="padding:.5rem .65rem;background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;font-size:.62rem;color:#92400e;margin-bottom:.5rem;">
+          <strong>Recommendation:</strong> Development & Coding mostly strong (75% correct) but flagged one Incorrect with hallucination + security concern. AI confidence was low (0.65) on the incorrect output — correctly self-identified. Stay in Phase 1 for now. Investigate security-related code generation patterns.
+        </div>
+
+        <div style="padding:.5rem .65rem;background:#fee2e2;border:1px solid #f87171;border-radius:6px;font-size:.62rem;color:#991b1b;">
+          <strong>⚠ Regression Alert:</strong> DEV-2026-048 flagged as Incorrect with hallucinated code and security concern. AI confidence was 0.65. Recommend: add security-focused test cases to prompt, review all AI-generated code touching auth/payment flows with mandatory human review regardless of confidence score.
+        </div>
+      </div>
+    </div>
+
+    <!-- Cross-SDLC Summary -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Cross-SDLC Weekly Summary</span>
+      </div>
+      <div style="padding:.75rem 1rem;">
+        <table style="width:100%;font-size:.65rem;border-collapse:collapse;font-family:'Inter',sans-serif;">
+          <thead><tr style="border-bottom:2px solid var(--border);">
+            <th style="text-align:left;padding:.4rem .5rem;">SDLC Step</th>
+            <th style="text-align:center;padding:.4rem .5rem;">Reviews</th>
+            <th style="text-align:center;padding:.4rem .5rem;">Correct</th>
+            <th style="text-align:center;padding:.4rem .5rem;">Avg Time</th>
+            <th style="text-align:center;padding:.4rem .5rem;">Avg Conf</th>
+            <th style="text-align:center;padding:.4rem .5rem;">Phase</th>
+            <th style="text-align:center;padding:.4rem .5rem;">Status</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .5rem;font-weight:600;">Requirements & PRD</td><td style="text-align:center;">6</td><td style="text-align:center;color:#2d6a4f;">83%</td><td style="text-align:center;">8 min</td><td style="text-align:center;">0.89</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">P1</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Ready P2 ↑</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .5rem;font-weight:600;">Architecture & Design</td><td style="text-align:center;">4</td><td style="text-align:center;color:#b45309;">50%</td><td style="text-align:center;">22 min</td><td style="text-align:center;">0.74</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">P1</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Needs training</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .5rem;font-weight:600;">Development & Coding</td><td style="text-align:center;">8</td><td style="text-align:center;color:#2d6a4f;">75%</td><td style="text-align:center;">10 min</td><td style="text-align:center;">0.85</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">P1</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">Monitor ⚠</span></td></tr>
+            <tr style="border-bottom:1px solid #f4f3f0;"><td style="padding:.3rem .5rem;font-weight:600;">Testing & QA</td><td style="text-align:center;">10</td><td style="text-align:center;color:#2d6a4f;">90%</td><td style="text-align:center;">6 min</td><td style="text-align:center;">0.91</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;">P2</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Calibrating ✓</span></td></tr>
+            <tr><td style="padding:.3rem .5rem;font-weight:600;">Reporting</td><td style="text-align:center;">12</td><td style="text-align:center;color:#2d6a4f;">92%</td><td style="text-align:center;">4 min</td><td style="text-align:center;">0.93</td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#f3e8ff;color:#6d28d9;">P3</span></td><td style="text-align:center;"><span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;">Autonomous ✓</span></td></tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top:.65rem;padding:.5rem .65rem;background:var(--surface);border-radius:6px;font-size:.62rem;color:var(--muted);line-height:1.6;">
+          <strong style="color:var(--ink);">Weekly Summary:</strong> 40 total AI outputs reviewed. Overall accuracy 78%. Requirements ready to promote to Phase 2. Architecture needs prompt improvement. Development flagged 1 regression (security). Testing and Reporting continue to perform well in higher phases. <strong style="color:var(--ink);">Hours saved this week vs manual: ~14 hours.</strong>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tab-reporting -->
 
 </div><!-- end #app -->
 
