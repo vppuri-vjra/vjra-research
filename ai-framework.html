@@ -562,9 +562,41 @@
 
         <!-- AI Confidence Score -->
         <div class="subsection">
-          <div class="subsection-title">AI Confidence Score</div>
-          <div class="criteria-item"><strong>How it's generated:</strong> System prompt instruction tells AI to output a confidence score (0&ndash;1) alongside every output. The score reflects the model's assessment of output completeness and accuracy given available context.</div>
-          <div class="criteria-item"><strong>How it's calibrated:</strong> During Phase 1&ndash;2, human reviewers independently rate accuracy. The correlation between AI confidence and actual human-verified accuracy is tracked. Threshold (default 0.85) is adjusted until high-confidence outputs have &ge;95% accuracy.</div>
+          <div class="subsection-title">AI Confidence Score — System Prompt &amp; Calibration</div>
+
+          <div class="criteria-item"><strong>How it's generated:</strong> Add the following block to every AI system prompt. The model outputs a confidence score on the last line of every response.</div>
+
+          <div style="background:#1a1a2e;border-radius:8px;padding:.75rem 1rem;margin:.5rem 0;font-family:monospace;font-size:.65rem;color:#e8e6e1;line-height:1.7;white-space:pre-wrap;overflow-x:auto;">After your response, output on the last line EXACTLY this format:
+CONFIDENCE: 0.XX
+
+Score between 0.00 and 1.00 based on:
+- How well the question maps to your training data and provided context
+- Whether you cited specific facts vs made general statements
+- Whether you had to speculate or infer beyond the source material
+- How complete your answer is relative to what was asked
+
+Scoring guide:
+  0.90–1.00  Fully grounded in provided context, specific citations, complete answer
+  0.80–0.89  Mostly grounded, minor gaps, high confidence in core claims
+  0.70–0.79  Partially grounded, some inference required, notable gaps
+  0.60–0.69  Significant inference, limited source material, incomplete
+  Below 0.60  Largely speculative, minimal grounding, flag for human review</div>
+
+          <div class="criteria-item" style="margin-top:.5rem;"><strong>How the pipeline parses it:</strong> The output wrapper strips the last line matching <code style="font-size:.6rem;background:#e8e6e1;padding:1px 4px;border-radius:3px;">CONFIDENCE: \d\.\d+</code> and writes it to the Jira ticket as <code style="font-size:.6rem;background:#e8e6e1;padding:1px 4px;border-radius:3px;">ai_confidence</code>. The line is removed from the user-facing output.</div>
+
+          <div class="criteria-item"><strong>How it's calibrated (Phase 1–2):</strong></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.4rem 0;">
+            <div style="background:var(--surface);border-radius:6px;padding:.5rem .65rem;">
+              <div style="font-size:.65rem;font-weight:700;color:#2d6a4f;margin-bottom:.2rem;">Well Calibrated ✓</div>
+              <div style="font-size:.6rem;color:var(--muted);line-height:1.5;">AI says 0.90 + Human says Correct<br>AI says 0.70 + Human says Partial<br>→ Scores align. Threshold is trustworthy.</div>
+            </div>
+            <div style="background:var(--surface);border-radius:6px;padding:.5rem .65rem;">
+              <div style="font-size:.65rem;font-weight:700;color:#991b1b;margin-bottom:.2rem;">Miscalibrated ✗</div>
+              <div style="font-size:.6rem;color:var(--muted);line-height:1.5;">AI says 0.92 + Human says Incorrect<br>→ AI is overconfident. Lower threshold<br>or retrain before Phase 2 routing.</div>
+            </div>
+          </div>
+
+          <div class="criteria-item"><strong>Threshold tuning:</strong> Default is <strong>0.85</strong>. During Phase 2, track false positive rate (good outputs flagged for review) and false negative rate (bad outputs that auto-passed). Adjust threshold until high-confidence outputs achieve <strong>&ge;95% accuracy</strong> on spot checks.</div>
         </div>
 
       </div>
