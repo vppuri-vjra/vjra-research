@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Agentic TPM — Transformations in Technical Program Management · vjra.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+    --bg: #f8f4ee;
+    --surface: #f4f3f0;
+    --border: #e8e6e1;
+    --green: #2d6a4f;
+    --amber: #b45309;
+    --purple: #6d28d9;
+    --blue: #1d4ed8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #2b2b2b;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 4px solid var(--accent);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .7rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .2rem;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.7rem; color: var(--ink); font-weight: 400;
+    letter-spacing: .01em;
+  }
+
+  /* ── Tab bar ── */
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+    padding: 0 2rem;
+    gap: .25rem;
+    position: sticky; top: 72px; z-index: 9;
+  }
+  .tab {
+    padding: .65rem 1.1rem;
+    font-size: .78rem; font-weight: 500;
+    background: none; border: none; cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .2s, border-color .2s;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── Main scroll area ── */
+  main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ── Hero arc ── */
+  .arc-hero {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--surface) 60%, #f0ede8);
+    display: flex; gap: 2rem; align-items: center;
+  }
+  .arc-hero-text { flex: 1; }
+  .arc-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 2.2rem; font-weight: 400;
+    color: var(--ink); line-height: 1.2; margin-bottom: .5rem;
+  }
+  .arc-hero-sub {
+    font-size: .85rem; color: var(--muted); line-height: 1.7;
+    max-width: 560px;
+  }
+  .arc-timeline {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    flex-shrink: 0;
+  }
+  .arc-node {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .65rem; font-weight: 700; text-align: center;
+    line-height: 1.2; color: #fff;
+  }
+  .arc-line { width: 2px; height: 20px; background: var(--border); }
+  .arc-arrow { color: var(--accent); font-size: 1.2rem; line-height: 1; }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: .65rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--accent); margin: 2rem 0 .75rem;
+  }
+
+  /* ── Transformation card ── */
+  .transform-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .transform-header {
+    display: flex; align-items: center; gap: 1rem;
+    padding: .75rem 1.25rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .transform-header:hover { background: #eceae5; }
+  .transform-num {
+    font-size: .62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--accent); min-width: 24px;
+  }
+  .transform-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem; flex-shrink: 0;
+  }
+  .transform-title-block { flex: 1; }
+  .transform-title {
+    font-size: .88rem; font-weight: 700; color: var(--ink);
+  }
+  .transform-tagline {
+    font-size: .73rem; color: var(--muted); margin-top: .1rem;
+  }
+  .transform-chevron {
+    color: var(--muted); font-size: .9rem; transition: transform .25s;
+    flex-shrink: 0;
+  }
+  .transform-card.open .transform-chevron { transform: rotate(180deg); }
+  .transform-body {
+    display: none;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+  .transform-card.open .transform-body { display: grid; }
+
+  /* ── Before / After ── */
+  .ba-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .ba-box {
+    border-radius: 8px;
+    padding: .85rem 1rem;
+  }
+  .ba-before { background: #fef2f2; border: 1px solid #fecaca; }
+  .ba-after  { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .ba-label {
+    font-size: .62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    margin-bottom: .4rem;
+  }
+  .ba-before .ba-label { color: #b91c1c; }
+  .ba-after  .ba-label { color: #166534; }
+  .ba-list { list-style: none; padding: 0; margin: 0; }
+  .ba-list li {
+    font-size: .78rem; color: var(--muted); line-height: 1.6;
+    padding: .15rem 0;
+    padding-left: 1rem;
+    position: relative;
+  }
+  .ba-list li::before {
+    position: absolute; left: 0;
+    font-size: .7rem;
+  }
+  .ba-before .ba-list li::before { content: '✗'; color: #ef4444; }
+  .ba-after  .ba-list li::before { content: '✓'; color: #22c55e; }
+  .ba-list li strong { color: var(--ink); }
+
+  /* ── Outcome strip ── */
+  .outcome-strip {
+    background: var(--ink);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    display: flex; gap: 1.5rem; flex-wrap: wrap;
+    align-items: center;
+  }
+  .outcome-label {
+    font-size: .62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--accent); flex-shrink: 0;
+  }
+  .outcome-text {
+    font-size: .78rem; color: #e2e2e2; line-height: 1.5; flex: 1;
+  }
+  .outcome-text strong { color: #fff; }
+
+  /* ── Talking point ── */
+  .talking-point {
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 8px 8px 0;
+    padding: .85rem 1.1rem;
+    margin-top: .75rem;
+  }
+  .tp-label {
+    font-size: .6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--accent); margin-bottom: .35rem;
+  }
+  .tp-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem; color: var(--ink); line-height: 1.6;
+  }
+
+  /* ── Signal bullets ── */
+  .signal-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: .6rem;
+  }
+  .signal-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .65rem .85rem;
+    background: var(--bg);
+  }
+  .signal-freq {
+    font-size: .6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--accent); margin-bottom: .2rem;
+  }
+  .signal-name {
+    font-size: .78rem; font-weight: 600; color: var(--ink);
+  }
+  .signal-desc {
+    font-size: .72rem; color: var(--muted); margin-top: .2rem; line-height: 1.4;
+  }
+
+  /* ── Summary table ── */
+  .summary-table {
+    width: 100%; border-collapse: collapse; font-size: .78rem;
+  }
+  .summary-table th {
+    text-align: left; padding: .5rem .75rem;
+    font-size: .62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-table td {
+    padding: .6rem .75rem; border-bottom: 1px solid var(--border);
+    vertical-align: top; color: var(--muted); line-height: 1.5;
+  }
+  .summary-table td:first-child { font-weight: 600; color: var(--ink); }
+  .summary-table tr:last-child td { border-bottom: none; }
+  .tag-pill {
+    display: inline-block;
+    font-size: .62rem; font-weight: 700;
+    padding: .15rem .5rem; border-radius: 10px;
+    border: 1px solid var(--border);
+    color: var(--muted); background: var(--surface);
+  }
+
+  /* ── Quote block ── */
+  .quote-block {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.35rem; color: var(--ink);
+    line-height: 1.6; margin-bottom: .75rem;
+  }
+  .quote-source { font-size: .72rem; color: var(--muted); }
+
+  /* ── Project link chips ── */
+  .project-ref {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-size: .7rem; font-weight: 600;
+    color: var(--accent);
+    border: 1px solid #e8c5c0;
+    border-radius: 20px;
+    padding: .2rem .65rem;
+    text-decoration: none;
+    background: #fdf5f4;
+    margin-top: .5rem;
+    margin-right: .35rem;
+  }
+  .project-ref:hover { background: #fae8e5; }
+
+  footer {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    font-size: .72rem; color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 700px) {
+    main { padding: 1rem; }
+    .arc-hero { flex-direction: column; padding: 1.25rem; }
+    .ba-grid, .signal-grid { grid-template-columns: 1fr; }
+    header { padding: 1rem; }
+    .tab-bar { padding: 0 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">Technical Program Management · AI Transformation</div>
+    <h1>The Agentic TPM</h1>
+  </div>
+  <a href="/" style="font-size:.75rem;color:var(--muted);text-decoration:none;">&larr; All Projects</a>
+</header>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('story')">Transformation Story</button>
+  <button class="tab" onclick="switchTab('playbook')">The Playbook</button>
+  <button class="tab" onclick="switchTab('talking')">Interview Talking Points</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 1: Transformation Story
+═══════════════════════════════════════════════ -->
+<div id="tab-story" style="display:block;">
+<main>
+
+  <!-- Hero -->
+  <div class="arc-hero">
+    <div class="arc-hero-text">
+      <div class="arc-hero-title">From Coordinator<br>to Orchestrator</div>
+      <div class="arc-hero-sub">Traditional TPMs are coordination hubs — pulling status from teams, assembling it into artifacts, pushing it to stakeholders. Agentic TPMs design systems that do that coordination continuously, at machine speed, so the human can focus on decisions, unblocking, and relationships. This is the 9–12 month transformation.</div>
+    </div>
+    <div class="arc-timeline">
+      <div class="arc-node" style="background:radial-gradient(circle at 35% 35%,#d0d0d0,#888,#444);font-size:.6rem;text-align:center;">Traditional<br>TPM</div>
+      <div class="arc-line"></div>
+      <div style="color:var(--accent);font-size:.75rem;font-weight:700;">9–12 mo</div>
+      <div class="arc-line"></div>
+      <div class="arc-node" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);font-size:.6rem;text-align:center;">Agentic<br>TPM</div>
+    </div>
+  </div>
+
+  <!-- What changes -->
+  <div class="section-label">What Actually Changes</div>
+
+  <!-- T1: Daily Intelligence -->
+  <div class="transform-card open" id="card1">
+    <div class="transform-header" onclick="toggleCard('card1')">
+      <div class="transform-num">01</div>
+      <div class="transform-icon" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">📊</div>
+      <div class="transform-title-block">
+        <div class="transform-title">Daily Intelligence — From Morning Triage to Morning Briefing</div>
+        <div class="transform-tagline">Multi-agent digest replaces 45 min of manual Jira/Slack/email triage</div>
+      </div>
+      <div class="transform-chevron">▼</div>
+    </div>
+    <div class="transform-body" style="grid-template-columns:1fr;">
+
+      <div class="ba-grid">
+        <div class="ba-box ba-before">
+          <div class="ba-label">Before</div>
+          <ul class="ba-list">
+            <li>Open Jira, filter sprint board manually each morning</li>
+            <li>Scroll Slack for overnight escalations, incidents, announcements</li>
+            <li>Check calendar, mentally map what needs prep</li>
+            <li>Triangulate across 3 tools — <strong>45–60 min</strong> before first standup</li>
+            <li>Miss things; context is frozen at the moment you checked</li>
+          </ul>
+        </div>
+        <div class="ba-box ba-after">
+          <div class="ba-label">After</div>
+          <ul class="ba-list">
+            <li><strong>5 AI agents</strong> run automatically at 7 AM every day</li>
+            <li>Slack Agent synthesizes all messages → one communication assessment</li>
+            <li>Jira Agent surfaces blockers, sprint health, delivery risks</li>
+            <li>Calendar Agent flags critical meetings, scheduling conflicts</li>
+            <li>Executive Synthesis Agent cross-correlates all three → <strong>one briefing in Slack</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:.25rem;">
+        <div class="signal-grid">
+          <div class="signal-item">
+            <div class="signal-freq">Every 24 hrs</div>
+            <div class="signal-name">Sprint Status</div>
+            <div class="signal-desc">Velocity, completed vs planned, scope changes, overall health score</div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-freq">Rolling 24 hrs</div>
+            <div class="signal-name">Bug Activity</div>
+            <div class="signal-desc">Bugs filed and bugs fixed — net trend tells you if quality is improving or degrading</div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-freq">Rolling 6 hrs</div>
+            <div class="signal-name">Customer Issues</div>
+            <div class="signal-desc">Customer-reported issues in the last 6 hours — tight window for faster escalation response</div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-freq">Daily</div>
+            <div class="signal-name">Epics / Blockers / Decisions</div>
+            <div class="signal-desc">Epic-level risks, unresolved blockers, and decisions pending leader input</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="outcome-strip">
+        <div class="outcome-label">Outcome</div>
+        <div class="outcome-text">TPM reads a <strong>2-minute Slack digest</strong> instead of doing 60 minutes of manual triage. The digest is always current, never stale, and surfaces cross-functional connections — like a Slack incident that aligns with a Jira blocker — that a human would miss in sequential review.</div>
+      </div>
+
+      <div class="talking-point">
+        <div class="tp-label">Interview Talking Point</div>
+        <div class="tp-text">"The first thing I automated was the morning intelligence loop. Every day I was spending an hour pulling status from three tools before I could even think about what needed my attention. I built a 5-agent n8n workflow — Slack, Jira, and Calendar agents running in parallel, feeding a synthesis agent. Now the briefing is waiting for me. I'm not gathering information anymore; I'm acting on it."</div>
+      </div>
+
+      <div>
+        <a href="/digest.html" class="project-ref">↗ Live Demo: Engineering Leadership Daily Digest</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- T2: Knowledge & Process -->
+  <div class="transform-card" id="card2">
+    <div class="transform-header" onclick="toggleCard('card2')">
+      <div class="transform-num">02</div>
+      <div class="transform-icon" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">📚</div>
+      <div class="transform-title-block">
+        <div class="transform-title">Knowledge Access — From "Who knows where that doc is?" to Instant Retrieval</div>
+        <div class="transform-tagline">RAG on Confluence turns institutional knowledge into a queryable system</div>
+      </div>
+      <div class="transform-chevron">▼</div>
+    </div>
+    <div class="transform-body" style="grid-template-columns:1fr;">
+
+      <div class="ba-grid">
+        <div class="ba-box ba-before">
+          <div class="ba-label">Before</div>
+          <ul class="ba-list">
+            <li>Process docs buried in Confluence, rarely updated, never found</li>
+            <li>"Ask Sarah — she was here when we decided that" → tribal knowledge bottleneck</li>
+            <li>Meeting notes archived but never surfaced at the right moment</li>
+            <li>New team members spend <strong>weeks</strong> learning team norms by asking around</li>
+            <li>TPM writes the same context in Slack 10 times a quarter</li>
+          </ul>
+        </div>
+        <div class="ba-box ba-after">
+          <div class="ba-label">After</div>
+          <ul class="ba-list">
+            <li>Confluence pages ingested into a <strong>vector store</strong> (Pinecone)</li>
+            <li>Team can query in plain English: <em>"What's our process for P1 incidents?"</em></li>
+            <li>Meeting notes become searchable: <em>"What did we decide on auth architecture in March?"</em></li>
+            <li>RAG agent retrieves, cites the source page, and answers in context</li>
+            <li>New team member onboarding: <strong>days, not weeks</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="outcome-strip">
+        <div class="outcome-label">Outcome</div>
+        <div class="outcome-text">Institutional knowledge moves from <strong>people's heads and abandoned Confluence pages</strong> to a living, queryable system. The TPM's role shifts from being the knowledge broker to designing the knowledge architecture.</div>
+      </div>
+
+      <div class="talking-point">
+        <div class="tp-label">Interview Talking Point</div>
+        <div class="tp-text">"I noticed I was answering the same process questions over and over — escalation path, incident process, how we handle cross-team dependencies. I ingested our Confluence wiki and key meeting notes into a RAG pipeline. Now teammates query it directly. I went from being a human search engine to the person who maintains the search engine."</div>
+      </div>
+
+      <div>
+        <a href="/globaledge.html" class="project-ref">↗ Related: GlobalEdge RAG Intelligence</a>
+        <a href="/rag.html" class="project-ref">↗ Related: NovaCart RAG Agent</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- T3: Program Reviews & Business Reviews -->
+  <div class="transform-card" id="card3">
+    <div class="transform-header" onclick="toggleCard('card3')">
+      <div class="transform-num">03</div>
+      <div class="transform-icon" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">📋</div>
+      <div class="transform-title-block">
+        <div class="transform-title">Program Reviews — From Deck Assembly to Agent-Generated Narratives</div>
+        <div class="transform-tagline">Multi-agent orchestration (MAO) for Business Reviews and Program Reviews</div>
+      </div>
+      <div class="transform-chevron">▼</div>
+    </div>
+    <div class="transform-body" style="grid-template-columns:1fr;">
+
+      <div class="ba-grid">
+        <div class="ba-box ba-before">
+          <div class="ba-label">Before</div>
+          <ul class="ba-list">
+            <li>Business Review prep: 4–6 hours of manual Jira exports, spreadsheet work, slide assembly</li>
+            <li>Copy-paste status from 8 different project leads into one doc</li>
+            <li>Executive narrative written last-minute, often missing key context</li>
+            <li>Risks and dependencies buried in appendices, not surfaced</li>
+            <li>By the time the review happens, <strong>data is already stale</strong></li>
+          </ul>
+        </div>
+        <div class="ba-box ba-after">
+          <div class="ba-label">After</div>
+          <ul class="ba-list">
+            <li><strong>Monitor agent</strong> continuously pulls Jira data — daily, not quarterly</li>
+            <li><strong>Escalation agent</strong> flags risks, dependencies, and exceptions as they occur</li>
+            <li><strong>Synthesis agent</strong> generates the exec narrative from structured data</li>
+            <li>Business Review deck is <strong>auto-generated</strong> — human reviews and edits, not assembles</li>
+            <li>Risks surface in the week they emerge, not at the quarterly review</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="outcome-strip">
+        <div class="outcome-label">Outcome</div>
+        <div class="outcome-text">Program Reviews shift from <strong>status recaps of the past</strong> to <strong>forward-looking leadership conversations</strong>. The TPM stops spending half the week on prep and starts spending that time on the risks the agents surface — <strong>before</strong> they become escalations.</div>
+      </div>
+
+      <div class="talking-point">
+        <div class="tp-label">Interview Talking Point</div>
+        <div class="tp-text">"I used to spend 6 hours the night before every Business Review pulling data and writing the narrative. I built a 3-agent pipeline — a monitor that runs nightly, an escalation agent that surfaces risks daily, and a reporting agent that generates the deck. Now prep is an hour of reviewing what the agents produced and adding judgment calls. The executives get better data and I get my time back."</div>
+      </div>
+
+      <div>
+        <a href="/portfolio.html" class="project-ref">↗ Live Demo: VP Portfolio Health Report</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- T4: Disagreement Resolution -->
+  <div class="transform-card" id="card4">
+    <div class="transform-header" onclick="toggleCard('card4')">
+      <div class="transform-num">04</div>
+      <div class="transform-icon" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">⚡</div>
+      <div class="transform-title-block">
+        <div class="transform-title">Disagreements & Blockers — From Festering to Surfaced</div>
+        <div class="transform-tagline">Agentic systems detect disagreement signals and route them before they stall programs</div>
+      </div>
+      <div class="transform-chevron">▼</div>
+    </div>
+    <div class="transform-body" style="grid-template-columns:1fr;">
+
+      <div class="ba-grid">
+        <div class="ba-box ba-before">
+          <div class="ba-label">Before</div>
+          <ul class="ba-list">
+            <li>Disagreements surface <strong>at the meeting</strong> — no pre-read, no owner, no resolution path</li>
+            <li>Blockers sit in Jira comments for weeks — nobody notices</li>
+            <li>Architecture disputes live in Slack threads that get lost</li>
+            <li>TPM manually hunts for blocked items each standup</li>
+            <li>Decision latency: weeks from conflict to resolution</li>
+          </ul>
+        </div>
+        <div class="ba-box ba-after">
+          <div class="ba-label">After</div>
+          <ul class="ba-list">
+            <li>Daily digest agent scans Jira for <strong>items blocked > 48 hrs</strong> — automatic flag</li>
+            <li>Escalation agent detects unresolved debates in comments — surfaces them as action items</li>
+            <li>Decision Pipeline agent can intake a dispute and structure it: context, options, recommendation</li>
+            <li>Blockers are routed to the right DRI with context — not discovered at standup</li>
+            <li>Decision latency: <strong>days, not weeks</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="outcome-strip">
+        <div class="outcome-label">Outcome</div>
+        <div class="outcome-text">Disagreements and blockers go from <strong>invisible until they cause a slip</strong> to <strong>systematically surfaced and routed</strong> within 24–48 hours of emergence. The TPM becomes a designer of resolution systems, not a manual escalation router.</div>
+      </div>
+
+      <div class="talking-point">
+        <div class="tp-label">Interview Talking Point</div>
+        <div class="tp-text">"The hardest part of TPM isn't finding blockers in Jira — it's finding the ones nobody put in Jira. I built an escalation agent that scans for items blocked without a plan, Slack threads with unresolved decision markers, and cross-team dependencies past their due date. It surfaces those daily. We cut blocker-to-resolution time in half — not because we got faster, but because we found them sooner."</div>
+      </div>
+
+      <div>
+        <a href="/decision.html" class="project-ref">↗ Related: Decision Pipeline Agent</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div><!-- #tab-story -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 2: The Playbook
+═══════════════════════════════════════════════ -->
+<div id="tab-playbook" style="display:none;">
+<main>
+
+  <div class="quote-block">
+    <div class="quote-text">"An Agentic TPM doesn't do more coordination — they design coordination systems that run without them."</div>
+    <div class="quote-source">The transformation in one sentence</div>
+  </div>
+
+  <div class="section-label">The 9–12 Month Sequencing</div>
+
+  <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem;">
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>What to Build</th>
+          <th>Tool / Pattern</th>
+          <th>Signal That It's Working</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Month 1–2<br><span style="font-weight:400;font-size:.7rem;color:var(--muted);">Observe</span></td>
+          <td>Daily intelligence digest — sprint, bugs, customer issues, blockers</td>
+          <td><span class="tag-pill">n8n</span> <span class="tag-pill">Multi-agent</span></td>
+          <td>You stop dreading Monday morning Jira review</td>
+        </tr>
+        <tr>
+          <td>Month 3–4<br><span style="font-weight:400;font-size:.7rem;color:var(--muted);">Know</span></td>
+          <td>RAG on Confluence + meeting notes — team knowledge queryable</td>
+          <td><span class="tag-pill">Pinecone</span> <span class="tag-pill">RAG</span></td>
+          <td>Teammates start asking the bot instead of you</td>
+        </tr>
+        <tr>
+          <td>Month 5–7<br><span style="font-weight:400;font-size:.7rem;color:var(--muted);">Report</span></td>
+          <td>Auto-generated Business Reviews and Program Reviews</td>
+          <td><span class="tag-pill">MAO</span> <span class="tag-pill">PPTX Gen</span></td>
+          <td>Prep time drops from 6 hrs to 1 hr</td>
+        </tr>
+        <tr>
+          <td>Month 8–12<br><span style="font-weight:400;font-size:.7rem;color:var(--muted);">Resolve</span></td>
+          <td>Blocker detection + decision routing + disagreement surfacing</td>
+          <td><span class="tag-pill">Escalation Agent</span> <span class="tag-pill">Decision Pipeline</span></td>
+          <td>Blockers surface in days, not at the quarterly review</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Architecture Principles</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem;">
+    <div style="border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.4rem;">Start with observation, not automation</div>
+      <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">Build the digest first — read-only, no actions. Understand what signals matter before you automate responses. Trust is earned by accurate observation, not fast action.</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.4rem;">Specialists before synthesizers</div>
+      <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">Each agent should own exactly one data source. A Slack agent that also reads Jira produces worse output than two focused agents. Separation of concerns applies to AI systems too.</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.4rem;">Guardrails before scale</div>
+      <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">Every agentic system needs a pre-flight layer — config validation, graceful degradation if a source fails, structured output schemas. Build this early; retrofitting reliability is expensive.</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.4rem;">Human in the loop on decisions</div>
+      <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">Agents surface and synthesize; humans decide and unblock. Don't automate the judgment call — automate the work that feeds it. Your job becomes higher leverage, not redundant.</div>
+    </div>
+  </div>
+
+  <div class="section-label">The Skill Shift</div>
+
+  <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>Traditional TPM Spends Time On</th>
+          <th>Agentic TPM Spends Time On</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pulling status from Jira, Slack, email</td>
+          <td>Designing the agents that pull status automatically</td>
+        </tr>
+        <tr>
+          <td>Assembling decks for Business Reviews</td>
+          <td>Reviewing and editing agent-generated narratives</td>
+        </tr>
+        <tr>
+          <td>Being the knowledge broker between teams</td>
+          <td>Curating the knowledge architecture teams self-serve from</td>
+        </tr>
+        <tr>
+          <td>Finding blockers at standup</td>
+          <td>Designing systems that find blockers before standup</td>
+        </tr>
+        <tr>
+          <td>Answering "what's the status of X?" in Slack</td>
+          <td>Answering "why does X matter for the quarter?" in the exec review</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+</div><!-- #tab-playbook -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 3: Interview Talking Points
+═══════════════════════════════════════════════ -->
+<div id="tab-talking" style="display:none;">
+<main>
+
+  <div style="border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;background:var(--surface);margin-bottom:1.5rem;">
+    <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.4rem;">How to Use This Page</div>
+    <div style="font-size:.8rem;color:var(--muted);line-height:1.6;">These are structured for the <strong style="color:var(--ink);">"Tell me about a time you improved a process"</strong> and <strong style="color:var(--ink);">"How have you used AI in your work?"</strong> interview questions. Each point follows: Situation → What I built → Outcome → What it signals about how I think.</div>
+  </div>
+
+  <div class="section-label">Core Narrative — Use This as Your Opener</div>
+
+  <div class="talking-point" style="margin-bottom:1rem;">
+    <div class="tp-label">The 60-second version</div>
+    <div class="tp-text">"Over the past year, I've been systematically rebuilding how I do TPM work — replacing manual coordination loops with agentic systems. I started with the thing I dreaded most: the morning status grind. I built a 5-agent workflow — Slack, Jira, Calendar agents running in parallel, feeding an executive synthesis agent that delivers a briefing to Slack before standup. From there I tackled program reviews, knowledge access, and blocker detection. The pattern across all of it is the same: find the coordination work that's eating my highest-leverage hours, design an agent system to handle it, and use the freed capacity to work at a level that actually moves programs."</div>
+  </div>
+
+  <div class="section-label">Situation-Specific Talking Points</div>
+
+  <div style="display:grid;grid-template-columns:1fr;gap:1rem;">
+
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.6rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem;">
+        <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Q: "Tell me about a time you improved how a team gets information."</div>
+      </div>
+      <div style="padding:1rem 1.25rem;">
+        <div class="tp-text" style="font-size:.88rem;">"We had a classic problem — our Confluence wiki was the source of truth in theory, but in practice people just pinged whoever they thought knew the answer. I ingested our key process docs and meeting notes into a RAG pipeline. Teammates could query in plain English. The unexpected outcome was that it forced us to clean up the docs — once people were getting answers from them, bad docs became obvious immediately. The knowledge quality improved because the retrieval made it visible."</div>
+        <div style="margin-top:.75rem;font-size:.72rem;color:var(--muted);"><strong style="color:var(--ink);">Signals:</strong> systems thinking, process design, quality instrumentation</div>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.6rem 1rem;border-bottom:1px solid var(--border);">
+        <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Q: "How do you handle cross-functional blockers?"</div>
+      </div>
+      <div style="padding:1rem 1.25rem;">
+        <div class="tp-text" style="font-size:.88rem;">"I changed the question from 'how do I resolve blockers?' to 'how do I find them earlier?' I built an escalation agent that runs nightly — it scans for Jira items blocked past 48 hours, cross-team dependencies past due, and unresolved decision threads in comments. It surfaces those as action items every morning. We went from discovering blockers at standup to discovering them in the daily digest — typically 3–4 days earlier. Decision latency dropped significantly."</div>
+        <div style="margin-top:.75rem;font-size:.72rem;color:var(--muted);"><strong style="color:var(--ink);">Signals:</strong> proactive risk management, systems design, measurable outcome</div>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.6rem 1rem;border-bottom:1px solid var(--border);">
+        <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Q: "How have you used AI or automation in your TPM work?"</div>
+      </div>
+      <div style="padding:1rem 1.25rem;">
+        <div class="tp-text" style="font-size:.88rem;">"I think about it in terms of which TPM activities are coordination-heavy vs. judgment-heavy. Coordination work — status aggregation, deck assembly, document retrieval, blocker detection — is high-volume, low-variance, and a perfect target for agents. Judgment work — unblocking, stakeholder alignment, scope decisions — needs me. I've built agentic systems for the coordination layer: a daily multi-agent digest, a RAG system for our wiki, an auto-generated reporting pipeline. The goal is to spend my hours on the 20% of TPM work that moves programs, not the 80% that reports on them."</div>
+        <div style="margin-top:.75rem;font-size:.72rem;color:var(--muted);"><strong style="color:var(--ink);">Signals:</strong> strategic leverage, AI literacy, role clarity</div>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="background:var(--surface);padding:.6rem 1rem;border-bottom:1px solid var(--border);">
+        <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);">Q: "What does the future of the TPM role look like to you?"</div>
+      </div>
+      <div style="padding:1rem 1.25rem;">
+        <div class="tp-text" style="font-size:.88rem;">"The coordination layer of TPM gets automated in the next 2–3 years — not the role, the layer. Status gathering, deck assembly, meeting notes, blocker detection — agents will do that. What's left is the judgment layer: who owns this ambiguous decision, which trade-off is right for this team's culture, how do we align two VPs who want different things. TPMs who thrive are the ones building those agentic systems now — because they understand both the program management domain and how to design AI systems to serve it."</div>
+        <div style="margin-top:.75rem;font-size:.72rem;color:var(--muted);"><strong style="color:var(--ink);">Signals:</strong> industry perspective, forward-looking, self-aware</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Quick Reference — Numbers & Facts</div>
+
+  <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <table class="summary-table">
+      <thead><tr><th>Claim</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td>45–60 min → 2 min morning triage</td><td>5-agent daily digest: Slack + Jira + Calendar agents, runs at 7 AM daily</td></tr>
+        <tr><td>6 hrs → 1 hr Business Review prep</td><td>3-agent pipeline: monitor → escalation → report generation, weekly automated</td></tr>
+        <tr><td>Days not weeks for blocker detection</td><td>Escalation agent: nightly scan, 48hr threshold for Jira blockers</td></tr>
+        <tr><td>Institutional knowledge self-serve</td><td>RAG on Confluence: Pinecone vector store, plain-English queries</td></tr>
+        <tr><td>7 live AI projects in portfolio</td><td>vjra.us — all deployable, all with architecture documentation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+</div><!-- #tab-talking -->
+
+<footer>
+  vjra.us — Vipin Puri · AI Projects &amp; Research
+</footer>
+
+<script>
+function switchTab(name) {
+  ['story','playbook','talking'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = (t === name) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((btn, i) => {
+    btn.classList.toggle('active', ['story','playbook','talking'][i] === name);
+  });
+}
+
+function toggleCard(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+</script>
+</body>
+</html>
