@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confluence Knowledge Agent · vjra.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+    --bg: #f8f4ee;
+    --surface: #f4f3f0;
+    --border: #e8e6e1;
+    --green: #2d6a4f;
+    --amber: #b45309;
+    --purple: #6d28d9;
+    --blue: #1d4ed8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #2b2b2b;
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 4px solid var(--accent);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .7rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .2rem;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.7rem; color: var(--ink); font-weight: 400;
+    letter-spacing: .01em;
+  }
+  .agent-pill {
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: .75rem;
+    background: var(--surface);
+    transition: border-color .3s;
+  }
+  .agent-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted);
+    transition: background .3s;
+    flex-shrink: 0;
+  }
+  .agent-label { color: var(--muted); }
+  .agent-label strong { color: var(--ink); }
+
+  /* ── API key gate ── */
+  #gate {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .gate-card {
+    max-width: 480px; width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    background: var(--bg);
+  }
+  .gate-card h2 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 500;
+    color: var(--ink); margin-bottom: .5rem;
+  }
+  .gate-card p { font-size: .9rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .gate-card input {
+    width: 100%; padding: .65rem .9rem;
+    border: 1px solid var(--border); border-radius: 6px;
+    font-size: .9rem; font-family: monospace;
+    background: var(--surface); color: var(--ink);
+    margin-bottom: .75rem;
+    outline: none;
+  }
+  .gate-card input:focus { border-color: var(--accent); }
+  .gate-card button {
+    width: 100%; padding: .7rem;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 6px;
+    font-size: .9rem; font-weight: 600;
+    cursor: pointer; transition: background .15s;
+  }
+  .gate-card button:hover { background: #a04038; }
+  .gate-note {
+    font-size: .75rem; color: var(--muted);
+    margin-top: .75rem; text-align: center;
+  }
+
+  /* ── Main layout ── */
+  #app { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+
+  /* ── Tab bar ── */
+  .tab-bar {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .tab {
+    padding: .7rem 1.5rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    letter-spacing: .01em;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── Tab panels ── */
+  .tab-panel {
+    flex: 1;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+  }
+  .tab-panel.active { display: flex; }
+  /* All three panels on this page use block layout internally — prevents flex overlap */
+  #tab-overview.active { display: block !important; }
+  #tab-arch.active { display: block !important; }
+  #tab-chat.active { display: block !important; }
+
+  #tab-overview, #tab-arch {
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+  }
+  #tab-chat {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .card-grid-2 { padding: .75rem 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: .75rem 1.5rem; }
+  .card-grid-3 { padding: .75rem 1rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+
+  .section-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: .9rem; }
+  .section-card:last-child { margin-bottom: 0; }
+  .section-head {
+    background: var(--surface); padding: .5rem 1rem; border-bottom: 1px solid var(--border);
+  }
+  .section-head span {
+    font-family: 'Inter', sans-serif; font-size: .62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em; color: var(--accent);
+  }
+  .field-label {
+    font-family: 'Inter', sans-serif; font-size: .65rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: .35rem;
+  }
+  .field-body { font-size: .78rem; color: var(--muted); line-height: 1.6; }
+  .field-body strong { color: var(--ink); }
+
+  /* ── Chat area ── */
+  .chat-wrap { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+
+  #chat {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  #chat::-webkit-scrollbar { width: 4px; }
+  #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg { display: flex; gap: 10px; animation: fadeUp .2s ease; max-width: 720px; }
+  .msg.user { flex-direction: row-reverse; margin-left: auto; }
+  .msg.bot { margin-right: auto; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0;
+    background: var(--surface); border: 1px solid var(--border); margin-top: 2px;
+  }
+  .msg.user .avatar { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .bubble {
+    max-width: 100%; background: #fff; border: 1px solid var(--border);
+    border-radius: 10px; padding: .75rem 1rem; font-size: .88rem; line-height: 1.65;
+  }
+  .msg.user .bubble { background: var(--surface); }
+
+  .sources { margin-top: .6rem; padding-top: .55rem; border-top: 1px solid var(--border); }
+  .sources-label {
+    font-family: 'Inter', sans-serif; font-size: .6rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--muted); margin-bottom: .35rem;
+  }
+  .source-link {
+    display: block; font-size: .76rem; color: var(--accent); text-decoration: none;
+    padding: .15rem 0; line-height: 1.4;
+  }
+  .source-link:hover { text-decoration: underline; }
+
+  .intro-block { padding: .9rem 1.5rem .5rem; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+  .intro-block p { font-size: .8rem; color: var(--muted); line-height: 1.6; margin-bottom: .65rem; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .75rem; }
+  .chip {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: .78rem;
+    color: var(--ink); background: #fff; border: 1px solid var(--border); border-radius: 20px;
+    padding: .3rem .8rem; cursor: pointer; transition: border-color .15s, color .15s;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+
+  .thinking { display: flex; gap: 5px; padding: 4px 0; }
+  .thinking b { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); display: block; animation: blink 1.2s infinite; }
+  .thinking b:nth-child(2) { animation-delay: .2s; }
+  .thinking b:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,80%,100%{opacity:.25} 40%{opacity:1} }
+
+  footer {
+    border-top: 1px solid var(--border); padding: .85rem 1.5rem 1rem;
+    background: var(--bg); flex-shrink: 0;
+  }
+  .footer-inner { max-width: 100%; margin: 0; }
+  .input-row {
+    display: flex; gap: 8px; border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 6px 6px 12px; background: #fff; transition: border-color .2s;
+  }
+  .input-row:focus-within { border-color: var(--accent); }
+  #msg {
+    flex: 1; border: none; outline: none; font-size: .9rem; resize: none;
+    background: transparent; color: var(--ink); line-height: 1.5; max-height: 90px; overflow-y: auto;
+  }
+  #msg::placeholder { color: #bbb; }
+  .btn {
+    border: none; cursor: pointer; border-radius: 6px; width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; background: transparent; color: var(--muted); transition: all .15s; flex-shrink: 0;
+  }
+  .btn:hover { background: var(--surface); color: var(--ink); }
+  #sendBtn { background: var(--accent); color: #fff; }
+  #sendBtn:hover { background: #a04038; color: #fff; }
+  #sendBtn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .footer-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: .6rem; font-size: .72rem; color: #bbb;
+  }
+  #resetBtn { background: none; border: none; cursor: pointer; color: #bbb; font-size: .72rem; padding: 2px 6px; border-radius: 4px; }
+  #resetBtn:hover { color: var(--muted); background: var(--surface); }
+
+  /* ── Architecture diagram ── */
+  .flow-row { display: flex; align-items: stretch; gap: .5rem; flex-wrap: wrap; }
+  .flow-box {
+    flex: 1; min-width: 180px; border: 1px solid var(--border); border-radius: 8px;
+    background: #fff; padding: .65rem .8rem;
+  }
+  .flow-box .flow-title { font-family: 'Cormorant Garamond', serif; font-size: .95rem; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .flow-box .flow-sub { font-size: .68rem; color: var(--muted); line-height: 1.4; }
+  .flow-box code { font-size: .65rem; background: var(--surface); padding: 1px 4px; border-radius: 3px; }
+  .flow-arrow { display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1.1rem; flex-shrink: 0; padding: 0 .1rem; }
+  .flow-label {
+    font-family: 'Inter', sans-serif; font-size: .58rem; font-weight: 700; letter-spacing: .12em;
+    color: #a8a29e; text-transform: uppercase; margin-bottom: .5rem;
+  }
+
+  .endpoint-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .endpoint-table th {
+    text-align: left; padding: .45rem .7rem; font-size: .62rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--ink); background: var(--surface); border-bottom: 1px solid var(--border);
+  }
+  .endpoint-table td { padding: .5rem .7rem; font-size: .76rem; color: var(--muted); border-bottom: 1px solid var(--surface); vertical-align: top; }
+  .endpoint-table tr:last-child td { border-bottom: none; }
+  .endpoint-table code { font-size: .72rem; background: var(--surface); padding: 1px 5px; border-radius: 3px; color: var(--ink); }
+
+  .note-box {
+    font-size: .76rem; line-height: 1.6; padding: .7rem .9rem; border-radius: 0 6px 6px 0;
+    background: #fffbeb; border-left: 3px solid #fbbf24; color: #92400e;
+  }
+  .note-box code { background: #fff; padding: 1px 5px; border-radius: 3px; }
+
+  @media (max-width: 768px) {
+    header { padding: .9rem 1rem; }
+    h1 { font-size: 1.1rem; }
+    .agent-pill { display: none; }
+    body, #app { overflow-x: hidden; }
+    #chat { padding: 1rem; }
+    #tab-overview, #tab-arch { padding: 1rem; }
+    footer { padding: .7rem 1rem .85rem; }
+    .bubble { max-width: 92%; font-size: .85rem; }
+    .tab { padding: .6rem .9rem; font-size: .75rem; }
+    .card-grid-2 { grid-template-columns: 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr; }
+    .flow-row { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+  @media (max-width: 480px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+    h1 { font-size: 1rem; }
+    .tab { padding: .55rem .7rem; font-size: .72rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">VJRA.US / CONFLUENCE</div>
+    <h1>Confluence Knowledge Agent</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <a href="/" style="font-size:.75rem;color:var(--muted);text-decoration:none;">&larr; Research Library</a>
+    <div class="agent-pill" id="agentPill">
+      <div class="agent-dot" id="agentDot"></div>
+      <div class="agent-label">Agent: <strong id="agentName">Confluence Agent</strong></div>
+    </div>
+  </div>
+</header>
+
+<!-- API key gate -->
+<div id="gate">
+  <div class="gate-card">
+    <h2>Enter your API Key</h2>
+    <p>Your Anthropic API key is used directly in the browser to call Claude. It is stored only in this browser session and never sent to any server.</p>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off"/>
+    <button onclick="startApp()">Launch Confluence Agent</button>
+    <p class="gate-note">Don't have a key? Get one at <strong>console.anthropic.com</strong></p>
+  </div>
+</div>
+
+<!-- Main app -->
+<div id="app">
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('overview')">Business Problem &amp; Solution</button>
+    <button class="tab" onclick="switchTab('arch')">Architecture</button>
+    <button class="tab" onclick="switchTab('chat')">Live Agent</button>
+  </div>
+
+  <!-- Tab 1: Business Problem & Solution -->
+  <div id="tab-overview" class="tab-panel active">
+
+    <!-- Card 01: Business Problem -->
+    <div class="section-card">
+      <div class="section-head"><span>01 &middot; Business Problem</span></div>
+      <div class="card-grid-2">
+        <div>
+          <div class="field-label">The Problem</div>
+          <div class="field-body">Organizational/family knowledge &mdash; financial tracking, project docs, historical records &mdash; lives scattered across <strong>8 Confluence spaces</strong> with dozens of pages and nested tables. Finding a specific fact (e.g. &ldquo;what did we spend on X in 2022&rdquo;) means manually opening pages and scanning tables &mdash; slow and error-prone. On top of that, <strong>CORS blocks any browser-based tool from calling the Confluence API directly</strong>, so a simple client-side script can't just fetch the data itself.</div>
+        </div>
+        <div>
+          <div class="field-label">The Solution</div>
+          <div class="field-body">A lightweight <strong>local proxy server</strong> bridges the browser to the Confluence Cloud REST API. A single agent takes a natural-language question, runs a <strong>CQL full-site search</strong> via the proxy to find and fetch the most relevant pages, then uses <strong>Claude</strong> to synthesize a grounded, cited answer &mdash; no manual page-hunting.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 02: Why This Approach -->
+    <div class="section-card">
+      <div class="section-head"><span>02 &middot; Solution Description</span></div>
+      <div class="card-grid-2">
+        <div>
+          <div class="field-label">Why Not Manual Search?</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">8 spaces, dozens of pages &mdash; no single search finds the right table</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Answers require scanning nested tables across multiple pages</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Confluence Cloud API blocks direct browser calls (CORS)</div>
+          </div>
+        </div>
+        <div>
+          <div class="field-label">Why Proxy + Agent?</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Local Flask proxy sidesteps CORS with server-side auth</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">CQL search narrows 8 spaces down to the handful of relevant pages</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Claude answers only from retrieved text and cites the source page(s)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 03: Technical Snapshot -->
+    <div class="section-card">
+      <div class="section-head"><span>03 &middot; Technical Snapshot</span></div>
+      <div class="card-grid-3">
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Proxy</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Flask</strong> &middot; local only<br>listens on <code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">:5175</code></div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Search</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">CQL <code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">text ~ "..."</code><br>top 8 results</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Retrieval</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">body.storage</code> &rarr; plain text<br>first 8,000 chars</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Model</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Claude Sonnet 4.6</strong><br>direct browser call</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Data Source</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">Confluence Cloud<br><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">gutmoss.atlassian.net</code> &middot; 8 spaces</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Auth</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">API token in local <code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">.env</code><br>never sent to browser</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- #tab-overview -->
+
+  <!-- Tab 2: Architecture -->
+  <div id="tab-arch" class="tab-panel">
+
+    <div class="section-card">
+      <div class="section-head"><span>Retrieval &mdash; Browser &rarr; Proxy &rarr; Confluence</span></div>
+      <div style="padding:1rem;">
+        <div class="flow-row">
+          <div class="flow-box">
+            <div class="flow-title">Browser</div>
+            <div class="flow-sub"><code>confluence.html</code><br>runs the CQL search + page fetches</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-box">
+            <div class="flow-title">Local Proxy</div>
+            <div class="flow-sub">Flask, <code>localhost:5175</code><br>server-side Basic auth to Confluence</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-box">
+            <div class="flow-title">Confluence Cloud REST API</div>
+            <div class="flow-sub"><code>gutmoss.atlassian.net</code><br>CQL search + page content</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Synthesis &mdash; Browser &rarr; Claude</span></div>
+      <div style="padding:1rem;">
+        <div class="flow-row">
+          <div class="flow-box">
+            <div class="flow-title">Browser</div>
+            <div class="flow-sub"><code>confluence.html</code><br>packages question + retrieved excerpts</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-box">
+            <div class="flow-title">Claude API</div>
+            <div class="flow-sub"><code>api.anthropic.com</code><br>direct browser call &mdash; no proxy involved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Proxy Endpoints</span></div>
+      <div style="padding:1rem;">
+        <table class="endpoint-table">
+          <thead>
+            <tr><th style="width:34%;">Endpoint</th><th>What it does</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>GET /search?q=&lt;text&gt;</code></td>
+              <td>Runs a CQL text search (<code>text ~ "..."</code>) across all 8 spaces. Returns up to 8 results as <code>{id, title, space, url}</code>.</td>
+            </tr>
+            <tr>
+              <td><code>GET /page/&lt;id&gt;</code></td>
+              <td>Fetches one page's <code>body.storage</code>, strips HTML tags, and returns <code>{id, title, space, text}</code> &mdash; text truncated to the first 8,000 characters.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Local-Dev-Only Demo</span></div>
+      <div style="padding:1rem;">
+        <div class="note-box">
+          The proxy must be running locally for the <strong>Live Agent</strong> tab to work: <code>python confluence_proxy.py</code> (listens on port <code>5175</code>). This is a local-dev-only demo, not a hosted backend &mdash; the Confluence API token lives in a local <code>.env</code> file that is never committed to the repo and never exposed to the browser. If the proxy isn't running, the Live Agent tab will tell you instead of failing silently.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- #tab-arch -->
+
+  <!-- Tab 3: Live Agent -->
+  <div id="tab-chat" class="tab-panel">
+    <div class="chat-wrap">
+
+      <div id="chat">
+        <div class="intro-block" id="introBlock">
+          <p><strong style="color:var(--ink)">Confluence Knowledge Agent</strong> &mdash; ask a question about anything tracked in the Confluence knowledge base (financial tracking, project docs, historical records) and it will search live pages, retrieve the relevant excerpts, and answer with citations. Requires the local proxy (see the Architecture tab).</p>
+          <div class="chip-row">
+            <span class="chip" onclick="useChip(this)">What did we spend on renovations in 2022?</span>
+            <span class="chip" onclick="useChip(this)">Summarize the latest project status page.</span>
+            <span class="chip" onclick="useChip(this)">What decisions were logged for the trip planning?</span>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-inner">
+          <div class="input-row">
+            <textarea id="msg" rows="1" placeholder="Ask about anything in Confluence..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+            <button class="btn" id="sendBtn" onclick="send()">&#10148;</button>
+          </div>
+          <div class="footer-meta">
+            <div></div>
+            <button id="resetBtn" onclick="resetChat()">&#8630; Reset</button>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </div><!-- #tab-chat -->
+
+</div><!-- #app -->
+
+<script>
+const PROXY_BASE = 'http://localhost:5175';
+
+// ── State ─────────────────────────────────────────────────────────
+let apiKey = '';
+
+// ── Tab switching ─────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && name === 'overview') || (i === 1 && name === 'arch') || (i === 2 && name === 'chat'));
+  });
+  document.getElementById('tab-overview').classList.toggle('active', name === 'overview');
+  document.getElementById('tab-arch').classList.toggle('active', name === 'arch');
+  document.getElementById('tab-chat').classList.toggle('active', name === 'chat');
+}
+
+// ── Boot ──────────────────────────────────────────────────────────
+function startApp() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key.startsWith('sk-')) {
+    alert('Please enter a valid Anthropic API key (starts with sk-)');
+    return;
+  }
+  apiKey = key;
+  sessionStorage.setItem('anthropic_key_confluence', key);
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  const dot = document.getElementById('agentDot');
+  if (dot) dot.style.background = 'var(--accent)';
+}
+
+window.addEventListener('load', () => {
+  const saved = sessionStorage.getItem('anthropic_key_confluence');
+  if (saved) {
+    document.getElementById('apiKeyInput').value = saved;
+  }
+  document.getElementById('apiKeyInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') startApp();
+  });
+});
+
+// ── Confluence proxy calls ───────────────────────────────────────
+async function searchConfluence(query) {
+  const res = await fetch(`${PROXY_BASE}/search?q=${encodeURIComponent(query)}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `Proxy search error (${res.status})`);
+  }
+  return res.json();
+}
+
+async function fetchPage(id) {
+  const res = await fetch(`${PROXY_BASE}/page/${id}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `Proxy page error (${res.status})`);
+  }
+  return res.json();
+}
+
+// ── Claude API call ───────────────────────────────────────────────
+async function callClaude(question, pages) {
+  const systemPrompt = `You are the Confluence Knowledge Agent, helping answer questions about organizational/family knowledge (financial tracking, project docs, historical records) stored across 8 Confluence spaces.
+
+Answer the user's question using ONLY the Confluence page excerpts provided in the user message. Do not use outside knowledge, and do not guess or speculate.
+- If the excerpts contain the answer, give a direct, concise answer and cite which page title(s) you drew from (e.g. "According to 'Page Title'...").
+- If no excerpts were retrieved, or the excerpts don't contain enough information to answer, say so clearly instead of guessing.
+- Use specific figures, dates, and names exactly as they appear in the excerpts.`;
+
+  const context = pages.length
+    ? pages.map(p => `### ${p.title} (${p.space})\n${p.text}`).join('\n\n---\n\n')
+    : '(No relevant Confluence pages were found for this query.)';
+
+  const userContent = `Question: ${question}\n\nRetrieved Confluence excerpts:\n\n${context}`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userContent }],
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${res.status}`);
+  }
+
+  const data = await res.json();
+  return data.content[0].text;
+}
+
+// ── Chat logic ────────────────────────────────────────────────────
+async function send() {
+  const input = document.getElementById('msg');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  autoResize(input);
+
+  addUserMsg(text);
+  const thinking = addThinking();
+  document.getElementById('sendBtn').disabled = true;
+
+  let searchData;
+  try {
+    searchData = await searchConfluence(text);
+  } catch (err) {
+    thinking.remove();
+    if (err instanceof TypeError) {
+      addProxyDownMsg();
+    } else {
+      addBotMsg(`Confluence search failed: ${err.message}`, []);
+    }
+    document.getElementById('sendBtn').disabled = false;
+    input.focus();
+    return;
+  }
+
+  const results = (searchData.results || []).slice(0, 3);
+  let pages = [];
+  if (results.length) {
+    try {
+      pages = await Promise.all(results.map(async r => {
+        const pd = await fetchPage(r.id);
+        return { title: r.title, url: r.url, space: r.space, text: pd.text || '' };
+      }));
+    } catch (err) {
+      // Partial retrieval failure — fall back to whatever pages we already have.
+    }
+  }
+
+  try {
+    const answer = await callClaude(text, pages);
+    thinking.remove();
+    addBotMsg(answer, pages);
+  } catch (err) {
+    thinking.remove();
+    addBotMsg(`Error calling Claude: ${err.message}`, []);
+  } finally {
+    document.getElementById('sendBtn').disabled = false;
+    input.focus();
+  }
+}
+
+function resetChat() {
+  const chat = document.getElementById('chat');
+  chat.innerHTML = '';
+  const intro = document.createElement('div');
+  intro.className = 'intro-block';
+  intro.id = 'introBlock';
+  intro.innerHTML = `
+    <p><strong style="color:var(--ink)">Confluence Knowledge Agent</strong> &mdash; ask a question about anything tracked in the Confluence knowledge base (financial tracking, project docs, historical records) and it will search live pages, retrieve the relevant excerpts, and answer with citations. Requires the local proxy (see the Architecture tab).</p>
+    <div class="chip-row">
+      <span class="chip" onclick="useChip(this)">What did we spend on renovations in 2022?</span>
+      <span class="chip" onclick="useChip(this)">Summarize the latest project status page.</span>
+      <span class="chip" onclick="useChip(this)">What decisions were logged for the trip planning?</span>
+    </div>`;
+  chat.appendChild(intro);
+}
+
+// ── DOM helpers ───────────────────────────────────────────────────
+function addUserMsg(text) {
+  const chat = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'msg user';
+  d.innerHTML = `<div class="avatar">&#128100;</div><div class="bubble">${esc(text)}</div>`;
+  chat.appendChild(d);
+  scrollBottom();
+}
+
+function addBotMsg(text, pages) {
+  const chat = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'msg bot';
+  let sourcesHtml = '';
+  if (pages && pages.length) {
+    sourcesHtml = `<div class="sources"><div class="sources-label">Sources</div>${pages.map(p =>
+      `<a href="${p.url}" target="_blank" rel="noopener" class="source-link">${esc(p.title)}${p.space ? ' &middot; ' + esc(p.space) : ''}</a>`
+    ).join('')}</div>`;
+  }
+  d.innerHTML = `<div class="avatar">&#128193;</div><div class="bubble"><div>${esc(text)}</div>${sourcesHtml}</div>`;
+  chat.appendChild(d);
+  scrollBottom();
+}
+
+function addProxyDownMsg() {
+  const chat = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'msg bot';
+  d.innerHTML = `<div class="avatar">&#9888;&#65039;</div><div class="bubble" style="border-color:#fbbf24;background:#fffbeb;color:#92400e;">Confluence proxy isn't running locally. Start it with <code style="background:#fff;padding:1px 5px;border-radius:3px;">python confluence_proxy.py</code> (see the Architecture tab) to try live search.</div>`;
+  chat.appendChild(d);
+  scrollBottom();
+}
+
+function addThinking() {
+  const chat = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'msg bot';
+  d.innerHTML = `<div class="avatar">&#128193;</div><div class="bubble"><div class="thinking"><b></b><b></b><b></b></div></div>`;
+  chat.appendChild(d);
+  scrollBottom();
+  return d;
+}
+
+function scrollBottom() {
+  const c = document.getElementById('chat');
+  c.scrollTop = c.scrollHeight;
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+// ── Utilities ─────────────────────────────────────────────────────
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+
+function useChip(el) {
+  document.getElementById('msg').value = el.textContent.trim();
+  send();
+}
+</script>
+</body>
+</html>
