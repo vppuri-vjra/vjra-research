@@ -69,47 +69,8 @@
   .agent-label { color: var(--muted); }
   .agent-label strong { color: var(--ink); }
 
-  /* ── API key gate ── */
-  #gate {
-    flex: 1; display: flex; align-items: center; justify-content: center;
-    padding: 2rem;
-  }
-  .gate-card {
-    max-width: 480px; width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 2rem 2.5rem;
-    background: var(--bg);
-  }
-  .gate-card h2 {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 500;
-    color: var(--ink); margin-bottom: .5rem;
-  }
-  .gate-card p { font-size: .9rem; color: var(--muted); margin-bottom: 1.5rem; }
-  .gate-card input {
-    width: 100%; padding: .65rem .9rem;
-    border: 1px solid var(--border); border-radius: 6px;
-    font-size: .9rem; font-family: monospace;
-    background: var(--surface); color: var(--ink);
-    margin-bottom: .75rem;
-    outline: none;
-  }
-  .gate-card input:focus { border-color: var(--accent); }
-  .gate-card button {
-    width: 100%; padding: .7rem;
-    background: var(--accent); color: #fff;
-    border: none; border-radius: 6px;
-    font-size: .9rem; font-weight: 600;
-    cursor: pointer; transition: background .15s;
-  }
-  .gate-card button:hover { background: #a04038; }
-  .gate-note {
-    font-size: .75rem; color: var(--muted);
-    margin-top: .75rem; text-align: center;
-  }
-
   /* ── Main layout ── */
-  #app { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+  #app { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
   /* ── Tab bar ── */
   .tab-bar {
@@ -148,13 +109,9 @@
   #tab-arch.active { display: block !important; }
   #tab-chat.active { display: block !important; }
 
-  #tab-overview, #tab-arch {
+  #tab-overview, #tab-arch, #tab-chat {
     overflow-y: auto;
     padding: 1.5rem 2rem;
-  }
-  #tab-chat {
-    overflow: hidden;
-    padding: 0;
   }
 
   .card-grid-2 { padding: .75rem 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: .75rem 1.5rem; }
@@ -176,25 +133,12 @@
   .field-body { font-size: .78rem; color: var(--muted); line-height: 1.6; }
   .field-body strong { color: var(--ink); }
 
-  /* ── Chat area ── */
-  .chat-wrap { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+  /* ── Sample transcript (static, reuses chat bubble visual language) ── */
+  .transcript { display: flex; flex-direction: column; gap: 1.1rem; margin-bottom: 1.5rem; }
 
-  #chat {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 1.25rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-  #chat::-webkit-scrollbar { width: 4px; }
-  #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  .msg { display: flex; gap: 10px; animation: fadeUp .2s ease; max-width: 720px; }
+  .msg { display: flex; gap: 10px; max-width: 720px; }
   .msg.user { flex-direction: row-reverse; margin-left: auto; }
   .msg.bot { margin-right: auto; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
   .avatar {
     width: 30px; height: 30px; border-radius: 50%;
@@ -221,22 +165,6 @@
   }
   .source-link:hover { text-decoration: underline; }
 
-  .intro-block { padding: .9rem 1.5rem .5rem; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
-  .intro-block p { font-size: .8rem; color: var(--muted); line-height: 1.6; margin-bottom: .65rem; }
-  .chip-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .75rem; }
-  .chip {
-    font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: .78rem;
-    color: var(--ink); background: #fff; border: 1px solid var(--border); border-radius: 20px;
-    padding: .3rem .8rem; cursor: pointer; transition: border-color .15s, color .15s;
-  }
-  .chip:hover { border-color: var(--accent); color: var(--accent); }
-
-  .thinking { display: flex; gap: 5px; padding: 4px 0; }
-  .thinking b { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); display: block; animation: blink 1.2s infinite; }
-  .thinking b:nth-child(2) { animation-delay: .2s; }
-  .thinking b:nth-child(3) { animation-delay: .4s; }
-  @keyframes blink { 0%,80%,100%{opacity:.25} 40%{opacity:1} }
-
   .agent-steps {
     margin-bottom: .65rem; padding-bottom: .6rem; border-bottom: 1px solid var(--border);
     display: flex; flex-direction: column; gap: .3rem;
@@ -248,39 +176,6 @@
   .agent-step .step-icon { color: var(--accent); flex-shrink: 0; }
   .agent-step .step-label { color: var(--ink); font-weight: 600; }
   .agent-step .step-detail { color: var(--muted); }
-  .agent-step.error .step-label, .agent-step.error .step-icon { color: #b91c1c; }
-
-  footer {
-    border-top: 1px solid var(--border); padding: .85rem 1.5rem 1rem;
-    background: var(--bg); flex-shrink: 0;
-  }
-  .footer-inner { max-width: 100%; margin: 0; }
-  .input-row {
-    display: flex; gap: 8px; border: 1px solid var(--border); border-radius: 8px;
-    padding: 6px 6px 6px 12px; background: #fff; transition: border-color .2s;
-  }
-  .input-row:focus-within { border-color: var(--accent); }
-  #msg {
-    flex: 1; border: none; outline: none; font-size: .9rem; resize: none;
-    background: transparent; color: var(--ink); line-height: 1.5; max-height: 90px; overflow-y: auto;
-  }
-  #msg::placeholder { color: #bbb; }
-  .btn {
-    border: none; cursor: pointer; border-radius: 6px; width: 34px; height: 34px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px; background: transparent; color: var(--muted); transition: all .15s; flex-shrink: 0;
-  }
-  .btn:hover { background: var(--surface); color: var(--ink); }
-  #sendBtn { background: var(--accent); color: #fff; }
-  #sendBtn:hover { background: #a04038; color: #fff; }
-  #sendBtn:disabled { opacity: .4; cursor: not-allowed; }
-
-  .footer-meta {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: .6rem; font-size: .72rem; color: #bbb;
-  }
-  #resetBtn { background: none; border: none; cursor: pointer; color: #bbb; font-size: .72rem; padding: 2px 6px; border-radius: 4px; }
-  #resetBtn:hover { color: var(--muted); background: var(--surface); }
 
   /* ── Architecture diagram ── */
   .flow-row { display: flex; align-items: stretch; gap: .5rem; flex-wrap: wrap; }
@@ -317,9 +212,7 @@
     h1 { font-size: 1.1rem; }
     .agent-pill { display: none; }
     body, #app { overflow-x: hidden; }
-    #chat { padding: 1rem; }
-    #tab-overview, #tab-arch { padding: 1rem; }
-    footer { padding: .7rem 1rem .85rem; }
+    #tab-overview, #tab-arch, #tab-chat { padding: 1rem; }
     .bubble { max-width: 92%; font-size: .85rem; }
     .tab { padding: .6rem .9rem; font-size: .75rem; }
     .card-grid-2 { grid-template-columns: 1fr; }
@@ -343,23 +236,12 @@
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
     <a href="/" style="font-size:.75rem;color:var(--muted);text-decoration:none;">&larr; Research Library</a>
-    <div class="agent-pill" id="agentPill">
-      <div class="agent-dot" id="agentDot"></div>
-      <div class="agent-label">Agent: <strong id="agentName">Confluence Agent</strong></div>
+    <div class="agent-pill">
+      <div class="agent-dot" style="background:var(--accent);"></div>
+      <div class="agent-label">Retrieval: <strong>Claude Code + MCP</strong></div>
     </div>
   </div>
 </header>
-
-<!-- API key gate -->
-<div id="gate">
-  <div class="gate-card">
-    <h2>Enter your API Key</h2>
-    <p>Your Anthropic API key is used directly in the browser to call Claude. It is stored only in this browser session and never sent to any server.</p>
-    <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off"/>
-    <button onclick="startApp()">Launch Confluence Agent</button>
-    <p class="gate-note">Don't have a key? Get one at <strong>console.anthropic.com</strong></p>
-  </div>
-</div>
 
 <!-- Main app -->
 <div id="app">
@@ -368,7 +250,7 @@
   <div class="tab-bar">
     <button class="tab active" onclick="switchTab('overview')">Business Problem &amp; Solution</button>
     <button class="tab" onclick="switchTab('arch')">Architecture</button>
-    <button class="tab" onclick="switchTab('chat')">Live Agent</button>
+    <button class="tab" onclick="switchTab('chat')">Sample Session</button>
   </div>
 
   <!-- Tab 1: Business Problem & Solution -->
@@ -380,33 +262,33 @@
       <div class="card-grid-2">
         <div>
           <div class="field-label">The Problem</div>
-          <div class="field-body">Organizational/family knowledge &mdash; financial tracking, project docs, historical records &mdash; lives scattered across <strong>8 Confluence spaces</strong> with dozens of pages and nested tables. Finding a specific fact (e.g. &ldquo;what did we spend on X in 2022&rdquo;) means manually opening pages and scanning tables &mdash; slow and error-prone. On top of that, <strong>CORS blocks any browser-based tool from calling the Confluence API directly</strong>, so a simple client-side script can't just fetch the data itself.</div>
+          <div class="field-body">Organizational/family knowledge &mdash; financial tracking, project docs, historical records &mdash; lives scattered across <strong>8 Confluence spaces</strong> with dozens of pages and nested tables. Finding a specific fact (e.g. &ldquo;what did we spend on X&rdquo;, &ldquo;who is Y&rdquo;) means manually opening pages and scanning tables &mdash; slow and error-prone. On top of that, <strong>CORS blocks any browser-based tool from calling the Confluence API directly</strong>, so a simple client-side script can't just fetch the data itself.</div>
         </div>
         <div>
           <div class="field-label">The Solution</div>
-          <div class="field-body">A lightweight <strong>local proxy server</strong> bridges the browser to the Confluence Cloud REST API. A single agent takes a natural-language question, runs a <strong>CQL full-site search</strong> via the proxy to find and fetch the most relevant pages, then uses <strong>Claude</strong> to synthesize a grounded, cited answer &mdash; no manual page-hunting.</div>
+          <div class="field-body">A Claude Code session connects directly to Confluence through the <strong>official <code style="font-size:.7rem;background:#e8e6e1;padding:1px 4px;border-radius:2px;">mcp-confluence</code> MCP server</strong> &mdash; no browser, no CORS workaround needed at all. Claude searches with real CQL, opens full pages, and answers with citations, working the way a researcher would: search, look, search again if needed, then answer.</div>
         </div>
       </div>
     </div>
 
-    <!-- Card 02: Why This Approach -->
+    <!-- Card 02: What we tried first, and why it changed -->
     <div class="section-card">
-      <div class="section-head"><span>02 &middot; Solution Description</span></div>
+      <div class="section-head"><span>02 &middot; What We Tried First, and Why It Changed</span></div>
       <div class="card-grid-2">
         <div>
-          <div class="field-label">Why Not Manual Search?</div>
+          <div class="field-label">V1: Browser + Local Proxy</div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">8 spaces, dozens of pages &mdash; no single search finds the right table</div>
-            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Answers require scanning nested tables across multiple pages</div>
-            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Confluence Cloud API blocks direct browser calls (CORS)</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">Built a Flask proxy so this page could call Confluence from the browser (CORS forces a server hop either way)</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;">To keep responses fast, the proxy truncated every page to the first 8,000 characters before handing it to Claude</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#fef2f2;border-left:2px solid #f87171;border-radius:0 4px 4px 0;color:#7f1d1d;line-height:1.45;"><strong>Real failure found in testing:</strong> on a page where the actual answer lived well past that cutoff, Claude had zero real data to work with &mdash; and fabricated a complete, plausible-looking answer instead of saying so. Confident-sounding, ungrounded.</div>
           </div>
         </div>
         <div>
-          <div class="field-label">Why Proxy + Agent?</div>
+          <div class="field-label">V2: Claude Code + Native MCP</div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Local Flask proxy sidesteps CORS with server-side auth</div>
-            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">CQL search narrows 8 spaces down to the handful of relevant pages</div>
-            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Claude answers only from retrieved text and cites the source page(s)</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Swapped the proxy for the official <code style="font-size:.68rem;">mcp-confluence</code> MCP server, run directly inside a Claude Code session</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">No arbitrary truncation &mdash; pages are returned in full (large ones get written to a file Claude reads in full, not silently cut)</div>
+            <div style="font-size:.73rem;padding:.4rem .5rem;background:#f0fdf4;border-left:2px solid #4ade80;border-radius:0 4px 4px 0;color:#14532d;line-height:1.45;">Re-ran the same question that caused the earlier hallucination &mdash; this time it retrieved the real data and answered correctly, catching its own prior mistake</div>
           </div>
         </div>
       </div>
@@ -417,20 +299,20 @@
       <div class="section-head"><span>03 &middot; Technical Snapshot</span></div>
       <div class="card-grid-3">
         <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Proxy</div>
-          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Flask</strong> &middot; local only<br>listens on <code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">:5175</code></div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Runtime</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Claude Code CLI</strong><br>local session, not a browser</div>
+        </div>
+        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">MCP Server</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">mcp-confluence</code><br>stdio subprocess, 22 tools</div>
         </div>
         <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
           <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Search</div>
-          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">CQL <code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">text ~ "..."</code><br>top 8 results</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">search_content</code><br>real CQL, no result cap workaround</div>
         </div>
         <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
           <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Retrieval</div>
-          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">body.storage</code> &rarr; plain text<br>first 8,000 chars</div>
-        </div>
-        <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Model</div>
-          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><strong style="color:var(--ink)">Claude Sonnet 4.6</strong><br>direct browser call</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;"><code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">get_page</code><br>full page content, no truncation</div>
         </div>
         <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
           <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Data Source</div>
@@ -438,7 +320,7 @@
         </div>
         <div style="padding:.5rem .6rem;background:var(--surface);border-radius:6px;">
           <div style="font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px;">Auth</div>
-          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">API token in local <code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">.env</code><br>never sent to browser</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">API token in <code style="font-size:.65rem;background:#e8e6e1;padding:1px 3px;border-radius:2px;">~/.claude.json</code><br>never touches a browser</div>
         </div>
       </div>
     </div>
@@ -449,108 +331,121 @@
   <div id="tab-arch" class="tab-panel">
 
     <div class="section-card">
-      <div class="section-head"><span>Agent Loop &mdash; Claude drives its own retrieval</span></div>
+      <div class="section-head"><span>Retrieval &mdash; Claude Code &rarr; MCP &rarr; Confluence</span></div>
       <div style="padding:1rem;">
         <div style="font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:.85rem;">
-          This isn't a fixed search-then-answer pipeline. Claude is given <code>search_confluence</code> and <code>get_page</code> as real tools (Anthropic tool-use) and runs its own loop: search, look at what came back, search again with different keywords or open more pages if needed, and only answer once it actually has enough &mdash; up to 5 turns per question.
+          MCP (Model Context Protocol) servers run as <strong>local subprocesses talking over stdio</strong> &mdash; that's only possible inside a real client like Claude Code, which can spawn processes and hold a persistent connection. A static browser page cannot do this: JavaScript in a page can make HTTP calls, but it can't launch a subprocess or speak stdio. That's the actual reason the earlier version of this page needed a proxy at all &mdash; not a design choice, the only bridge CORS allowed. With MCP, there's no browser in the loop to bridge for.
         </div>
         <div class="flow-row">
           <div class="flow-box">
-            <div class="flow-title">Browser</div>
-            <div class="flow-sub"><code>confluence.html</code><br>calls Claude with <code>tools: [search_confluence, get_page]</code></div>
+            <div class="flow-title">Claude Code</div>
+            <div class="flow-sub">local CLI session<br>runs the agentic search &rarr; read &rarr; answer loop</div>
           </div>
           <div class="flow-arrow">&rarr;</div>
           <div class="flow-box">
-            <div class="flow-title">Claude API</div>
-            <div class="flow-sub"><code>api.anthropic.com</code><br>decides which tool to call, and with what input</div>
+            <div class="flow-title">mcp-confluence</div>
+            <div class="flow-sub">local stdio subprocess<br>22 tools: search, get/create/update/delete pages, blog posts, labels, attachments</div>
           </div>
           <div class="flow-arrow">&rarr;</div>
           <div class="flow-box">
-            <div class="flow-title">Local Proxy</div>
-            <div class="flow-sub">Flask, <code>localhost:5175</code><br>executes the tool call against Confluence</div>
+            <div class="flow-title">Confluence Cloud REST API</div>
+            <div class="flow-sub"><code>gutmoss.atlassian.net</code><br>real CQL search + full page content</div>
           </div>
         </div>
         <div style="font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:.85rem;">
-          The proxy's result is sent back to Claude as a <code>tool_result</code>, and the loop repeats until Claude stops calling tools and returns a final answer &mdash; visible live in the Live Agent tab as a step-by-step trace above each response.
+          Because this only runs inside a local session, the <strong>Sample Session</strong> tab shows real transcripts from actually using it, rather than a live chat embedded in this page.
         </div>
       </div>
     </div>
 
     <div class="section-card">
-      <div class="section-head"><span>Tools Exposed to Claude</span></div>
+      <div class="section-head"><span>Debugging Note &mdash; the config was in the wrong file</span></div>
       <div style="padding:1rem;">
-        <table class="endpoint-table">
-          <thead>
-            <tr><th style="width:34%;">Tool</th><th>What it does</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>search_confluence(query)</code></td>
-              <td>Proxies to <code>GET /search?q=</code> &mdash; runs a title-match and a text-match CQL search (<code>title ~</code> / <code>text ~ "..." and type=page</code>) and merges them, title matches first, so an exact-title page always surfaces even when it ranks low on body-text relevance. Returns up to 8 <code>{id, title, space, url}</code> results.</td>
-            </tr>
-            <tr>
-              <td><code>get_page(page_id)</code></td>
-              <td>Proxies to <code>GET /page/&lt;id&gt;</code> &mdash; fetches one page's <code>body.storage</code>, strips HTML tags, and returns <code>{id, title, space, url, text}</code>, text truncated to the first 8,000 characters.</td>
-            </tr>
-          </tbody>
-        </table>
-        <div style="font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:.7rem;">
-          The proxy also strips filler/question words (&ldquo;tell&rdquo;, &ldquo;me&rdquo;, &ldquo;about&rdquo;, &ldquo;what&rdquo;, etc.) from whatever query it receives before building CQL &mdash; Confluence's <code>text ~ "..."</code> requires every word in the phrase to literally co-occur, so an unfiltered natural-language question can silently exclude the page you're actually asking about. Claude is also instructed to search with focused keywords rather than a full sentence in the first place.
+        <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">
+          The MCP server was initially registered in <code>~/.claude/settings.json</code>, which looked correct and even ran fine when tested standalone &mdash; but Claude Code actually reads locally-added MCP servers from a different file, <code>~/.claude.json</code>, populated via <code>claude mcp add</code>. Two full app restarts changed nothing, because there was nothing to pick up. <code>claude mcp list</code> was the tool that surfaced the real state (&ldquo;No MCP servers configured&rdquo;), which is what pointed at the actual root cause instead of continuing to guess at session-lifecycle issues. Re-registering it correctly with <code>claude mcp add -s user</code> fixed it on the first try.
         </div>
       </div>
     </div>
 
     <div class="section-card">
-      <div class="section-head"><span>Local-Dev-Only Demo</span></div>
+      <div class="section-head"><span>Reliability Note &mdash; the truncation hallucination</span></div>
       <div style="padding:1rem;">
         <div class="note-box">
-          The proxy must be running locally for the <strong>Live Agent</strong> tab to work: <code>python confluence_proxy.py</code> (listens on port <code>5175</code>). This is a local-dev-only demo, not a hosted backend &mdash; the Confluence API token lives in a local <code>.env</code> file that is never committed to the repo and never exposed to the browser. If the proxy isn't running, the Live Agent tab will tell you instead of failing silently.
+          The proxy version of this page capped every fetched page to 8,000 characters to keep responses fast. On one page, the section containing the actual answer started well past that cutoff &mdash; so Claude was working from an excerpt that literally could not contain the answer. Instead of saying so, it produced a complete, confident, well-formatted answer with no real grounding. The system prompt did instruct it to admit when it lacked information, and it still didn't catch it. Switching to <code>get_page</code> via native MCP removes the arbitrary cutoff entirely: large pages are returned in full (written to a file and read completely, not silently sliced), so there's no window in which the model has to guess in the dark and doesn't know it.
         </div>
       </div>
     </div>
 
   </div><!-- #tab-arch -->
 
-  <!-- Tab 3: Live Agent -->
+  <!-- Tab 3: Sample Session -->
   <div id="tab-chat" class="tab-panel">
-    <div class="chat-wrap">
 
-      <div id="chat">
-        <div class="intro-block" id="introBlock">
-          <p><strong style="color:var(--ink)">Confluence Knowledge Agent</strong> &mdash; ask a question about anything tracked in the Confluence knowledge base (financial tracking, project docs, historical records) and it will search live pages, retrieve the relevant excerpts, and answer with citations. Requires the local proxy (see the Architecture tab).</p>
-          <div class="chip-row">
-            <span class="chip" onclick="useChip(this)">What did we spend on renovations in 2022?</span>
-            <span class="chip" onclick="useChip(this)">Summarize the latest project status page.</span>
-            <span class="chip" onclick="useChip(this)">What decisions were logged for the trip planning?</span>
+    <div class="section-card">
+      <div class="section-head"><span>Real transcripts, not a live demo</span></div>
+      <div style="padding:1rem;">
+        <div class="field-body">As explained on the Architecture tab, MCP only runs inside a real client (Claude Code), not a static browser page &mdash; so there's no live chat to embed here. What follows are two unedited exchanges from an actual session against <code style="font-size:.7rem;background:#e8e6e1;padding:1px 4px;border-radius:2px;">gutmoss.atlassian.net</code>, including the exact tool calls Claude made along the way.</div>
+      </div>
+    </div>
+
+    <!-- Example 1 -->
+    <div class="transcript">
+      <div class="msg user"><div class="avatar">&#128100;</div><div class="bubble">tell me about Dr Rulin Xiu</div></div>
+      <div class="msg bot">
+        <div class="avatar">&#128193;</div>
+        <div class="bubble">
+          <div class="agent-steps">
+            <div class="agent-step"><span class="step-icon">&rarr;</span><span class="step-label">search_content("Rulin Xiu")</span><span class="step-detail">13 results</span></div>
+            <div class="agent-step"><span class="step-icon">&rarr;</span><span class="step-label">get_page("Dr Rulin's Corner..")</span><span class="step-detail">bio</span></div>
+            <div class="agent-step"><span class="step-icon">&rarr;</span><span class="step-label">get_page("Papers by Dr Rulin Xiu")</span><span class="step-detail">publication list</span></div>
+          </div>
+          <div style="font-size:.85rem;line-height:1.7;">
+            <p style="margin-bottom:.6rem;"><strong>Dr. Rulin Xiu</strong> &mdash; quantum physicist and string theorist. Doctorate from UC Berkeley; post-doctoral research at Harvard's Lyman Laboratory of Physics and the Houston Advanced Research Center. Her life's work is the pursuit of the <strong>Grand Unification Theory</strong> &mdash; unifying all forces, matter, and space-time &mdash; alongside research into the mathematical definition of &ldquo;positive information&rdquo; as a new way to study life and medicine.</p>
+            <p style="margin-bottom:.4rem;"><strong>Published papers</strong> (several co-authored with Dr. Zhi Gang Sha):</p>
+            <ul style="margin:0 0 0 1.1rem; font-size:.82rem; color:var(--muted); line-height:1.7;">
+              <li>2022 &mdash; Holographic Principle, String Theory, and Grand Unification Theory (Science of Consciousness, Tucson AZ)</li>
+              <li>2020 &mdash; Information Mechanics: The Dynamics of &ldquo;It from Bit&rdquo;</li>
+              <li>2019 &mdash; Derivation of the Existence of Two Kinds of Space and Time from the Law of Creation</li>
+              <li>2018 &mdash; String Theory Explanation of Large-Scale Anisotropy and Anomalous Alignment</li>
+              <li>2017 &mdash; Dark Energy and Estimate of Cosmological Constant from String Theory</li>
+            </ul>
+          </div>
+          <div class="sources">
+            <div class="sources-label">Sources</div>
+            <a class="source-link" href="https://gutmoss.atlassian.net/wiki/spaces/CAE/pages/5832748/Dr+Rulin+s+Corner.." target="_blank" rel="noopener">Dr Rulin's Corner.. &middot; Science and Spirituality</a>
+            <a class="source-link" href="https://gutmoss.atlassian.net/wiki/spaces/CAE/pages/2851097/Papers+by+Dr+Rulin+Xiu" target="_blank" rel="noopener">Papers by Dr Rulin Xiu &middot; Science and Spirituality</a>
           </div>
         </div>
       </div>
+    </div>
 
-      <footer>
-        <div class="footer-inner">
-          <div class="input-row">
-            <textarea id="msg" rows="1" placeholder="Ask about anything in Confluence..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-            <button class="btn" id="sendBtn" onclick="send()">&#10148;</button>
+    <!-- Example 2 -->
+    <div class="transcript">
+      <div class="msg user"><div class="avatar">&#128100;</div><div class="bubble">tell me about the Billionaire and the Mechanic</div></div>
+      <div class="msg bot">
+        <div class="avatar">&#128193;</div>
+        <div class="bubble">
+          <div class="agent-steps">
+            <div class="agent-step"><span class="step-icon">&rarr;</span><span class="step-label">search_content("Billionaire and the Mechanic")</span><span class="step-detail">2 results</span></div>
+            <div class="agent-step"><span class="step-icon">&rarr;</span><span class="step-label">get_page("The Billionaire and the Mechanic")</span><span class="step-detail">full page, view format</span></div>
           </div>
-          <div class="footer-meta">
-            <div></div>
-            <button id="resetBtn" onclick="resetChat()">&#8630; Reset</button>
+          <div style="font-size:.85rem;line-height:1.7;">
+            <p style="margin-bottom:.6rem;">Julian Guthrie's book tells the story of <strong>Larry Ellison</strong> (Oracle founder) and <strong>Norbert Bajurin</strong> (a San Francisco radiator-shop mechanic and yacht builder) winning the 2013 America's Cup with USA-17. Key takeaways: <strong>partnership</strong> between complementary skill sets, <strong>innovation</strong> under pressure (a 223-ft wing sail too tall for the Golden Gate Bridge), <strong>persistence</strong> through repeated setbacks, and an unlikely, enduring <strong>friendship</strong> across a wealth divide.</p>
+            <p style="font-size:.82rem; color:var(--muted);">Team USA-17 included skipper Russell Coutts (4x America's Cup winner), navigator John Kostecki, and designers Dirk Kramers, Scott Ferguson, and Joseph Ozanne &mdash; ranging from ~20&ndash;30 people to over 100 during the final race push. Bajurin's parents, Croatian immigrants who ran a SF radiator repair shop, are where he first learned the mechanical skills later applied to the yacht's hydraulics.</p>
+          </div>
+          <div class="sources">
+            <div class="sources-label">Sources</div>
+            <a class="source-link" href="https://gutmoss.atlassian.net/wiki/spaces/CAE/pages/8454145/The+Billionaire+and+the+Mechanic" target="_blank" rel="noopener">The Billionaire and the Mechanic &middot; Science and Spirituality</a>
           </div>
         </div>
-      </footer>
-
+      </div>
     </div>
+
   </div><!-- #tab-chat -->
 
 </div><!-- #app -->
 
 <script>
-const PROXY_BASE = 'http://localhost:5175';
-
-// ── State ─────────────────────────────────────────────────────────
-let apiKey = '';
-
-// ── Tab switching ─────────────────────────────────────────────────
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', (i === 0 && name === 'overview') || (i === 1 && name === 'arch') || (i === 2 && name === 'chat'));
@@ -558,259 +453,6 @@ function switchTab(name) {
   document.getElementById('tab-overview').classList.toggle('active', name === 'overview');
   document.getElementById('tab-arch').classList.toggle('active', name === 'arch');
   document.getElementById('tab-chat').classList.toggle('active', name === 'chat');
-}
-
-// ── Boot ──────────────────────────────────────────────────────────
-function startApp() {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key.startsWith('sk-')) {
-    alert('Please enter a valid Anthropic API key (starts with sk-)');
-    return;
-  }
-  apiKey = key;
-  sessionStorage.setItem('anthropic_key_confluence', key);
-  document.getElementById('gate').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  const dot = document.getElementById('agentDot');
-  if (dot) dot.style.background = 'var(--accent)';
-}
-
-window.addEventListener('load', () => {
-  const saved = sessionStorage.getItem('anthropic_key_confluence');
-  if (saved) {
-    document.getElementById('apiKeyInput').value = saved;
-  }
-  document.getElementById('apiKeyInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') startApp();
-  });
-});
-
-// ── Agentic tool-use loop ────────────────────────────────────────
-// Claude decides when to search, what to search for, and which pages to
-// open — it can retry with different keywords or pull more pages if the
-// first search doesn't have what it needs, instead of a single fixed
-// search-then-answer pass.
-const TOOLS = [
-  {
-    name: 'search_confluence',
-    description: 'Search Confluence (gutmoss.atlassian.net) for pages matching a query. Returns up to 8 matches with id, title, space, and url. Pass focused keywords, not a full sentence — e.g. "treasures" or "renovation budget 2022", not "what did we spend on renovations in 2022?".',
-    input_schema: {
-      type: 'object',
-      properties: { query: { type: 'string', description: 'Search keywords' } },
-      required: ['query'],
-    },
-  },
-  {
-    name: 'get_page',
-    description: 'Fetch the full text content of one Confluence page by its id (as returned by search_confluence). Call this before answering from a page — do not answer from a title alone.',
-    input_schema: {
-      type: 'object',
-      properties: { page_id: { type: 'string', description: 'The Confluence page id' } },
-      required: ['page_id'],
-    },
-  },
-];
-
-const AGENT_SYSTEM_PROMPT = `You are the Confluence Knowledge Agent, helping answer questions about organizational/family knowledge (financial tracking, project docs, historical records) stored across 8 Confluence spaces on gutmoss.atlassian.net.
-
-You have two tools: search_confluence and get_page. Use them like a researcher, not a single fixed lookup:
-- Search with focused keywords, not the user's full sentence verbatim.
-- Look at the results before deciding what to do next. If nothing looks relevant, try again with different or narrower keywords rather than giving up after one search.
-- Fetch (get_page) any page that looks relevant before you rely on it — never answer from a title alone.
-- If a tool call returns an error (e.g. the local proxy isn't reachable), tell the user directly and clearly instead of guessing or retrying forever.
-- Once you have enough information, answer directly and concisely, citing which page title(s) you drew from (e.g. "According to 'Page Title'..."). Use specific figures, dates, and names exactly as they appear in the page text. If after a reasonable search you still can't find the answer, say so clearly instead of guessing.
-- If the question is about your own setup rather than knowledge-base content (e.g. "what site do you search", "how does this work"), you can answer directly without necessarily needing search results — an empty/irrelevant search result for a meta-question is expected, not a failure.`;
-
-async function executeTool(name, input, stepsEl, fetchedPages) {
-  try {
-    if (name === 'search_confluence') {
-      const res = await fetch(`${PROXY_BASE}/search?q=${encodeURIComponent(input.query)}`);
-      if (!res.ok) {
-        const e = await res.json().catch(() => ({}));
-        addStep(stepsEl, `Searched "${input.query}"`, e.error || `error ${res.status}`, true);
-        return { error: e.error || `search error ${res.status}` };
-      }
-      const data = await res.json();
-      addStep(stepsEl, `Searched "${input.query}"`, `${data.results.length} result(s)`);
-      return data;
-    }
-    if (name === 'get_page') {
-      const res = await fetch(`${PROXY_BASE}/page/${encodeURIComponent(input.page_id)}`);
-      if (!res.ok) {
-        const e = await res.json().catch(() => ({}));
-        addStep(stepsEl, `Fetched page ${input.page_id}`, e.error || `error ${res.status}`, true);
-        return { error: e.error || `page error ${res.status}` };
-      }
-      const data = await res.json();
-      addStep(stepsEl, `Opened "${data.title}"`, `${data.text.length} chars`);
-      if (!fetchedPages.some(p => p.id === data.id)) fetchedPages.push(data);
-      return data;
-    }
-    return { error: `unknown tool ${name}` };
-  } catch (err) {
-    if (err instanceof TypeError) {
-      addStep(stepsEl, name, 'Confluence proxy unreachable at localhost:5175', true);
-      return { error: 'The local Confluence proxy is not reachable at localhost:5175. It must be running (python confluence_proxy.py) for search to work — tell the user this directly.' };
-    }
-    addStep(stepsEl, name, err.message, true);
-    return { error: err.message };
-  }
-}
-
-async function runAgent(question, stepsEl) {
-  let messages = [{ role: 'user', content: question }];
-  const fetchedPages = [];
-  const MAX_TURNS = 5;
-
-  for (let turn = 0; turn < MAX_TURNS; turn++) {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1024,
-        system: AGENT_SYSTEM_PROMPT,
-        tools: TOOLS,
-        messages,
-      }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error?.message || `API error ${res.status}`);
-    }
-
-    const data = await res.json();
-    messages.push({ role: 'assistant', content: data.content });
-
-    if (data.stop_reason !== 'tool_use') {
-      const textBlock = data.content.find(b => b.type === 'text');
-      return { text: textBlock ? textBlock.text : '(no answer text)', pages: fetchedPages };
-    }
-
-    const toolUseBlocks = data.content.filter(b => b.type === 'tool_use');
-    const toolResults = [];
-    for (const block of toolUseBlocks) {
-      const result = await executeTool(block.name, block.input, stepsEl, fetchedPages);
-      toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: JSON.stringify(result) });
-    }
-    messages.push({ role: 'user', content: toolResults });
-  }
-
-  return { text: "I searched several times but couldn't settle on a confident answer — try rephrasing the question.", pages: fetchedPages };
-}
-
-// ── Chat logic ────────────────────────────────────────────────────
-async function send() {
-  const input = document.getElementById('msg');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  autoResize(input);
-
-  addUserMsg(text);
-  const agentMsg = addAgentMsg();
-  document.getElementById('sendBtn').disabled = true;
-
-  try {
-    const { text: answer, pages } = await runAgent(text, agentMsg.querySelector('.agent-steps'));
-    finishAgentMsg(agentMsg, answer, pages);
-  } catch (err) {
-    finishAgentMsg(agentMsg, `Error calling Claude: ${err.message}`, []);
-  } finally {
-    document.getElementById('sendBtn').disabled = false;
-    input.focus();
-  }
-}
-
-function resetChat() {
-  const chat = document.getElementById('chat');
-  chat.innerHTML = '';
-  const intro = document.createElement('div');
-  intro.className = 'intro-block';
-  intro.id = 'introBlock';
-  intro.innerHTML = `
-    <p><strong style="color:var(--ink)">Confluence Knowledge Agent</strong> &mdash; ask a question about anything tracked in the Confluence knowledge base (financial tracking, project docs, historical records) and it will search live pages, retrieve the relevant excerpts, and answer with citations. Requires the local proxy (see the Architecture tab).</p>
-    <div class="chip-row">
-      <span class="chip" onclick="useChip(this)">What did we spend on renovations in 2022?</span>
-      <span class="chip" onclick="useChip(this)">Summarize the latest project status page.</span>
-      <span class="chip" onclick="useChip(this)">What decisions were logged for the trip planning?</span>
-    </div>`;
-  chat.appendChild(intro);
-}
-
-// ── DOM helpers ───────────────────────────────────────────────────
-function addUserMsg(text) {
-  const chat = document.getElementById('chat');
-  const d = document.createElement('div');
-  d.className = 'msg user';
-  d.innerHTML = `<div class="avatar">&#128100;</div><div class="bubble">${esc(text)}</div>`;
-  chat.appendChild(d);
-  scrollBottom();
-}
-
-function addAgentMsg() {
-  const chat = document.getElementById('chat');
-  const d = document.createElement('div');
-  d.className = 'msg bot';
-  d.innerHTML = `<div class="avatar">&#128193;</div><div class="bubble">
-    <div class="agent-steps" style="display:none;"></div>
-    <div class="agent-answer"><div class="thinking"><b></b><b></b><b></b></div></div>
-  </div>`;
-  chat.appendChild(d);
-  scrollBottom();
-  return d;
-}
-
-function addStep(stepsEl, label, detail, isError) {
-  if (!stepsEl) return;
-  stepsEl.style.display = 'flex';
-  const row = document.createElement('div');
-  row.className = 'agent-step' + (isError ? ' error' : '');
-  row.innerHTML = `<span class="step-icon">${isError ? '&#9888;' : '&rarr;'}</span><span class="step-label">${esc(label)}</span><span class="step-detail">${esc(detail)}</span>`;
-  stepsEl.appendChild(row);
-  scrollBottom();
-}
-
-function finishAgentMsg(msgEl, text, pages) {
-  const answerEl = msgEl.querySelector('.agent-answer');
-  let sourcesHtml = '';
-  if (pages && pages.length) {
-    sourcesHtml = `<div class="sources"><div class="sources-label">Sources</div>${pages.map(p =>
-      `<a href="${p.url}" target="_blank" rel="noopener" class="source-link">${esc(p.title)}${p.space ? ' &middot; ' + esc(p.space) : ''}</a>`
-    ).join('')}</div>`;
-  }
-  answerEl.innerHTML = `<div>${esc(text)}</div>${sourcesHtml}`;
-  scrollBottom();
-}
-
-function scrollBottom() {
-  const c = document.getElementById('chat');
-  c.scrollTop = c.scrollHeight;
-}
-
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-}
-
-// ── Utilities ─────────────────────────────────────────────────────
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
-}
-
-function useChip(el) {
-  document.getElementById('msg').value = el.textContent.trim();
-  send();
 }
 </script>
 </body>

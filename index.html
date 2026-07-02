@@ -368,10 +368,10 @@
         <div class="card-title">Confluence Knowledge Agent</div>
       </div>
       <div class="card-body">
-        <div class="card-desc">Retrieval agent for organizational knowledge scattered across 8 Confluence spaces. A local proxy bridges the browser's CORS block to the Confluence Cloud REST API, running a CQL search over live pages; Claude synthesizes a grounded, cited answer from the retrieved excerpts.</div>
+        <div class="card-desc">Retrieval agent for organizational knowledge scattered across 8 Confluence spaces, connected directly through the official Confluence MCP server &mdash; no browser, no CORS workaround. Includes a real case study: an earlier proxy-based version silently hallucinated on a large page; switching to native MCP retrieval fixed it.</div>
         <div class="card-tags">
+          <span class="card-tag">MCP Server</span>
           <span class="card-tag">CQL Search</span>
-          <span class="card-tag">Local Proxy</span>
           <span class="card-tag">Grounded Answers</span>
         </div>
       </div>
