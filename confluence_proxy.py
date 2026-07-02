@@ -70,25 +70,41 @@ def search():
     if not query:
         return jsonify({"error": "missing q param"}), 400
 
-    cql = f'text ~ "{query}" and type=page'
+    # Title matches are run separately and placed first: Confluence's default
+    # relevance ranking for `text ~` sorts by body-text match frequency, which
+    # can bury a page whose title is an exact match (e.g. sparse/table-heavy
+    # pages like "Treasures") below chattier pages that just mention the word
+    # more often. A plain text-only search silently drops the page you asked for.
+    title_cql = f'title ~ "{query}" and type=page'
+    text_cql = f'text ~ "{query}" and type=page'
     try:
-        data = confluence_get(
+        title_data = confluence_get(
             "/rest/api/content/search",
-            params={"cql": cql, "limit": 8, "expand": "space"},
+            params={"cql": title_cql, "limit": 5, "expand": "space"},
+        )
+        text_data = confluence_get(
+            "/rest/api/content/search",
+            params={"cql": text_cql, "limit": 8, "expand": "space"},
         )
     except requests.HTTPError as e:
         return jsonify({"error": str(e)}), 502
 
-    results = [
-        {
+    def to_result(r):
+        return {
             "id": r["id"],
             "title": r["title"],
             "space": r.get("space", {}).get("name", ""),
             "url": CONFLUENCE_BASE + r["_links"]["webui"],
         }
-        for r in data.get("results", [])
-    ]
-    return jsonify({"query": query, "results": results})
+
+    merged, seen = [], set()
+    for r in title_data.get("results", []) + text_data.get("results", []):
+        if r["id"] in seen:
+            continue
+        seen.add(r["id"])
+        merged.append(to_result(r))
+
+    return jsonify({"query": query, "results": merged[:8]})
 
 
 @app.route("/page/<page_id>")
