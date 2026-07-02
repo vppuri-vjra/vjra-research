@@ -601,11 +601,13 @@ async function fetchPage(id) {
 
 // ── Claude API call ───────────────────────────────────────────────
 async function callClaude(question, pages) {
-  const systemPrompt = `You are the Confluence Knowledge Agent, helping answer questions about organizational/family knowledge (financial tracking, project docs, historical records) stored across 8 Confluence spaces.
+  const systemPrompt = `You are the Confluence Knowledge Agent, helping answer questions about organizational/family knowledge (financial tracking, project docs, historical records) stored across 8 Confluence spaces on gutmoss.atlassian.net.
 
-Answer the user's question using ONLY the Confluence page excerpts provided in the user message. Do not use outside knowledge, and do not guess or speculate.
-- If the excerpts contain the answer, give a direct, concise answer and cite which page title(s) you drew from (e.g. "According to 'Page Title'...").
-- If no excerpts were retrieved, or the excerpts don't contain enough information to answer, say so clearly instead of guessing.
+Every question first runs through a live CQL full-text search against gutmoss.atlassian.net via a local proxy (localhost:5175), and the top matching pages are fetched and passed to you as excerpts below.
+
+There are two kinds of questions you'll get:
+1. Questions ABOUT CONTENT in the knowledge base (e.g. "what did we spend on X", "summarize page Y") — answer using ONLY the Confluence excerpts provided. Do not use outside knowledge or guess. Cite which page title(s) you drew from (e.g. "According to 'Page Title'..."). If no excerpts were retrieved or they don't contain enough information, say so clearly.
+2. Questions ABOUT YOURSELF/YOUR SETUP (e.g. "what site are you searching", "are you connected", "how does this work") — answer directly and confidently from the description above, even if the CQL search for that question returned no page excerpts. Don't treat an empty search result as reason to doubt or deny your own configuration — a meta-question naturally won't match any page's text.
 - Use specific figures, dates, and names exactly as they appear in the excerpts.`;
 
   const context = pages.length
