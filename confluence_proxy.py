@@ -59,6 +59,26 @@ def storage_to_text(storage_html):
     return re.sub(r"\s+", " ", text).strip()
 
 
+# Confluence's `text ~ "..."` CQL treats a quoted multi-word string as an AND
+# of every word (not a fuzzy/relevance match), so a natural-language question
+# like "tell me about treasures" only matches pages containing "tell" AND
+# "me" AND "about" AND "treasures" literally -- filler words silently exclude
+# the page you actually want. Strip them so only meaningful keywords remain.
+_STOPWORDS = {
+    "a", "about", "am", "an", "and", "any", "are", "as", "at", "be", "can",
+    "could", "did", "do", "does", "for", "from", "give", "has", "have",
+    "how", "i", "in", "is", "it", "me", "of", "on", "our", "please", "show",
+    "tell", "that", "the", "there", "this", "to", "us", "was", "we", "were",
+    "what", "when", "where", "which", "who", "will", "with", "you", "your",
+}
+
+
+def extract_keywords(query):
+    words = re.findall(r"[A-Za-z0-9']+", query)
+    keywords = [w for w in words if w.lower() not in _STOPWORDS]
+    return " ".join(keywords) if keywords else query
+
+
 @app.route("/health")
 def health():
     return jsonify({"ok": bool(EMAIL and TOKEN)})
@@ -75,8 +95,9 @@ def search():
     # can bury a page whose title is an exact match (e.g. sparse/table-heavy
     # pages like "Treasures") below chattier pages that just mention the word
     # more often. A plain text-only search silently drops the page you asked for.
-    title_cql = f'title ~ "{query}" and type=page'
-    text_cql = f'text ~ "{query}" and type=page'
+    keywords = extract_keywords(query)
+    title_cql = f'title ~ "{keywords}" and type=page'
+    text_cql = f'text ~ "{keywords}" and type=page'
     try:
         title_data = confluence_get(
             "/rest/api/content/search",
@@ -104,7 +125,7 @@ def search():
         seen.add(r["id"])
         merged.append(to_result(r))
 
-    return jsonify({"query": query, "results": merged[:8]})
+    return jsonify({"query": query, "keywords": keywords, "results": merged[:8]})
 
 
 @app.route("/page/<page_id>")
