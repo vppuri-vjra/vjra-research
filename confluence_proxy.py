@@ -143,6 +143,7 @@ def page(page_id):
         "id": data["id"],
         "title": data["title"],
         "space": data.get("space", {}).get("name", ""),
+        "url": CONFLUENCE_BASE + data["_links"]["webui"],
         "text": storage_to_text(body)[:8000],
     })
 

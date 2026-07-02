@@ -237,6 +237,19 @@
   .thinking b:nth-child(3) { animation-delay: .4s; }
   @keyframes blink { 0%,80%,100%{opacity:.25} 40%{opacity:1} }
 
+  .agent-steps {
+    margin-bottom: .65rem; padding-bottom: .6rem; border-bottom: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: .3rem;
+  }
+  .agent-step {
+    display: flex; align-items: baseline; gap: .4rem;
+    font-family: 'Inter', sans-serif; font-size: .72rem; color: var(--muted);
+  }
+  .agent-step .step-icon { color: var(--accent); flex-shrink: 0; }
+  .agent-step .step-label { color: var(--ink); font-weight: 600; }
+  .agent-step .step-detail { color: var(--muted); }
+  .agent-step.error .step-label, .agent-step.error .step-icon { color: #b91c1c; }
+
   footer {
     border-top: 1px solid var(--border); padding: .85rem 1.5rem 1rem;
     background: var(--bg); flex-shrink: 0;
@@ -436,62 +449,54 @@
   <div id="tab-arch" class="tab-panel">
 
     <div class="section-card">
-      <div class="section-head"><span>Retrieval &mdash; Browser &rarr; Proxy &rarr; Confluence</span></div>
+      <div class="section-head"><span>Agent Loop &mdash; Claude drives its own retrieval</span></div>
       <div style="padding:1rem;">
-        <div class="flow-row">
-          <div class="flow-box">
-            <div class="flow-title">Browser</div>
-            <div class="flow-sub"><code>confluence.html</code><br>runs the CQL search + page fetches</div>
-          </div>
-          <div class="flow-arrow">&rarr;</div>
-          <div class="flow-box">
-            <div class="flow-title">Local Proxy</div>
-            <div class="flow-sub">Flask, <code>localhost:5175</code><br>server-side Basic auth to Confluence</div>
-          </div>
-          <div class="flow-arrow">&rarr;</div>
-          <div class="flow-box">
-            <div class="flow-title">Confluence Cloud REST API</div>
-            <div class="flow-sub"><code>gutmoss.atlassian.net</code><br>CQL search + page content</div>
-          </div>
+        <div style="font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:.85rem;">
+          This isn't a fixed search-then-answer pipeline. Claude is given <code>search_confluence</code> and <code>get_page</code> as real tools (Anthropic tool-use) and runs its own loop: search, look at what came back, search again with different keywords or open more pages if needed, and only answer once it actually has enough &mdash; up to 5 turns per question.
         </div>
-      </div>
-    </div>
-
-    <div class="section-card">
-      <div class="section-head"><span>Synthesis &mdash; Browser &rarr; Claude</span></div>
-      <div style="padding:1rem;">
         <div class="flow-row">
           <div class="flow-box">
             <div class="flow-title">Browser</div>
-            <div class="flow-sub"><code>confluence.html</code><br>packages question + retrieved excerpts</div>
+            <div class="flow-sub"><code>confluence.html</code><br>calls Claude with <code>tools: [search_confluence, get_page]</code></div>
           </div>
           <div class="flow-arrow">&rarr;</div>
           <div class="flow-box">
             <div class="flow-title">Claude API</div>
-            <div class="flow-sub"><code>api.anthropic.com</code><br>direct browser call &mdash; no proxy involved</div>
+            <div class="flow-sub"><code>api.anthropic.com</code><br>decides which tool to call, and with what input</div>
           </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-box">
+            <div class="flow-title">Local Proxy</div>
+            <div class="flow-sub">Flask, <code>localhost:5175</code><br>executes the tool call against Confluence</div>
+          </div>
+        </div>
+        <div style="font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:.85rem;">
+          The proxy's result is sent back to Claude as a <code>tool_result</code>, and the loop repeats until Claude stops calling tools and returns a final answer &mdash; visible live in the Live Agent tab as a step-by-step trace above each response.
         </div>
       </div>
     </div>
 
     <div class="section-card">
-      <div class="section-head"><span>Proxy Endpoints</span></div>
+      <div class="section-head"><span>Tools Exposed to Claude</span></div>
       <div style="padding:1rem;">
         <table class="endpoint-table">
           <thead>
-            <tr><th style="width:34%;">Endpoint</th><th>What it does</th></tr>
+            <tr><th style="width:34%;">Tool</th><th>What it does</th></tr>
           </thead>
           <tbody>
             <tr>
-              <td><code>GET /search?q=&lt;text&gt;</code></td>
-              <td>Runs a CQL text search (<code>text ~ "..."</code>) across all 8 spaces. Returns up to 8 results as <code>{id, title, space, url}</code>.</td>
+              <td><code>search_confluence(query)</code></td>
+              <td>Proxies to <code>GET /search?q=</code> &mdash; runs a title-match and a text-match CQL search (<code>title ~</code> / <code>text ~ "..." and type=page</code>) and merges them, title matches first, so an exact-title page always surfaces even when it ranks low on body-text relevance. Returns up to 8 <code>{id, title, space, url}</code> results.</td>
             </tr>
             <tr>
-              <td><code>GET /page/&lt;id&gt;</code></td>
-              <td>Fetches one page's <code>body.storage</code>, strips HTML tags, and returns <code>{id, title, space, text}</code> &mdash; text truncated to the first 8,000 characters.</td>
+              <td><code>get_page(page_id)</code></td>
+              <td>Proxies to <code>GET /page/&lt;id&gt;</code> &mdash; fetches one page's <code>body.storage</code>, strips HTML tags, and returns <code>{id, title, space, url, text}</code>, text truncated to the first 8,000 characters.</td>
             </tr>
           </tbody>
         </table>
+        <div style="font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:.7rem;">
+          The proxy also strips filler/question words (&ldquo;tell&rdquo;, &ldquo;me&rdquo;, &ldquo;about&rdquo;, &ldquo;what&rdquo;, etc.) from whatever query it receives before building CQL &mdash; Confluence's <code>text ~ "..."</code> requires every word in the phrase to literally co-occur, so an unfiltered natural-language question can silently exclude the page you're actually asking about. Claude is also instructed to search with focused keywords rather than a full sentence in the first place.
+        </div>
       </div>
     </div>
 
@@ -580,65 +585,124 @@ window.addEventListener('load', () => {
   });
 });
 
-// ── Confluence proxy calls ───────────────────────────────────────
-async function searchConfluence(query) {
-  const res = await fetch(`${PROXY_BASE}/search?q=${encodeURIComponent(query)}`);
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || `Proxy search error (${res.status})`);
-  }
-  return res.json();
-}
-
-async function fetchPage(id) {
-  const res = await fetch(`${PROXY_BASE}/page/${id}`);
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || `Proxy page error (${res.status})`);
-  }
-  return res.json();
-}
-
-// ── Claude API call ───────────────────────────────────────────────
-async function callClaude(question, pages) {
-  const systemPrompt = `You are the Confluence Knowledge Agent, helping answer questions about organizational/family knowledge (financial tracking, project docs, historical records) stored across 8 Confluence spaces on gutmoss.atlassian.net.
-
-Every question first runs through a live CQL full-text search against gutmoss.atlassian.net via a local proxy (localhost:5175), and the top matching pages are fetched and passed to you as excerpts below.
-
-There are two kinds of questions you'll get:
-1. Questions ABOUT CONTENT in the knowledge base (e.g. "what did we spend on X", "summarize page Y") — answer using ONLY the Confluence excerpts provided. Do not use outside knowledge or guess. Cite which page title(s) you drew from (e.g. "According to 'Page Title'..."). If no excerpts were retrieved or they don't contain enough information, say so clearly.
-2. Questions ABOUT YOURSELF/YOUR SETUP (e.g. "what site are you searching", "are you connected", "how does this work") — answer directly and confidently from the description above, even if the CQL search for that question returned no page excerpts. Don't treat an empty search result as reason to doubt or deny your own configuration — a meta-question naturally won't match any page's text.
-- Use specific figures, dates, and names exactly as they appear in the excerpts.`;
-
-  const context = pages.length
-    ? pages.map(p => `### ${p.title} (${p.space})\n${p.text}`).join('\n\n---\n\n')
-    : '(No relevant Confluence pages were found for this query.)';
-
-  const userContent = `Question: ${question}\n\nRetrieved Confluence excerpts:\n\n${context}`;
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
+// ── Agentic tool-use loop ────────────────────────────────────────
+// Claude decides when to search, what to search for, and which pages to
+// open — it can retry with different keywords or pull more pages if the
+// first search doesn't have what it needs, instead of a single fixed
+// search-then-answer pass.
+const TOOLS = [
+  {
+    name: 'search_confluence',
+    description: 'Search Confluence (gutmoss.atlassian.net) for pages matching a query. Returns up to 8 matches with id, title, space, and url. Pass focused keywords, not a full sentence — e.g. "treasures" or "renovation budget 2022", not "what did we spend on renovations in 2022?".',
+    input_schema: {
+      type: 'object',
+      properties: { query: { type: 'string', description: 'Search keywords' } },
+      required: ['query'],
     },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userContent }],
-    }),
-  });
+  },
+  {
+    name: 'get_page',
+    description: 'Fetch the full text content of one Confluence page by its id (as returned by search_confluence). Call this before answering from a page — do not answer from a title alone.',
+    input_schema: {
+      type: 'object',
+      properties: { page_id: { type: 'string', description: 'The Confluence page id' } },
+      required: ['page_id'],
+    },
+  },
+];
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `API error ${res.status}`);
+const AGENT_SYSTEM_PROMPT = `You are the Confluence Knowledge Agent, helping answer questions about organizational/family knowledge (financial tracking, project docs, historical records) stored across 8 Confluence spaces on gutmoss.atlassian.net.
+
+You have two tools: search_confluence and get_page. Use them like a researcher, not a single fixed lookup:
+- Search with focused keywords, not the user's full sentence verbatim.
+- Look at the results before deciding what to do next. If nothing looks relevant, try again with different or narrower keywords rather than giving up after one search.
+- Fetch (get_page) any page that looks relevant before you rely on it — never answer from a title alone.
+- If a tool call returns an error (e.g. the local proxy isn't reachable), tell the user directly and clearly instead of guessing or retrying forever.
+- Once you have enough information, answer directly and concisely, citing which page title(s) you drew from (e.g. "According to 'Page Title'..."). Use specific figures, dates, and names exactly as they appear in the page text. If after a reasonable search you still can't find the answer, say so clearly instead of guessing.
+- If the question is about your own setup rather than knowledge-base content (e.g. "what site do you search", "how does this work"), you can answer directly without necessarily needing search results — an empty/irrelevant search result for a meta-question is expected, not a failure.`;
+
+async function executeTool(name, input, stepsEl, fetchedPages) {
+  try {
+    if (name === 'search_confluence') {
+      const res = await fetch(`${PROXY_BASE}/search?q=${encodeURIComponent(input.query)}`);
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        addStep(stepsEl, `Searched "${input.query}"`, e.error || `error ${res.status}`, true);
+        return { error: e.error || `search error ${res.status}` };
+      }
+      const data = await res.json();
+      addStep(stepsEl, `Searched "${input.query}"`, `${data.results.length} result(s)`);
+      return data;
+    }
+    if (name === 'get_page') {
+      const res = await fetch(`${PROXY_BASE}/page/${encodeURIComponent(input.page_id)}`);
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        addStep(stepsEl, `Fetched page ${input.page_id}`, e.error || `error ${res.status}`, true);
+        return { error: e.error || `page error ${res.status}` };
+      }
+      const data = await res.json();
+      addStep(stepsEl, `Opened "${data.title}"`, `${data.text.length} chars`);
+      if (!fetchedPages.some(p => p.id === data.id)) fetchedPages.push(data);
+      return data;
+    }
+    return { error: `unknown tool ${name}` };
+  } catch (err) {
+    if (err instanceof TypeError) {
+      addStep(stepsEl, name, 'Confluence proxy unreachable at localhost:5175', true);
+      return { error: 'The local Confluence proxy is not reachable at localhost:5175. It must be running (python confluence_proxy.py) for search to work — tell the user this directly.' };
+    }
+    addStep(stepsEl, name, err.message, true);
+    return { error: err.message };
+  }
+}
+
+async function runAgent(question, stepsEl) {
+  let messages = [{ role: 'user', content: question }];
+  const fetchedPages = [];
+  const MAX_TURNS = 5;
+
+  for (let turn = 0; turn < MAX_TURNS; turn++) {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1024,
+        system: AGENT_SYSTEM_PROMPT,
+        tools: TOOLS,
+        messages,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error ${res.status}`);
+    }
+
+    const data = await res.json();
+    messages.push({ role: 'assistant', content: data.content });
+
+    if (data.stop_reason !== 'tool_use') {
+      const textBlock = data.content.find(b => b.type === 'text');
+      return { text: textBlock ? textBlock.text : '(no answer text)', pages: fetchedPages };
+    }
+
+    const toolUseBlocks = data.content.filter(b => b.type === 'tool_use');
+    const toolResults = [];
+    for (const block of toolUseBlocks) {
+      const result = await executeTool(block.name, block.input, stepsEl, fetchedPages);
+      toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: JSON.stringify(result) });
+    }
+    messages.push({ role: 'user', content: toolResults });
   }
 
-  const data = await res.json();
-  return data.content[0].text;
+  return { text: "I searched several times but couldn't settle on a confident answer — try rephrasing the question.", pages: fetchedPages };
 }
 
 // ── Chat logic ────────────────────────────────────────────────────
@@ -650,44 +714,14 @@ async function send() {
   autoResize(input);
 
   addUserMsg(text);
-  const thinking = addThinking();
+  const agentMsg = addAgentMsg();
   document.getElementById('sendBtn').disabled = true;
 
-  let searchData;
   try {
-    searchData = await searchConfluence(text);
+    const { text: answer, pages } = await runAgent(text, agentMsg.querySelector('.agent-steps'));
+    finishAgentMsg(agentMsg, answer, pages);
   } catch (err) {
-    thinking.remove();
-    if (err instanceof TypeError) {
-      addProxyDownMsg();
-    } else {
-      addBotMsg(`Confluence search failed: ${err.message}`, []);
-    }
-    document.getElementById('sendBtn').disabled = false;
-    input.focus();
-    return;
-  }
-
-  const results = (searchData.results || []).slice(0, 3);
-  let pages = [];
-  if (results.length) {
-    try {
-      pages = await Promise.all(results.map(async r => {
-        const pd = await fetchPage(r.id);
-        return { title: r.title, url: r.url, space: r.space, text: pd.text || '' };
-      }));
-    } catch (err) {
-      // Partial retrieval failure — fall back to whatever pages we already have.
-    }
-  }
-
-  try {
-    const answer = await callClaude(text, pages);
-    thinking.remove();
-    addBotMsg(answer, pages);
-  } catch (err) {
-    thinking.remove();
-    addBotMsg(`Error calling Claude: ${err.message}`, []);
+    finishAgentMsg(agentMsg, `Error calling Claude: ${err.message}`, []);
   } finally {
     document.getElementById('sendBtn').disabled = false;
     input.focus();
@@ -720,38 +754,39 @@ function addUserMsg(text) {
   scrollBottom();
 }
 
-function addBotMsg(text, pages) {
+function addAgentMsg() {
   const chat = document.getElementById('chat');
   const d = document.createElement('div');
   d.className = 'msg bot';
+  d.innerHTML = `<div class="avatar">&#128193;</div><div class="bubble">
+    <div class="agent-steps" style="display:none;"></div>
+    <div class="agent-answer"><div class="thinking"><b></b><b></b><b></b></div></div>
+  </div>`;
+  chat.appendChild(d);
+  scrollBottom();
+  return d;
+}
+
+function addStep(stepsEl, label, detail, isError) {
+  if (!stepsEl) return;
+  stepsEl.style.display = 'flex';
+  const row = document.createElement('div');
+  row.className = 'agent-step' + (isError ? ' error' : '');
+  row.innerHTML = `<span class="step-icon">${isError ? '&#9888;' : '&rarr;'}</span><span class="step-label">${esc(label)}</span><span class="step-detail">${esc(detail)}</span>`;
+  stepsEl.appendChild(row);
+  scrollBottom();
+}
+
+function finishAgentMsg(msgEl, text, pages) {
+  const answerEl = msgEl.querySelector('.agent-answer');
   let sourcesHtml = '';
   if (pages && pages.length) {
     sourcesHtml = `<div class="sources"><div class="sources-label">Sources</div>${pages.map(p =>
       `<a href="${p.url}" target="_blank" rel="noopener" class="source-link">${esc(p.title)}${p.space ? ' &middot; ' + esc(p.space) : ''}</a>`
     ).join('')}</div>`;
   }
-  d.innerHTML = `<div class="avatar">&#128193;</div><div class="bubble"><div>${esc(text)}</div>${sourcesHtml}</div>`;
-  chat.appendChild(d);
+  answerEl.innerHTML = `<div>${esc(text)}</div>${sourcesHtml}`;
   scrollBottom();
-}
-
-function addProxyDownMsg() {
-  const chat = document.getElementById('chat');
-  const d = document.createElement('div');
-  d.className = 'msg bot';
-  d.innerHTML = `<div class="avatar">&#9888;&#65039;</div><div class="bubble" style="border-color:#fbbf24;background:#fffbeb;color:#92400e;">Confluence proxy isn't running locally. Start it with <code style="background:#fff;padding:1px 5px;border-radius:3px;">python confluence_proxy.py</code> (see the Architecture tab) to try live search.</div>`;
-  chat.appendChild(d);
-  scrollBottom();
-}
-
-function addThinking() {
-  const chat = document.getElementById('chat');
-  const d = document.createElement('div');
-  d.className = 'msg bot';
-  d.innerHTML = `<div class="avatar">&#128193;</div><div class="bubble"><div class="thinking"><b></b><b></b><b></b></div></div>`;
-  chat.appendChild(d);
-  scrollBottom();
-  return d;
 }
 
 function scrollBottom() {
