@@ -135,6 +135,7 @@
 
   .stop-yes { color: var(--accent); font-weight: 700; }
   .stop-no { color: #a8a29e; }
+  .principle-tag { display: inline-block; font-size: .62rem; font-weight: 600; padding: .1rem .45rem; border-radius: 4px; background: var(--surface); color: var(--muted); border: 1px solid var(--border); white-space: nowrap; }
 
   .note-box {
     font-size: .76rem; line-height: 1.6; padding: .7rem .9rem; border-radius: 0 6px 6px 0;
@@ -324,6 +325,92 @@
         <tr><td class="sc-cell">504 Authoring Tools</td><td>Accessible content creation (if applicable)</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
         <tr><td class="sc-cell">602 Support Documentation</td><td>Docs describe/are themselves accessible</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
         <tr><td class="sc-cell">603 Support Services</td><td>Support channels accommodate disabilities</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Grouped by Severity — All POUR + Section 508</span></div>
+      <div style="padding:.75rem 1rem 0;">
+        <div class="field-body">Same criteria as above, re-sorted by triage bucket instead of principle — use this view to size the Critical/Stopper backlog at a glance.</div>
+      </div>
+      <div style="padding:.75rem 1rem .25rem;"><span class="pill sev-critical">Critical</span> <span style="font-size:.68rem;color:var(--muted);margin-left:.4rem;">10 criteria — all Release Stoppers</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>SC / Section</th><th>Principle</th><th>Level</th><th>Description</th></tr>
+        <tr><td class="sc-cell">1.1.1 Non-text Content</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Alt text for images/icons/functional controls</td></tr>
+        <tr><td class="sc-cell">1.3.1 Info and Relationships</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Structure conveyed programmatically, not just visually</td></tr>
+        <tr><td class="sc-cell">2.1.1 Keyboard</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Full keyboard operability</td></tr>
+        <tr><td class="sc-cell">2.1.2 No Keyboard Trap</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Focus can always move away</td></tr>
+        <tr><td class="sc-cell">2.3.1 Three Flashes or Below Threshold</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>No seizure-triggering flashing</td></tr>
+        <tr><td class="sc-cell">2.4.7 Focus Visible</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Visible keyboard focus indicator</td></tr>
+        <tr><td class="sc-cell">3.3.1 Error Identification</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Errors identified and described in text</td></tr>
+        <tr><td class="sc-cell">3.3.2 Labels or Instructions</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Form fields have labels/instructions</td></tr>
+        <tr><td class="sc-cell">4.1.2 Name, Role, Value</td><td><span class="principle-tag">Robust</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Correct AT exposure for custom widgets</td></tr>
+        <tr><td class="sc-cell">502 Interoperability with AT</td><td><span class="principle-tag">Section 508</span></td><td class="level-cell"><span style="color:#a8a29e;">—</span></td><td>AT compatibility, object/role/value exposure</td></tr>
+      </table>
+      </div>
+      <div style="padding:.75rem 1rem .25rem;"><span class="pill sev-high">High</span> <span style="font-size:.68rem;color:var(--muted);margin-left:.4rem;">16 criteria</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>SC / Section</th><th>Principle</th><th>Level</th><th>Description</th></tr>
+        <tr><td class="sc-cell">1.2.2 Captions (Prerecorded)</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Captions on recorded video</td></tr>
+        <tr><td class="sc-cell">1.2.4 Captions (Live)</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Live captions</td></tr>
+        <tr><td class="sc-cell">1.3.2 Meaningful Sequence</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Logical reading/navigation order</td></tr>
+        <tr><td class="sc-cell">1.4.1 Use of Color</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Color isn't the only info carrier</td></tr>
+        <tr><td class="sc-cell">1.4.3 Contrast (Minimum)</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>4.5:1 text contrast (3:1 large text)</td></tr>
+        <tr><td class="sc-cell">1.4.10 Reflow</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Reflows at 400% zoom, no horizontal scroll</td></tr>
+        <tr><td class="sc-cell">2.2.1 Timing Adjustable</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Time limits adjustable/extendable</td></tr>
+        <tr><td class="sc-cell">2.2.2 Pause, Stop, Hide</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>User can control auto-updating content</td></tr>
+        <tr><td class="sc-cell">2.4.3 Focus Order</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Logical tab order</td></tr>
+        <tr><td class="sc-cell">2.5.1 Pointer Gestures</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Single-pointer alternative to multipoint gestures</td></tr>
+        <tr><td class="sc-cell">2.5.3 Label in Name</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Visible label matches accessible name</td></tr>
+        <tr><td class="sc-cell">3.2.1 On Focus</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>No unexpected context change on focus</td></tr>
+        <tr><td class="sc-cell">3.2.2 On Input</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>No unexpected context change on input</td></tr>
+        <tr><td class="sc-cell">3.3.4 Error Prevention (Legal/Financial/Data)</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Review/confirm/reverse for critical submissions</td></tr>
+        <tr><td class="sc-cell">4.1.3 Status Messages</td><td><span class="principle-tag">Robust</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Status messages announced without focus</td></tr>
+        <tr><td class="sc-cell">503 Applications</td><td><span class="principle-tag">Section 508</span></td><td class="level-cell"><span style="color:#a8a29e;">—</span></td><td>User prefs, alt UIs, caption/audio controls</td></tr>
+      </table>
+      </div>
+      <div style="padding:.75rem 1rem .25rem;"><span class="pill sev-medium">Medium</span> <span style="font-size:.68rem;color:var(--muted);margin-left:.4rem;">22 criteria</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>SC / Section</th><th>Principle</th><th>Level</th><th>Description</th></tr>
+        <tr><td class="sc-cell">1.2.1 Audio/Video-only (Prerecorded)</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Text/audio alt for media-only content</td></tr>
+        <tr><td class="sc-cell">1.2.3 Audio Description or Alt</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Audio description or full text alt for video</td></tr>
+        <tr><td class="sc-cell">1.2.5 Audio Description (Prerecorded)</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Audio description for visual-only info in video</td></tr>
+        <tr><td class="sc-cell">1.3.3 Sensory Characteristics</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Instructions don't rely on shape/color/position alone</td></tr>
+        <tr><td class="sc-cell">1.3.4 Orientation</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Not locked to one screen orientation</td></tr>
+        <tr><td class="sc-cell">1.3.5 Identify Input Purpose</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Form fields identifiable for autofill</td></tr>
+        <tr><td class="sc-cell">1.4.2 Audio Control</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Auto-playing audio can be paused/muted</td></tr>
+        <tr><td class="sc-cell">1.4.4 Resize Text</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>200% resize without breaking</td></tr>
+        <tr><td class="sc-cell">1.4.11 Non-text Contrast</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>3:1 contrast for UI components/icons</td></tr>
+        <tr><td class="sc-cell">1.4.13 Content on Hover or Focus</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Tooltips dismissible/hoverable/persistent</td></tr>
+        <tr><td class="sc-cell">2.1.4 Character Key Shortcuts</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Single-key shortcuts remappable/disable-able</td></tr>
+        <tr><td class="sc-cell">2.4.1 Bypass Blocks</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Skip repeated content</td></tr>
+        <tr><td class="sc-cell">2.4.4 Link Purpose (In Context)</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Link text/context makes destination clear</td></tr>
+        <tr><td class="sc-cell">2.4.6 Headings and Labels</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Descriptive headings/labels</td></tr>
+        <tr><td class="sc-cell">2.5.2 Pointer Cancellation</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Actions cancellable before completion</td></tr>
+        <tr><td class="sc-cell">3.1.1 Language of Page</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Page language set programmatically</td></tr>
+        <tr><td class="sc-cell">3.2.3 Consistent Navigation</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Nav order consistent across pages</td></tr>
+        <tr><td class="sc-cell">3.2.4 Consistent Identification</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Same function labeled consistently</td></tr>
+        <tr><td class="sc-cell">3.3.3 Error Suggestion</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Fix suggestions provided where known</td></tr>
+        <tr><td class="sc-cell">504 Authoring Tools</td><td><span class="principle-tag">Section 508</span></td><td class="level-cell"><span style="color:#a8a29e;">—</span></td><td>Accessible content creation (if applicable)</td></tr>
+        <tr><td class="sc-cell">602 Support Documentation</td><td><span class="principle-tag">Section 508</span></td><td class="level-cell"><span style="color:#a8a29e;">—</span></td><td>Docs describe/are themselves accessible</td></tr>
+        <tr><td class="sc-cell">603 Support Services</td><td><span class="principle-tag">Section 508</span></td><td class="level-cell"><span style="color:#a8a29e;">—</span></td><td>Support channels accommodate disabilities</td></tr>
+      </table>
+      </div>
+      <div style="padding:.75rem 1rem .25rem;"><span class="pill sev-low">Low</span> <span style="font-size:.68rem;color:var(--muted);margin-left:.4rem;">7 criteria</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>SC / Section</th><th>Principle</th><th>Level</th><th>Description</th></tr>
+        <tr><td class="sc-cell">1.4.5 Images of Text</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Real text over images of text</td></tr>
+        <tr><td class="sc-cell">1.4.12 Text Spacing</td><td><span class="principle-tag">Perceivable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>No content loss with increased spacing</td></tr>
+        <tr><td class="sc-cell">2.4.2 Page Titled</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Descriptive page titles</td></tr>
+        <tr><td class="sc-cell">2.4.5 Multiple Ways</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>More than one way to find a page</td></tr>
+        <tr><td class="sc-cell">2.5.4 Motion Actuation</td><td><span class="principle-tag">Operable</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Motion-triggered functions have UI alternative</td></tr>
+        <tr><td class="sc-cell">3.1.2 Language of Parts</td><td><span class="principle-tag">Understandable</span></td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Language changes marked within content</td></tr>
+        <tr><td class="sc-cell">4.1.1 Parsing</td><td><span class="principle-tag">Robust</span></td><td class="level-cell"><span class="pill pill-a">A</span></td><td>No major markup errors (deprecated in WCAG 2.2)</td></tr>
       </table>
       </div>
     </div>
