@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Standards & SDLC Playbook · vjra.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+    --bg: #f8f4ee;
+    --surface: #f4f3f0;
+    --border: #e8e6e1;
+    --green: #2d6a4f;
+    --amber: #b45309;
+    --purple: #6d28d9;
+    --blue: #1d4ed8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #2b2b2b;
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 4px solid var(--accent);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .7rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .2rem;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.7rem; color: var(--ink); font-weight: 400;
+    letter-spacing: .01em;
+  }
+
+  /* ── Main layout ── */
+  #app { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ── Tab bar ── */
+  .tab-bar {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: .7rem 1.5rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    letter-spacing: .01em;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── Tab panels ── */
+  .tab-panel { flex: 1; overflow: hidden; display: none; flex-direction: column; }
+  .tab-panel.active { display: flex; }
+  #tab-standards.active { display: block !important; }
+  #tab-pour.active { display: block !important; }
+  #tab-tools.active { display: block !important; }
+  #tab-scope.active { display: block !important; }
+
+  #tab-standards, #tab-pour, #tab-tools, #tab-scope {
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+  }
+
+  .card-grid-2 { padding: .75rem 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: .75rem 1.5rem; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  .section-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: .9rem; }
+  .section-card:last-child { margin-bottom: 0; }
+  .section-head {
+    background: var(--surface); padding: .5rem 1rem; border-bottom: 1px solid var(--border);
+  }
+  .section-head span {
+    font-family: 'Inter', sans-serif; font-size: .62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em; color: var(--accent);
+  }
+  .field-label {
+    font-family: 'Inter', sans-serif; font-size: .65rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: .35rem;
+  }
+  .field-body { font-size: .78rem; color: var(--muted); line-height: 1.6; }
+  .field-body strong { color: var(--ink); }
+
+  .endpoint-table { width: 100%; border-collapse: collapse; background: #fff; }
+  .endpoint-table th {
+    text-align: left; padding: .45rem .7rem; font-size: .62rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--ink); background: var(--surface); border-bottom: 1px solid var(--border);
+  }
+  .endpoint-table td { padding: .5rem .7rem; font-size: .76rem; color: var(--muted); border-bottom: 1px solid var(--surface); vertical-align: top; }
+  .endpoint-table tr:last-child td { border-bottom: none; }
+  .endpoint-table code { font-size: .72rem; background: var(--surface); padding: 1px 5px; border-radius: 3px; color: var(--ink); }
+  .endpoint-table td.sc-cell { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  .endpoint-table td.level-cell { white-space: nowrap; }
+
+  .pill { display: inline-block; font-size: .65rem; font-weight: 700; padding: .15rem .5rem; border-radius: 20px; white-space: nowrap; }
+  .pill-a { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+  .pill-aa { background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; }
+  .sev-critical { background: #fef2f2; color: #7f1d1d; border: 1px solid #fecaca; }
+  .sev-high { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+  .sev-medium { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+  .sev-low { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+  .sev-ref { background: #f4f3f0; color: #a8a29e; border: 1px solid var(--border); font-style: italic; }
+
+  .stop-yes { color: var(--accent); font-weight: 700; }
+  .stop-no { color: #a8a29e; }
+
+  .note-box {
+    font-size: .76rem; line-height: 1.6; padding: .7rem .9rem; border-radius: 0 6px 6px 0;
+    background: #fffbeb; border-left: 3px solid #fbbf24; color: #92400e; margin-bottom: .9rem;
+  }
+  .note-box code { background: #fff; padding: 1px 5px; border-radius: 3px; }
+
+  .tool-grid { padding: .75rem 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+  .tool-card { padding: .6rem .75rem; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); }
+  .tool-name { font-family: 'Cormorant Garamond', serif; font-size: .92rem; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .tool-desc { font-size: .72rem; color: var(--muted); line-height: 1.45; }
+
+  ul.scope-list { margin: 0; padding-left: 1.1rem; }
+  ul.scope-list li { font-size: .78rem; color: var(--muted); line-height: 1.7; }
+  ul.scope-list li strong { color: var(--ink); }
+
+  @media (max-width: 768px) {
+    header { padding: .9rem 1rem; }
+    h1 { font-size: 1.1rem; }
+    body, #app { overflow-x: hidden; }
+    #tab-standards, #tab-pour, #tab-tools, #tab-scope { padding: 1rem; }
+    .tab { padding: .6rem .9rem; font-size: .75rem; }
+    .card-grid-2, .tool-grid { grid-template-columns: 1fr; }
+    .endpoint-table { font-size: .7rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">VJRA.US / ACCESSIBILITY</div>
+    <h1>Accessibility Standards &amp; SDLC Playbook</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <a href="/" style="font-size:.75rem;color:var(--muted);text-decoration:none;">&larr; Research Library</a>
+  </div>
+</header>
+
+<div id="app">
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('standards')">Standards &amp; SDLC</button>
+    <button class="tab" onclick="switchTab('pour')">WCAG POUR Detail</button>
+    <button class="tab" onclick="switchTab('tools')">Testing Tools</button>
+    <button class="tab" onclick="switchTab('scope')">Scope of Work</button>
+  </div>
+
+  <!-- TAB 1: Standards & SDLC -->
+  <div id="tab-standards" class="tab-panel active">
+
+    <div class="section-card">
+      <div class="section-head"><span>Governing Standards</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>Standard</th><th>Scope</th></tr>
+        <tr><td class="sc-cell">WCAG 2.1 / 2.2 AA</td><td>Core web content accessibility criteria — primary baseline for most software products</td></tr>
+        <tr><td class="sc-cell">Section 508 (US)</td><td>Federal procurement requirement; incorporates WCAG 2.0 AA by reference (501.1, 602.3)</td></tr>
+        <tr><td class="sc-cell">EN 301 549 (EU)</td><td>European public sector procurement standard</td></tr>
+        <tr><td class="sc-cell">WAI-ARIA 1.2</td><td>Roles / states / properties for custom interactive widgets</td></tr>
+        <tr><td class="sc-cell">ADA Title III (US)</td><td>Legal exposure driver for public-facing commercial applications</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Accessibility Across SDLC Phases</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>Phase</th><th>Activity</th></tr>
+        <tr><td class="sc-cell">Requirements</td><td>Accessibility written in as a non-functional requirement (target: WCAG 2.1/2.2 AA); target assistive tech identified (NVDA/JAWS/VoiceOver, keyboard-only)</td></tr>
+        <tr><td class="sc-cell">Design</td><td>Contrast ratios (4.5:1 text / 3:1 UI), focus order, no color-only meaning; ARIA intent annotated on mockups</td></tr>
+        <tr><td class="sc-cell">Development</td><td>Implementation per Developer Scope of Work (see Scope tab)</td></tr>
+        <tr><td class="sc-cell">Code Review</td><td>Accessibility checklist item enforced in every PR review</td></tr>
+        <tr><td class="sc-cell">Testing</td><td>Automated + manual verification (see Tester Scope of Work) before merge/release</td></tr>
+        <tr><td class="sc-cell">Release</td><td>VPAT / Accessibility Conformance Report (ACR) updated for customer-facing releases</td></tr>
+        <tr><td class="sc-cell">Maintenance</td><td>Regression re-testing; accessibility defects tracked at the same severity as functional defects</td></tr>
+      </table>
+      </div>
+    </div>
+
+  </div><!-- #tab-standards -->
+
+  <!-- TAB 2: WCAG POUR Detail -->
+  <div id="tab-pour" class="tab-panel">
+
+    <div class="note-box">
+      Severity and Release Stopper are a program-level triage layer on top of WCAG — WCAG itself only defines conformance <strong>levels</strong> (A/AA), not urgency. <span class="stop-yes">Stopper = Critical</span>: cannot ship regardless of deadline pressure. Ratings below are sensible defaults; adjust per where a defect actually lands (core flow vs. edge case).
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Perceivable</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>SC</th><th>Level</th><th>Description</th><th>Default Severity</th><th>Stopper</th></tr>
+        <tr><td class="sc-cell">1.1.1 Non-text Content</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Alt text for images/icons/functional controls</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">1.2.1 Audio/Video-only (Prerecorded)</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Text/audio alt for media-only content</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.2.2 Captions (Prerecorded)</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Captions on recorded video</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.2.3 Audio Description or Alt</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Audio description or full text alt for video</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.2.4 Captions (Live)</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Live captions</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.2.5 Audio Description (Prerecorded)</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Audio description for visual-only info in video</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.3.1 Info and Relationships</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Structure conveyed programmatically, not just visually</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">1.3.2 Meaningful Sequence</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Logical reading/navigation order</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.3.3 Sensory Characteristics</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Instructions don't rely on shape/color/position alone</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.3.4 Orientation</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Not locked to one screen orientation</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.3.5 Identify Input Purpose</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Form fields identifiable for autofill</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.1 Use of Color</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Color isn't the only info carrier</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.2 Audio Control</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Auto-playing audio can be paused/muted</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.3 Contrast (Minimum)</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>4.5:1 text contrast (3:1 large text)</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.4 Resize Text</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>200% resize without breaking</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.5 Images of Text</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Real text over images of text</td><td><span class="pill sev-low">Low</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.10 Reflow</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Reflows at 400% zoom, no horizontal scroll</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.11 Non-text Contrast</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>3:1 contrast for UI components/icons</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.12 Text Spacing</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>No content loss with increased spacing</td><td><span class="pill sev-low">Low</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">1.4.13 Content on Hover or Focus</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Tooltips dismissible/hoverable/persistent</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Operable</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>SC</th><th>Level</th><th>Description</th><th>Default Severity</th><th>Stopper</th></tr>
+        <tr><td class="sc-cell">2.1.1 Keyboard</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Full keyboard operability</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">2.1.2 No Keyboard Trap</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Focus can always move away</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">2.1.4 Character Key Shortcuts</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Single-key shortcuts remappable/disable-able</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.2.1 Timing Adjustable</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Time limits adjustable/extendable</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.2.2 Pause, Stop, Hide</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>User can control auto-updating content</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.3.1 Three Flashes or Below Threshold</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>No seizure-triggering flashing</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">2.4.1 Bypass Blocks</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Skip repeated content</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.4.2 Page Titled</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Descriptive page titles</td><td><span class="pill sev-low">Low</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.4.3 Focus Order</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Logical tab order</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.4.4 Link Purpose (In Context)</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Link text/context makes destination clear</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.4.5 Multiple Ways</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>More than one way to find a page</td><td><span class="pill sev-low">Low</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.4.6 Headings and Labels</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Descriptive headings/labels</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.4.7 Focus Visible</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Visible keyboard focus indicator</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">2.5.1 Pointer Gestures</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Single-pointer alternative to multipoint gestures</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.5.2 Pointer Cancellation</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Actions cancellable before completion</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.5.3 Label in Name</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Visible label matches accessible name</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">2.5.4 Motion Actuation</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Motion-triggered functions have UI alternative</td><td><span class="pill sev-low">Low</span></td><td class="stop-no">—</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Understandable</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>SC</th><th>Level</th><th>Description</th><th>Default Severity</th><th>Stopper</th></tr>
+        <tr><td class="sc-cell">3.1.1 Language of Page</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Page language set programmatically</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">3.1.2 Language of Parts</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Language changes marked within content</td><td><span class="pill sev-low">Low</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">3.2.1 On Focus</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>No unexpected context change on focus</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">3.2.2 On Input</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>No unexpected context change on input</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">3.2.3 Consistent Navigation</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Nav order consistent across pages</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">3.2.4 Consistent Identification</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Same function labeled consistently</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">3.3.1 Error Identification</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Errors identified and described in text</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">3.3.2 Labels or Instructions</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Form fields have labels/instructions</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">3.3.3 Error Suggestion</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Fix suggestions provided where known</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">3.3.4 Error Prevention (Legal/Financial/Data)</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Review/confirm/reverse for critical submissions</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Robust</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>SC</th><th>Level</th><th>Description</th><th>Default Severity</th><th>Stopper</th></tr>
+        <tr><td class="sc-cell">4.1.1 Parsing</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>No major markup errors (deprecated in WCAG 2.2)</td><td><span class="pill sev-low">Low</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">4.1.2 Name, Role, Value</td><td class="level-cell"><span class="pill pill-a">A</span></td><td>Correct AT exposure for custom widgets</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">4.1.3 Status Messages</td><td class="level-cell"><span class="pill pill-aa">AA</span></td><td>Status messages announced without focus</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Revised Section 508 (2018)</span></div>
+      <div class="table-scroll">
+      <table class="endpoint-table">
+        <tr><th>Section</th><th>Description</th><th>Default Severity</th><th>Stopper</th></tr>
+        <tr><td class="sc-cell">302 Functional Performance Criteria</td><td>High-level, technology-agnostic requirements (vision, hearing, speech, manipulation, cognitive)</td><td><span class="pill sev-ref">Reference</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">Ch. 4 Hardware</td><td>Physical device requirements</td><td><span class="pill sev-ref">N/A for software</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">501 Scope</td><td>Incorporates WCAG 2.0 AA by reference</td><td><span class="pill sev-ref">Reference</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">502 Interoperability with AT</td><td>AT compatibility, object/role/value exposure</td><td><span class="pill sev-critical">Critical</span></td><td class="stop-yes">Yes</td></tr>
+        <tr><td class="sc-cell">503 Applications</td><td>User prefs, alt UIs, caption/audio controls</td><td><span class="pill sev-high">High</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">504 Authoring Tools</td><td>Accessible content creation (if applicable)</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">602 Support Documentation</td><td>Docs describe/are themselves accessible</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+        <tr><td class="sc-cell">603 Support Services</td><td>Support channels accommodate disabilities</td><td><span class="pill sev-medium">Medium</span></td><td class="stop-no">—</td></tr>
+      </table>
+      </div>
+    </div>
+
+  </div><!-- #tab-pour -->
+
+  <!-- TAB 3: Testing Tools -->
+  <div id="tab-tools" class="tab-panel">
+
+    <div class="section-card">
+      <div class="section-head"><span>Tools Used for Developer Testing</span></div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-name">eslint-plugin-jsx-a11y</div><div class="tool-desc">Lint-time catch of missing alt text, labels, and ARIA misuse before code is even committed</div></div>
+        <div class="tool-card"><div class="tool-name">axe-core (unit/CI)</div><div class="tool-desc">Automated rule engine run in component tests or CI pipeline; blocks merge on critical/serious violations</div></div>
+        <div class="tool-card"><div class="tool-name">axe DevTools (browser extension)</div><div class="tool-desc">In-browser scan while building a feature — fastest feedback loop for a developer</div></div>
+        <div class="tool-card"><div class="tool-name">Chrome Lighthouse</div><div class="tool-desc">Built into DevTools; quick accessibility score + flagged issues during local dev</div></div>
+        <div class="tool-card"><div class="tool-name">Storybook a11y addon</div><div class="tool-desc">Per-component accessibility checks in isolation, useful in design-system-driven codebases</div></div>
+        <div class="tool-card"><div class="tool-name">Colour Contrast Analyser / Stark</div><div class="tool-desc">Verify contrast ratios against design tokens before/while implementing styles</div></div>
+        <div class="tool-card"><div class="tool-name">Keyboard-only pass</div><div class="tool-desc">No tool needed — unplug the mouse and tab through the feature before opening a PR</div></div>
+        <div class="tool-card"><div class="tool-name">VoiceOver / NVDA spot-check</div><div class="tool-desc">Quick screen reader smoke test on the specific component just built, not a full audit</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Tools Used for QA / Tester Testing</span></div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-name">axe DevTools / WAVE</div><div class="tool-desc">Automated scanning across full pages/flows — catches roughly 30–40% of issues (contrast, missing labels, ARIA)</div></div>
+        <div class="tool-card"><div class="tool-name">Lighthouse CI</div><div class="tool-desc">Gated automated scan integrated into the release pipeline</div></div>
+        <div class="tool-card"><div class="tool-name">Accessibility Insights for Web</div><div class="tool-desc">Microsoft's guided manual + automated assessment tool for structured test passes</div></div>
+        <div class="tool-card"><div class="tool-name">NVDA + Firefox/Chrome</div><div class="tool-desc">Free screen reader — most common combination for Windows manual testing</div></div>
+        <div class="tool-card"><div class="tool-name">JAWS + Edge/Chrome</div><div class="tool-desc">Enterprise-standard screen reader, often required for federal/508 test evidence</div></div>
+        <div class="tool-card"><div class="tool-name">VoiceOver + Safari (macOS/iOS)</div><div class="tool-desc">Native Apple screen reader — required for mobile/web coverage on Apple platforms</div></div>
+        <div class="tool-card"><div class="tool-name">TalkBack (Android)</div><div class="tool-desc">Native Android screen reader for mobile web/app coverage</div></div>
+        <div class="tool-card"><div class="tool-name">Colour Contrast Analyser</div><div class="tool-desc">Verifies contrast across component states — hover, disabled, error, not just default</div></div>
+        <div class="tool-card"><div class="tool-name">Siteimprove / Deque WorldSpace</div><div class="tool-desc">Enterprise-scale continuous scanning and defect tracking across many pages/releases</div></div>
+        <div class="tool-card"><div class="tool-name">Keyboard-only + zoom/reflow testing</div><div class="tool-desc">Manual pass at 200%/400% zoom and full keyboard-only task walkthroughs</div></div>
+      </div>
+    </div>
+
+  </div><!-- #tab-tools -->
+
+  <!-- TAB 4: Scope of Work -->
+  <div id="tab-scope" class="tab-panel">
+
+    <div class="section-card">
+      <div class="section-head"><span>Developer Scope of Work</span></div>
+      <div style="padding:1rem;">
+        <ul class="scope-list">
+          <li>Use <strong>semantic HTML</strong> (button, nav, header, ordered headings) before reaching for ARIA</li>
+          <li>Add <strong>ARIA</strong> roles/labels only for custom widgets (tabs, modals, dropdowns) — no ARIA is better than bad ARIA</li>
+          <li>Ensure full <strong>keyboard operability</strong>: tab order, visible focus indicator, no keyboard traps</li>
+          <li>Manage <strong>focus programmatically</strong> — modals trap focus and return it on close; SPA route changes move focus</li>
+          <li>Provide <strong>text alternatives</strong>: alt text for images, labels for all form inputs, accessible names for icon-only buttons</li>
+          <li>Meet <strong>color contrast</strong> ratios in the actual implementation, not just the design file</li>
+          <li>Support <strong>text resize/zoom</strong> to 200% without loss of content or function</li>
+          <li>Announce dynamic content changes via <strong>aria-live</strong> regions where needed</li>
+          <li>Avoid time-based auto-updates without user control (carousels, session timeouts)</li>
+          <li>Fix accessibility defects flagged in code review or automated linting (eslint-plugin-jsx-a11y, axe-core in CI)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Tester Scope of Work</span></div>
+      <div style="padding:1rem;">
+        <ul class="scope-list">
+          <li><strong>Automated scanning</strong>: axe DevTools, WAVE, Lighthouse, or axe-core in CI</li>
+          <li><strong>Keyboard-only testing</strong>: full task flows using Tab/Shift+Tab/Enter/Esc/Arrow keys, no mouse</li>
+          <li><strong>Screen reader testing</strong>: NVDA/JAWS on Windows, VoiceOver on macOS/iOS — verify reading order, announcements, form labels</li>
+          <li><strong>Zoom/reflow testing</strong>: 200%/400% zoom, browser resize, no horizontal scroll or content clipping</li>
+          <li><strong>Focus management testing</strong>: modals, dropdowns, route changes, error messages</li>
+          <li><strong>Color/contrast verification</strong>: including hover, disabled, and error states, not just default</li>
+          <li><strong>Regression testing</strong>: re-verify previously passing a11y criteria after each release</li>
+          <li><strong>Reporting</strong>: log defects with WCAG success criterion reference (e.g. "1.4.3 Contrast Minimum"), severity, and repro steps</li>
+          <li><strong>Sign-off</strong>: produce/update the VPAT/ACR or internal a11y test summary before the release gate</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span>Shared Definition of Done</span></div>
+      <div style="padding:1rem;">
+        <div class="field-body">A feature isn't "done" until it passes automated scan (zero critical/serious issues), a keyboard-only walkthrough, and one screen reader smoke test — owned jointly by <strong>Dev (fix)</strong> and <strong>QA (verify)</strong>.</div>
+      </div>
+    </div>
+
+  </div><!-- #tab-scope -->
+
+</div><!-- #app -->
+
+<script>
+function switchTab(name) {
+  const tabs = ['standards', 'pour', 'tools', 'scope'];
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', tabs[i] === name);
+  });
+  tabs.forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('active', t === name);
+  });
+}
+</script>
+</body>
+</html>
