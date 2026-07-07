@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Powered Support Ticket Analysis System · vjra.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+    --bg: #f8f4ee;
+    --surface: #f4f3f0;
+    --border: #e8e6e1;
+    --green: #2d6a4f;
+    --amber: #b45309;
+    --purple: #6d28d9;
+    --blue: #1d4ed8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #2b2b2b;
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 4px solid var(--accent);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .7rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .2rem;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.7rem; color: var(--ink); font-weight: 400;
+    letter-spacing: .01em;
+  }
+  .agent-balls { display: flex; align-items: center; gap: 0; }
+  .agent-ball {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .6rem; font-weight: 700; color: #fff;
+    margin-left: -8px; border: 2px solid var(--bg);
+    flex-shrink: 0;
+  }
+  .agent-ball:first-child { margin-left: 0; }
+
+  /* ── Tabs ── */
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+    padding: 0 2rem;
+    gap: .25rem;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: .65rem 1.1rem;
+    font-size: .78rem; font-weight: 500;
+    background: none; border: none; cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── Tab panels ── */
+  .tab-panel { display: none; flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+  .tab-panel.active { display: block; }
+
+  /* ── Card sections ── */
+  .section-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: .75rem; }
+  .section-card-head {
+    background: var(--surface); padding: .5rem 1rem; border-bottom: 1px solid var(--border);
+    font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--accent);
+  }
+  .section-card-body { padding: 1rem 1.25rem; }
+  .card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; padding: 1rem 1.25rem; }
+  .card-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .6rem; padding: 1rem 1.25rem; }
+  .label-sm {
+    font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--accent); margin-bottom: .35rem;
+  }
+  .body-sm { font-size: .78rem; color: var(--muted); line-height: 1.6; }
+  .body-sm strong { color: var(--ink); }
+
+  /* ── Stat row ── */
+  .stat-row { display: flex; gap: 1.5rem; flex-wrap: wrap; padding: 1rem 1.25rem; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--ink); line-height: 1; }
+  .stat-label { font-size: .68rem; color: var(--muted); margin-top: .15rem; }
+
+  /* ── Architecture diagram ── */
+  .arch-layer { border: 1px solid var(--border); border-radius: 10px; margin-bottom: .75rem; overflow: hidden; }
+  .arch-layer-head { padding: .5rem 1rem; display: flex; align-items: center; gap: .75rem; border-bottom: 1px solid var(--border); }
+  .arch-layer-badge {
+    font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+    padding: .2rem .55rem; border-radius: 20px; white-space: nowrap;
+  }
+  .arch-layer-title { font-size: .8rem; font-weight: 600; color: var(--ink); }
+  .arch-layer-sub { font-size: .72rem; color: var(--muted); }
+  .arch-nodes { display: flex; gap: .75rem; padding: .85rem 1rem; flex-wrap: wrap; background: var(--bg); }
+  .arch-node { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .6rem .9rem; flex: 1; min-width: 200px; }
+  .arch-node-name { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin-bottom: .2rem; }
+  .arch-node-desc { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+
+  /* ── Pipeline visual ── */
+  .pipeline { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 1rem 1.25rem 1.25rem; flex-wrap: nowrap; }
+  .pipeline-agent { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; min-width: 120px; }
+  .pipeline-ball {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; font-weight: 700; color: #fff; margin-bottom: .4rem;
+  }
+  .pipeline-label { font-size: .65rem; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.3; }
+  .pipeline-sub { font-size: .6rem; color: var(--muted); text-align: center; margin-top: .15rem; }
+  .pipeline-connector { flex-shrink: 0; display: flex; align-items: center; padding: 0 .25rem; margin-top: 20px; color: var(--muted); font-size: .8rem; }
+
+  /* ── JSON viewer ── */
+  .json-toolbar {
+    display: flex; align-items: center; justify-content: space-between; padding: .65rem 1rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px 8px 0 0; border-bottom: none;
+  }
+  .json-toolbar-label { font-size: .72rem; font-weight: 600; color: var(--ink); }
+  .json-toolbar-actions { display: flex; gap: .5rem; }
+  .btn-sm {
+    padding: .3rem .75rem; font-size: .72rem; font-weight: 600; border-radius: 5px; border: 1px solid var(--border);
+    cursor: pointer; background: var(--bg); color: var(--ink); transition: background .15s, border-color .15s;
+  }
+  .btn-sm:hover { background: var(--surface); border-color: var(--accent); }
+  .btn-sm.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-sm.primary:hover { opacity: .88; }
+  .json-box {
+    background: #1a1a2e; border: 1px solid var(--border); border-radius: 0 0 8px 8px; padding: 1rem 1.25rem;
+    font-family: 'Menlo', 'Monaco', monospace; font-size: .7rem; line-height: 1.6;
+    overflow-x: auto; max-height: 520px; overflow-y: auto; color: #cdd6f4; white-space: pre;
+  }
+  .json-box .j-key { color: #89b4fa; }
+  .json-box .j-str { color: #a6e3a1; }
+  .json-box .j-num { color: #fab387; }
+  .json-box .j-bool { color: #cba6f7; }
+  .json-box .j-null { color: #f38ba8; }
+
+  /* ── back link ── */
+  .back-link { font-size: .75rem; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: .3rem; }
+  .back-link:hover { color: var(--accent); }
+
+  /* ── tag chips ── */
+  .chip-row { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+  .chip { font-size: .65rem; font-weight: 600; padding: .2rem .55rem; border-radius: 12px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+
+  /* ── policy table ── */
+  table.data-table { width: 100%; border-collapse: collapse; font-size: .74rem; }
+  table.data-table th {
+    text-align: left; padding: .5rem .75rem; background: var(--surface); border-bottom: 1px solid var(--border);
+    font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: .05em; font-size: .62rem;
+  }
+  table.data-table td { padding: .5rem .75rem; border-bottom: 1px solid #f4f3f0; color: var(--muted); vertical-align: top; }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table td strong { color: var(--ink); }
+
+  /* ── score bar ── */
+  .score-row { display: flex; align-items: center; gap: .6rem; padding: .35rem 0; }
+  .score-label { font-size: .72rem; font-weight: 600; color: var(--ink); width: 150px; flex-shrink: 0; }
+  .score-track { flex: 1; height: 8px; background: var(--surface); border-radius: 5px; overflow: hidden; border: 1px solid var(--border); }
+  .score-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--accent), #d97a6c); }
+  .score-num { font-size: .72rem; font-weight: 700; color: var(--accent); width: 42px; text-align: right; flex-shrink: 0; }
+
+  /* ── ticket walkthrough ── */
+  .walkthrough-step { border: 1px solid var(--border); border-radius: 8px; padding: .7rem .9rem; margin-bottom: .5rem; background: #fff; }
+  .walkthrough-step-label { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: .3rem; }
+  .walkthrough-step-body { font-size: .76rem; color: var(--ink); line-height: 1.6; }
+  .walkthrough-arrow { text-align: center; color: var(--muted); font-size: .8rem; margin: .1rem 0; }
+
+  /* ── callout ── */
+  .callout { border-left: 3px solid var(--accent); background: #fef6f4; padding: .7rem 1rem; border-radius: 0 6px 6px 0; font-size: .78rem; color: #6b2e26; line-height: 1.6; }
+  .callout strong { color: var(--accent); }
+
+  @media (max-width: 700px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+    header { padding: 1rem; }
+    .tab-panel { padding: 1rem; }
+    .score-label { width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">VJRA.US / UT AUSTIN</div>
+    <h1>AI-Powered Support Ticket Analysis System</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="agent-balls">
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">S</div>
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">E</div>
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">R</div>
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+    </div>
+    <a href="/" class="back-link">&larr; All Projects</a>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('overview')">Business Problem &amp; Solution</button>
+  <button class="tab" onclick="switchTab('arch')">Architecture &amp; Pipeline</button>
+  <button class="tab" onclick="switchTab('workflow')">n8n Workflow</button>
+  <button class="tab" onclick="switchTab('eval')">Evaluation Results</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 1 — Business Problem & Solution
+═══════════════════════════════════════════════ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <!-- 01 Business Problem -->
+  <div class="section-card">
+    <div class="section-card-head">01 &middot; Business Problem</div>
+    <div class="card-grid-2">
+      <div>
+        <div class="label-sm">The Problem</div>
+        <div class="body-sm">ShopNest Global is a large-scale e-commerce platform operating in <strong>30+ countries</strong> with <strong>50M+ active customers</strong> and <strong>2,000+ human support agents</strong> working 24/7 across the US, Europe, India, and Southeast Asia, processing <strong>200,000+ orders/day</strong>. Every order carries risk of delivery delay, payment failure, wrong item, or return — and each generates a support ticket. Real tickets are messy: some overloaded with emotional detail, some shorthand-heavy, some a single sparse sentence. Agents spend <strong>2&ndash;3 minutes per ticket</strong> just decoding the issue before resolution work starts, and peak periods spike volume from ~5,000/day to <strong>~15,000/day</strong>.</div>
+      </div>
+      <div>
+        <div class="label-sm">The Solution</div>
+        <div class="body-sm">A <strong>4-stage n8n workflow</strong> powered by <strong>GPT-4.1</strong> that summarizes raw tickets into clean, factual summaries, drafts a professional and policy-grounded customer response with a clear next step, and evaluates both outputs automatically with <strong>LLM-as-a-Judge</strong> scoring &mdash; giving the business measurable, auditable quality signal before a broader rollout decision.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 By the Numbers -->
+  <div class="section-card">
+    <div class="section-card-head">02 &middot; By the Numbers</div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">30</div><div class="stat-label">Tickets Processed</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Pipeline Stages</div></div>
+      <div class="stat"><div class="stat-num">2</div><div class="stat-label">LLM-Judge Rubrics</div></div>
+      <div class="stat"><div class="stat-num">9.82</div><div class="stat-label">Avg Summary Score /10</div></div>
+      <div class="stat"><div class="stat-num">9.28</div><div class="stat-label">Avg Response Score /10</div></div>
+      <div class="stat"><div class="stat-num">60/60</div><div class="stat-label">Submission Grade</div></div>
+    </div>
+  </div>
+
+  <!-- 03 Embedded Business Policies -->
+  <div class="section-card">
+    <div class="section-card-head">03 &middot; Embedded Business Policies</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table">
+        <thead><tr><th>Policy</th><th>Terms</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Refund &amp; Return</strong></td><td>Full refund or replacement within 10 days; refunds processed in 5&ndash;7 business days; COD refunds via bank transfer</td></tr>
+          <tr><td><strong>Delivery Delay</strong></td><td>&gt;3 days late &rarr; Rs 100 voucher; &gt;7 days late &rarr; may qualify for full refund</td></tr>
+          <tr><td><strong>Wrong Item</strong></td><td>Free replacement or refund; pickup arranged within 2 business days; photo evidence may be requested</td></tr>
+          <tr><td><strong>Payment Failure</strong></td><td>Failed transactions usually reversed in 3&ndash;5 business days; ask customer for transaction reference if needed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 04 Sample Ticket Walkthrough -->
+  <div class="section-card">
+    <div class="section-card-head">04 &middot; Sample Ticket Walkthrough &mdash; Ticket #1</div>
+    <div class="section-card-body">
+      <div class="walkthrough-step">
+        <div class="walkthrough-step-label">Raw Ticket (support_ticket_desc)</div>
+        <div class="walkthrough-step-body" style="color:var(--muted);font-style:italic;">"I cannot believe the level of service I have received. I have been a loyal ShopNest customer since 2020&hellip; I spent over three hours today trying to reach your support team&hellip; Order SNX-4421 for a Bosch dishwasher. Delivered wrong model. Want replacement."</div>
+      </div>
+      <div class="walkthrough-arrow">&darr; Stage 1 &middot; Ticket Summarization</div>
+      <div class="walkthrough-step">
+        <div class="walkthrough-step-label">Summary</div>
+        <div class="walkthrough-step-body">"The customer received the wrong model of Bosch dishwasher for order SNX-4421 and is requesting a replacement. They experienced significant difficulty reaching support through multiple channels, including long hold times and unhelpful responses."</div>
+      </div>
+      <div class="walkthrough-arrow">&darr; Stage 2 &middot; Summary Evaluation &mdash; Accuracy 9/10 &middot; Clarity 10/10 &middot; Completeness 9/10</div>
+      <div class="walkthrough-arrow">&darr; Stage 3 &middot; Response Generation</div>
+      <div class="walkthrough-step">
+        <div class="walkthrough-step-label">Generated Response</div>
+        <div class="walkthrough-step-body">"Thank you for reaching out and sharing your experience. I sincerely apologize for the frustration&hellip; we will arrange a free pickup of the incorrect dishwasher within 2 business days and process a replacement for the correct model. Could you please reply with a photo of the received item and its packaging?"</div>
+      </div>
+      <div class="walkthrough-arrow">&darr; Stage 4 &middot; Response Evaluation &mdash; Professionalism 9/10 &middot; Empathy 9/10 &middot; Clarity 9/10 &middot; Policy Compliance 8/10 &middot; Actionability 9/10</div>
+    </div>
+  </div>
+
+</div><!-- #tab-overview -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 2 — Architecture & Pipeline
+═══════════════════════════════════════════════ -->
+<div id="tab-arch" class="tab-panel">
+
+  <div class="section-card" style="margin-bottom:.75rem;">
+    <div class="section-card-head">Pipeline</div>
+    <div style="overflow-x:auto;">
+      <div class="pipeline">
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#d0d0d0,#888,#444);">&#9654;</div>
+          <div class="pipeline-label">Manual<br>Trigger</div>
+          <div class="pipeline-sub">Load CSV</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">S</div>
+          <div class="pipeline-label">Ticket<br>Summarization</div>
+          <div class="pipeline-sub">GPT-4.1, temp 0.2</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">E</div>
+          <div class="pipeline-label">Summary<br>Evaluation</div>
+          <div class="pipeline-sub">LLM-as-Judge</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">R</div>
+          <div class="pipeline-label">Response<br>Generation</div>
+          <div class="pipeline-sub">GPT-4.1, temp 0.4</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          <div class="pipeline-label">Response<br>Evaluation</div>
+          <div class="pipeline-sub">LLM-as-Judge</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">&#128190;</div>
+          <div class="pipeline-label">Export<br>CSV</div>
+          <div class="pipeline-sub">output_file.csv</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#f0fff8;">
+      <span class="arch-layer-badge" style="background:#2d6a4f;color:#fff;">Stage 1</span>
+      <div>
+        <div class="arch-layer-title">Ticket Summarization</div>
+        <div class="arch-layer-sub">GPT-4.1 &middot; temp 0.2 &middot; max 150 tokens</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">System Prompt Rules</div>
+        <div class="arch-node-desc">Summarize in 2&ndash;3 concise sentences. Clearly identify the main issue. Remove unnecessary emotional language. Preserve important facts. Mention order/payment/delivery/refund issue explicitly. Maintain factual accuracy. Do not hallucinate.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Input / Output</div>
+        <div class="arch-node-desc">Input: raw <code>support_ticket_desc</code> field. Output: clean 2&ndash;3 sentence summary, stored as <code>Summarization</code>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#eef4ff;">
+      <span class="arch-layer-badge" style="background:#1d4ed8;color:#fff;">Stage 2</span>
+      <div>
+        <div class="arch-layer-title">Summary Evaluation (LLM-as-a-Judge)</div>
+        <div class="arch-layer-sub">GPT-4.1 &middot; temp 0.2 &middot; max 150 tokens</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">Rubric</div>
+        <div class="arch-node-desc"><strong>Accuracy</strong> &mdash; does the summary correctly reflect the original ticket? <strong>Clarity</strong> &mdash; is it easy to understand and professional? <strong>Completeness</strong> &mdash; does it include all major issues, requests, and context? Each scored /10, plus short feedback. Penalizes hallucinations and missing detail.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Judge Input</div>
+        <div class="arch-node-desc">Original ticket text + the Stage 1 summary, so the judge can compare directly. Output format constrained to plain text (no markdown).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#fff8f0;">
+      <span class="arch-layer-badge" style="background:#b45309;color:#fff;">Stage 3</span>
+      <div>
+        <div class="arch-layer-title">Response Generation</div>
+        <div class="arch-layer-sub">GPT-4.1 &middot; temp 0.4 &middot; max 250 tokens</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">System Prompt Rules</div>
+        <div class="arch-node-desc">Be empathetic and professional. Acknowledge the customer's issue. Provide clear next steps. Maintain a calm, respectful tone. Keep it concise and actionable. Do not make unsupported promises.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Policies Embedded in Prompt</div>
+        <div class="arch-node-desc">Refund &amp; Return, Delivery Delay, Wrong Item, and Payment Failure policies are hard-coded directly into the system prompt (see Overview tab) so every generated response is grounded in the same rules, not model guesswork.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#f5f0ff;">
+      <span class="arch-layer-badge" style="background:#6d28d9;color:#fff;">Stage 4</span>
+      <div>
+        <div class="arch-layer-title">Response Evaluation (LLM-as-a-Judge)</div>
+        <div class="arch-layer-sub">GPT-4.1 &middot; temp 0.1 &middot; max 180 tokens</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">Rubric</div>
+        <div class="arch-node-desc"><strong>Professionalism</strong>, <strong>Empathy</strong>, <strong>Clarity</strong>, <strong>Policy Compliance</strong> (does it correctly follow the stated policies?), <strong>Actionability</strong> (clear, useful next steps). Each scored /10, plus short feedback. Penalizes unsupported promises and vague actions.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Why a Lower Temperature</div>
+        <div class="arch-node-desc">temp 0.1 for the judge (vs. 0.2&ndash;0.4 for the generation stages) &mdash; evaluation needs to be consistent and objective run to run, not creative.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Design Notes</div>
+    <div class="card-grid-2">
+      <div>
+        <div class="label-sm">Why n8n?</div>
+        <div class="body-sm">No-code orchestration made the 4-stage pipeline visually debuggable node-by-node, and the <code>Set</code> node pattern (Prepare Final Output) made it trivial to assemble all 6 output fields &mdash; ticket id, description, summary, summary eval, response, response eval &mdash; into one row per ticket before CSV export.</div>
+      </div>
+      <div>
+        <div class="label-sm">Why Two Separate Judge Calls?</div>
+        <div class="body-sm">Summarization and response generation are different tasks with different failure modes (factual drift vs. policy compliance), so each gets its own rubric and its own LLM-as-a-Judge call rather than one combined evaluation &mdash; keeping each score interpretable and actionable on its own.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #tab-arch -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 3 — n8n Workflow
+═══════════════════════════════════════════════ -->
+<div id="tab-workflow" class="tab-panel">
+
+  <div style="margin-bottom:.75rem;">
+    <div class="json-toolbar">
+      <div>
+        <div class="json-toolbar-label">AI-Powered Support Ticket Analysis System — n8n Workflow JSON</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:.1rem;">10 nodes &nbsp;&middot;&nbsp; 4 GPT-4.1 calls &nbsp;&middot;&nbsp; CSV in / CSV out</div>
+      </div>
+      <div class="json-toolbar-actions">
+        <button class="btn-sm" onclick="copyJson()">Copy JSON</button>
+        <button class="btn-sm primary" onclick="downloadJson()">Download .json</button>
+      </div>
+    </div>
+    <div class="json-box" id="jsonBox"></div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">How to Import into n8n</div>
+    <div class="card-grid-3" style="padding:1rem 1.25rem;">
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">01 &middot; Download</div>
+        <div class="body-sm">Click "Download .json" above to get the workflow file.</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">02 &middot; Import</div>
+        <div class="body-sm">In n8n: Menu &rarr; Workflows &rarr; Import from File. Select the downloaded JSON.</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">03 &middot; Credentials</div>
+        <div class="body-sm">Connect your OpenAI API key on all 4 GPT-4.1 nodes.</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">04 &middot; File Paths</div>
+        <div class="body-sm">Update the Load Support Ticket Dataset and Export Final Results node paths to your environment, then run.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #tab-workflow -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 4 — Evaluation Results
+═══════════════════════════════════════════════ -->
+<div id="tab-eval" class="tab-panel">
+
+  <div class="section-card">
+    <div class="section-card-head">Summary Evaluation &mdash; 30/30 Tickets (/10)</div>
+    <div class="section-card-body">
+      <div class="score-row"><div class="score-label">Accuracy</div><div class="score-track"><div class="score-fill" style="width:98.3%;"></div></div><div class="score-num">9.83</div></div>
+      <div class="score-row"><div class="score-label">Clarity</div><div class="score-track"><div class="score-fill" style="width:100%;"></div></div><div class="score-num">10.00</div></div>
+      <div class="score-row"><div class="score-label">Completeness</div><div class="score-track"><div class="score-fill" style="width:96.3%;"></div></div><div class="score-num">9.63</div></div>
+      <div style="margin-top:.75rem;font-size:.72rem;color:var(--muted);">Overall average: <strong style="color:var(--ink);">9.82/10</strong> &nbsp;&middot;&nbsp; 20 of 30 tickets scored a perfect 10/10/10</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Response Evaluation &mdash; 30/30 Tickets (/10)</div>
+    <div class="section-card-body">
+      <div class="score-row"><div class="score-label">Professionalism</div><div class="score-track"><div class="score-fill" style="width:97.3%;"></div></div><div class="score-num">9.73</div></div>
+      <div class="score-row"><div class="score-label">Empathy</div><div class="score-track"><div class="score-fill" style="width:90%;"></div></div><div class="score-num">9.00</div></div>
+      <div class="score-row"><div class="score-label">Clarity</div><div class="score-track"><div class="score-fill" style="width:93.7%;"></div></div><div class="score-num">9.37</div></div>
+      <div class="score-row"><div class="score-label">Policy Compliance</div><div class="score-track"><div class="score-fill" style="width:92.3%;"></div></div><div class="score-num">9.23</div></div>
+      <div class="score-row"><div class="score-label">Actionability</div><div class="score-track"><div class="score-fill" style="width:90.7%;"></div></div><div class="score-num">9.07</div></div>
+      <div style="margin-top:.75rem;font-size:.72rem;color:var(--muted);">Overall average: <strong style="color:var(--ink);">9.28/10</strong></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Key Finding</div>
+    <div class="section-card-body">
+      <div class="callout"><strong>Policy Compliance was the lowest and most variable metric</strong> (min 7/10). The judge repeatedly flagged responses that promised a specific outcome &mdash; a full refund, a Rs 100 voucher &mdash; without the ticket containing enough information to confirm eligibility against the stated policy. This is the clearest lever for prompt iteration: constrain Response Generation to confirm eligibility criteria before offering compensation, rather than offering it proactively.</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Sample Scored Tickets</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Issue</th><th>Summary Eval</th><th>Response Eval</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Wrong dishwasher model delivered, replacement requested</td><td>9 / 10 / 9</td><td>9 / 9 / 9 / 8 / 9</td></tr>
+          <tr><td>3</td><td>"not working. please help." &mdash; near-zero detail</td><td>10 / 10 / 9</td><td>10 / 9 / 9 / 10 / 9</td></tr>
+          <tr><td>10</td><td>14-day non-delivery, conflicting agent explanations, BBB escalation threat</td><td>10 / 10 / 10</td><td>10 / 9 / 10 / 10 / 10</td></tr>
+          <tr><td>14</td><td>Missing laptop charger, heavy typos, urgent for work</td><td>10 / 10 / 10</td><td>9 / 9 / 10 / 10 / 10</td></tr>
+          <tr><td>21</td><td>Stock-shown-as-available cancellation, refund past SLA, billing escalation</td><td>10 / 10 / 10</td><td>10 / 9 / 9 / 10 / 9</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:.5rem;">Summary Eval columns: Accuracy / Clarity / Completeness. Response Eval columns: Professionalism / Empathy / Clarity / Policy Compliance / Actionability. Full 30-ticket results in <code>data/output_file.csv</code>.</div>
+    </div>
+  </div>
+
+</div><!-- #tab-eval -->
+
+<script>
+const WORKFLOW_JSON = {"name":"AI-Powered Support Ticket Analysis System","nodes":[{"parameters":{},"type":"n8n-nodes-base.manualTrigger","typeVersion":1,"position":[-32,0],"id":"920cafe7-f2cd-42b1-98bd-a2e52b1eb867","name":"When clicking \u2018Execute workflow\u2019"},{"parameters":{"options":{}},"type":"n8n-nodes-base.extractFromFile","typeVersion":1.1,"position":[416,0],"id":"eac72768-ce15-419b-b91f-3be2a5852845","name":"Extract Ticket Data"},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"role":"system","content":"You are a customer support ticket summarization assistant.\n\nRules:\n- Summarize the support ticket in 2-3 concise sentences\n- Clearly identify the main issue\n- Remove unnecessary emotional language\n- Preserve important facts\n- Mention order/payment/delivery/refund issue clearly\n- Maintain factual accuracy\n- Do not hallucinate information"},{"content":"={{ $json.support_ticket_desc }}"}]},"builtInTools":{},"options":{"maxTokens":150,"temperature":0.2}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[624,0],"id":"8801271f-a3a4-4636-9dd9-f3207002d04e","name":"Ticket Summarization","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"role":"system","content":"You are an AI evaluator for customer support ticket summaries.\n\nEvaluate the generated summary using the following criteria:\n\n1. Accuracy\n- Does the summary correctly reflect the original ticket?\n- Are important facts preserved?\n\n2. Clarity\n- Is the summary easy to understand?\n- Is the wording concise and professional?\n\n3. Completeness\n- Does the summary include all major issues, requests, and context?\n\nInstructions:\n- Provide a score out of 10 for each criterion\n- Be objective and consistent\n- Penalize hallucinations or missing key details\n- Keep feedback concise\n\nReturn plain text only.\n\nOutput Format:\n\nAccuracy: X/10\nClarity: X/10\nCompleteness: X/10\n\nFeedback:\n<short explanation>\n\nDo not use markdown formatting. Return plain text only."},{"content":"=Original Ticket: {{ $('Extract Ticket Data').item.json.support_ticket_desc }}\n\nGenerated Summary:{{ $json.output[0].content[0].text }}"}]},"builtInTools":{},"options":{"maxTokens":150,"temperature":0.2}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[944,0],"id":"4c322a55-7cbd-4543-a33a-d2a191612552","name":"Summary Evaluation","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"role":"system","content":"You are a professional customer support assistant for ShopNest Global.\n\nRules:\n- Be empathetic and professional\n- Acknowledge the customer's issue\n- Provide clear next steps\n- Maintain a calm and respectful tone\n- Keep the response concise and actionable\n- Do not make unsupported promises\n\nPolicies:\n\nRefund & Return Policy:\n- Customers can request full refund or replacement within 10 days\n- Refunds are processed within 5-7 business days\n- COD refunds are processed via bank transfer\n\nDelivery Delay Policy:\n- Delay over 3 days qualifies for a Rs 100 voucher\n- Delay over 7 days may qualify for a full refund\n\nWrong Item Policy:\n- Free replacement or refund available\n- Pickup arranged within 2 business days\n- Photo evidence may be requested\n\nPayment Failure Policy:\n- Failed transactions are usually reversed within 3-5 business days\n- Ask customer for transaction reference if needed\n\nReturn plain text only.\n\nDo not include newline escape characters like \\n\\n in the response. Write as clean plain text paragraphs."},{"content":"=Customer Ticket: {{ $('Extract Ticket Data').item.json.support_ticket_desc }}\n\nGenerated Summary:{{ $json.output[0].content[0].text }}"}]},"builtInTools":{},"options":{"maxTokens":250,"temperature":0.4}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[1296,0],"id":"97f3db47-5702-4658-83e2-b035ab40cf2b","name":"Response Generation","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"role":"system","content":"You are an AI evaluator for customer support responses.\n\nEvaluate the generated response using the following criteria:\n\n1. Professionalism\n- Is the tone respectful and business appropriate?\n\n2. Empathy\n- Does the response acknowledge the customer's frustration appropriately?\n\n3. Clarity\n- Are the next steps and actions easy to understand?\n\n4. Policy Compliance\n- Does the response follow the provided company policies correctly?\n\n5. Actionability\n- Does the response provide clear and useful next steps?\n\nInstructions:\n- Provide a score out of 10 for each criterion\n- Be objective and concise\n- Penalize unsupported promises or vague actions\n- Return plain text only\n\nOutput Format:\n\nProfessionalism: X/10\nEmpathy: X/10\nClarity: X/10\nPolicy Compliance: X/10\nActionability: X/10\n\nFeedback:\n<short explanation>"},{"content":"=Customer Ticket: {{ $('Extract Ticket Data').item.json.support_ticket_desc }}\n\nGenerated Response:{{ $json.output[0].content[0].text }}"}]},"builtInTools":{},"options":{"maxTokens":180,"temperature":0.1}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[1648,0],"id":"fc033cbe-6292-41ad-9dd1-4657aded2b84","name":"Response Evaluation","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"fileSelector":"/data/shared/support_ticket_data.csv","options":{}},"type":"n8n-nodes-base.readWriteFile","typeVersion":1.1,"position":[208,0],"id":"1b07fa16-1a2c-4b8a-8003-4f40ce1d8fd2","name":"Load Support Ticket Dataset"},{"parameters":{"operation":"write","fileName":"/data/shared/output_file.csv","options":{}},"type":"n8n-nodes-base.readWriteFile","typeVersion":1.1,"position":[2416,0],"id":"3d0ad0e6-dc08-456a-8cb6-66db8e48fb16","name":"Export Final Results"},{"parameters":{"assignments":{"assignments":[{"id":"a259fdd1-ff97-44bb-9519-649d2a605bd1","name":"support_ticket_id","value":"={{ $('Extract Ticket Data').item.json['\ufeffsupport_ticket_id'] }}","type":"string"},{"id":"c56f4d7e-dbc6-4a1b-af1f-84b23cdffeb2","name":"support_ticket_desc","value":"={{ $('Extract Ticket Data').item.json.support_ticket_desc }}","type":"string"},{"id":"c70b9f1c-8391-4c3c-9d1a-da44ea7ff4f7","name":"Summarization ","value":"={{ $('Ticket Summarization').item.json.output[0].content[0].text }}","type":"string"},{"id":"77c8fb26-fcdd-4cf2-b912-e5f92d6adcca","name":"summary_evaluation","value":"={{ $('Summary Evaluation').item.json.output[0].content[0].text }}","type":"string"},{"id":"c69282ed-f2d7-4bff-be4a-62832ef15967","name":"response_generation","value":"={{ $('Response Generation').item.json.output[0].content[0].text }}","type":"string"},{"id":"77f3e97a-76f5-4725-bd8c-62724eca95f9","name":"response_evaluation","value":"={{ $json.output[0].content[0].text }}","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[2000,0],"id":"b41ddea5-64d5-45d6-9069-356c3a9098d1","name":"Prepare Final Output"},{"parameters":{"options":{}},"type":"n8n-nodes-base.convertToFile","typeVersion":1.1,"position":[2208,0],"id":"21603c61-c49f-47aa-9c1b-f59e22e0323f","name":"Generate CSV Report"}],"pinData":{},"connections":{"When clicking \u2018Execute workflow\u2019":{"main":[[{"node":"Load Support Ticket Dataset","type":"main","index":0}]]},"Extract Ticket Data":{"main":[[{"node":"Ticket Summarization","type":"main","index":0}]]},"Ticket Summarization":{"main":[[{"node":"Summary Evaluation","type":"main","index":0}]]},"Summary Evaluation":{"main":[[{"node":"Response Generation","type":"main","index":0}]]},"Response Generation":{"main":[[{"node":"Response Evaluation","type":"main","index":0}]]},"Response Evaluation":{"main":[[{"node":"Prepare Final Output","type":"main","index":0}]]},"Load Support Ticket Dataset":{"main":[[{"node":"Extract Ticket Data","type":"main","index":0}]]},"Prepare Final Output":{"main":[[{"node":"Generate CSV Report","type":"main","index":0}]]},"Generate CSV Report":{"main":[[{"node":"Export Final Results","type":"main","index":0}]]}},"active":false,"settings":{"executionOrder":"v1","availableInMCP":false},"versionId":"0e68b7c3-d06c-4811-aed9-60b57c830712","meta":{"templateCredsSetupCompleted":true,"instanceId":"9eec91ab028da3044b893ad93da376fcd67c0d37224cdead88c7c3ba95ce47dc"},"id":"m5T3rv7INTTiwvLxtdbJl","tags":[]};
+
+function switchTab(name) {
+  const order = ['overview','arch','workflow','eval'];
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', order[i] === name);
+  });
+  order.forEach(n => {
+    document.getElementById('tab-' + n).classList.toggle('active', n === name);
+  });
+}
+
+function syntaxHighlight(obj) {
+  const json = JSON.stringify(obj, null, 2);
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+    let cls = 'j-num';
+    if (/^"/.test(match)) {
+      cls = /:$/.test(match) ? 'j-key' : 'j-str';
+    } else if (/true|false/.test(match)) {
+      cls = 'j-bool';
+    } else if (/null/.test(match)) {
+      cls = 'j-null';
+    }
+    return `<span class="${cls}">${match}</span>`;
+  });
+}
+
+document.getElementById('jsonBox').innerHTML = syntaxHighlight(WORKFLOW_JSON);
+
+function copyJson() {
+  navigator.clipboard.writeText(JSON.stringify(WORKFLOW_JSON, null, 2)).then(() => {
+    const btn = document.querySelector('.btn-sm:not(.primary)');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy JSON', 1500);
+  });
+}
+
+function downloadJson() {
+  const blob = new Blob([JSON.stringify(WORKFLOW_JSON, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'AI-Powered Support Ticket Analysis System.json';
+  a.click();
+}
+</script>
+</body>
+</html>
