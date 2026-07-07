@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vipin Puri — AI Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent:  #b85042;
+    --ink:     #1a1a2e;
+    --muted:   #767676;
+    --bg:      #f8f4ee;
+    --surface: #f4f3f0;
+    --border:  #e8e6e1;
+    --n8n-bg:    #fff0e6; --n8n-fg:    #c2410c; --n8n-bd:    #fbd5b5;
+    --claude-bg: #ede9fe; --claude-fg: #5b21b6; --claude-bd: #c4b5fd;
+    --api-bg:    #e0f2fe; --api-fg:    #0369a1; --api-bd:    #bae6fd;
+    --ik-bg:     #fef9c3; --ik-fg:     #854d0e; --ik-bd:     #fde68a;
+    --ut-bg:     #f0fdf4; --ut-fg:     #166534; --ut-bd:     #bbf7d0;
+    --ind-bg:    #f3f4f6; --ind-fg:    #374151; --ind-bd:    #d1d5db;
+    --fw-bg:     #ede9fe; --fw-fg:     #5b21b6; --fw-bd:     #c4b5fd;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: #2b2b2b; line-height: 1.6; min-height: 100vh; }
+
+  /* HEADER */
+  header { border-bottom: 4px solid var(--accent); padding: 2.75rem 2rem 2rem; text-align: center; background: var(--bg); }
+  .kicker { text-transform: uppercase; letter-spacing: .16em; font-size: .65rem; font-weight: 700; color: var(--accent); margin-bottom: .5rem; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 2.6rem; color: var(--ink); font-weight: 400; margin-bottom: .35rem; }
+  .header-role { font-size: .8rem; color: var(--muted); margin-bottom: 1rem; letter-spacing: .04em; }
+  .header-links { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+  .header-link { font-size: .7rem; font-weight: 600; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: .25rem .75rem; border-radius: 20px; transition: background .15s, color .15s; }
+  .header-link:hover { background: var(--accent); color: #fff; }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; gap: .5rem; flex-wrap: wrap; max-width: 1100px; margin: 1.75rem auto 0; padding: 0 1.5rem; }
+  .filter-btn { font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .3rem .8rem; border-radius: 20px; border: 1px solid var(--border); background: #fff; cursor: pointer; transition: all .15s; color: var(--muted); }
+  .filter-btn:hover, .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* SECTION */
+  .section { margin-bottom: 2.5rem; }
+  .section-head { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--border); }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.25rem; color: var(--ink); }
+  .section-badge { font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: .2rem .6rem; border-radius: 20px; }
+  .badge-ik  { background: var(--ik-bg);  color: var(--ik-fg);  border: 1px solid var(--ik-bd); }
+  .badge-ut  { background: var(--ut-bg);  color: var(--ut-fg);  border: 1px solid var(--ut-bd); }
+  .badge-ind { background: var(--ind-bg); color: var(--ind-fg); border: 1px solid var(--ind-bd); }
+  .badge-fw  { background: var(--fw-bg);  color: var(--fw-fg);  border: 1px solid var(--fw-bd); }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* PROJECT CARD */
+  .card { border: 1px solid var(--border); border-radius: 12px; background: #fff; text-decoration: none; color: inherit; overflow: hidden; transition: border-color .18s, box-shadow .18s; display: flex; flex-direction: column; }
+  .card:hover { border-color: var(--accent); box-shadow: 0 6px 20px rgba(0,0,0,.07); }
+  .card-top { padding: 1.25rem 1.25rem .75rem; display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+  .card-left { display: flex; align-items: center; gap: .75rem; }
+  .balls { display: flex; }
+  .ball { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: .72rem; box-shadow: inset -1px -1px 3px rgba(0,0,0,.3), inset 1px 1px 3px rgba(255,255,255,.2), 0 1px 4px rgba(0,0,0,.15); margin-left: -6px; }
+  .ball:first-child { margin-left: 0; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.15rem; color: var(--ink); }
+  .card-pills { display: flex; gap: .3rem; flex-wrap: wrap; justify-content: flex-end; }
+  .pill { font-size: .55rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; padding: .18rem .5rem; border-radius: 20px; white-space: nowrap; }
+  .pill-n8n    { background: var(--n8n-bg);    color: var(--n8n-fg);    border: 1px solid var(--n8n-bd); }
+  .pill-claude { background: var(--claude-bg); color: var(--claude-fg); border: 1px solid var(--claude-bd); }
+  .pill-api    { background: var(--api-bg);    color: var(--api-fg);    border: 1px solid var(--api-bd); }
+  .card-body { padding: 0 1.25rem .9rem; flex: 1; }
+  .card-desc { font-size: .75rem; color: var(--muted); line-height: 1.6; margin-bottom: .7rem; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .tag { font-size: .56rem; font-weight: 600; padding: .12rem .4rem; border-radius: 3px; background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+  .card-footer { padding: .65rem 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+  .card-cta { font-size: .68rem; font-weight: 600; color: var(--accent); white-space: nowrap; }
+  .card-meta { text-align: right; }
+  .card-model { font-size: .57rem; color: var(--muted); display: block; }
+  .card-repo  { font-size: .54rem; color: #a8a29e; display: block; margin-top: .2rem; }
+  .card-repo code { background: var(--surface); padding: 1px 4px; border-radius: 3px; color: var(--muted); font-size: .54rem; }
+
+  /* FRAMEWORK CARD (horizontal) */
+  .fw-card { border: 1px solid var(--border); border-radius: 10px; background: #fff; text-decoration: none; color: inherit; display: flex; align-items: center; gap: 1.25rem; padding: 1rem 1.25rem; transition: border-color .15s, box-shadow .15s; margin-bottom: .75rem; }
+  .fw-card:hover { border-color: var(--accent); box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+  .fw-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: #fff; }
+  .fw-body { flex: 1; }
+  .fw-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--ink); margin-bottom: .2rem; }
+  .fw-desc { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+  .fw-right { text-align: right; flex-shrink: 0; }
+  .fw-cta { font-size: .67rem; font-weight: 600; color: var(--accent); display: block; }
+  .fw-repo { font-size: .54rem; color: #a8a29e; margin-top: .3rem; display: block; }
+  .fw-repo code { background: var(--surface); padding: 1px 4px; border-radius: 3px; color: var(--muted); font-size: .54rem; }
+
+  footer { text-align: center; padding: 1.5rem; font-size: .68rem; color: var(--muted); border-top: 1px solid var(--border); }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    h1 { font-size: 1.9rem; }
+    header { padding: 2rem 1rem 1.5rem; }
+    .fw-card { flex-direction: column; align-items: flex-start; }
+    .fw-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="kicker">vjra.us</div>
+  <h1>Vipin Puri</h1>
+  <div class="header-role">Technical Program Manager &nbsp;·&nbsp; Agentic AI Systems &nbsp;·&nbsp; Bay Area</div>
+  <div class="header-links">
+    <a class="header-link" href="https://github.com/vppuri-vjra" target="_blank">GitHub</a>
+    <a class="header-link" href="mailto:vp.puri@gmail.com">Contact</a>
+  </div>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all',this)">All Projects</button>
+  <button class="filter-btn" onclick="filter('ik',this)">IK AI PM/TPM</button>
+  <button class="filter-btn" onclick="filter('ut',this)">UT Austin</button>
+  <button class="filter-btn" onclick="filter('independent',this)">Independent</button>
+  <button class="filter-btn" onclick="filter('n8n',this)">n8n</button>
+  <button class="filter-btn" onclick="filter('claude',this)">Claude Code</button>
+</div>
+
+<main>
+
+<!-- ══ SECTION 1 — IK ══ -->
+<div class="section" data-section="ik">
+  <div class="section-head">
+    <div class="section-title">IK AI PM/TPM Program</div>
+    <span class="section-badge badge-ik">Interview Kickstart</span>
+  </div>
+  <div class="grid">
+
+    <!-- Engineering Leadership Daily Digest -->
+    <a class="card" href="/digest.html" data-tags="ik n8n">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">S</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">J</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">C</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">X</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">P</div>
+          </div>
+          <div class="card-title">Engineering Leadership Daily Digest</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-n8n">n8n</span>
+          <span class="pill pill-api">GPT-4.1</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">5-agent n8n workflow delivering a daily executive briefing from Slack, Jira, and Calendar — with confidential routing, orchestration-level graceful degradation, and error handling. 3-layer architecture: Control, Execution, Reliability.</div>
+        <div class="card-tags">
+          <span class="tag">5 Agents</span><span class="tag">43 Nodes</span><span class="tag">Guardrail</span><span class="tag">Tiered LLMs</span><span class="tag">Week 5</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Architecture &amp; Workflow &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">gpt-4.1-mini · gpt-5-mini</span>
+          <span class="card-repo"><code>vppuri-vjra/engineering-leadership-digest</code></span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Decision Pipeline -->
+    <a class="card" href="/decision.html" data-tags="ik claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">P</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">A</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">C</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          </div>
+          <div class="card-title">Decision Pipeline</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">8-agent adversarial pipeline: Greeter → Planner → dual Analyzers → Synthesizer → Critic → Reviser → Publisher. Routes any decision brief through structured debate to produce a paste-ready Decision Memo.</div>
+        <div class="card-tags">
+          <span class="tag">8 Agents</span><span class="tag">Adversarial</span><span class="tag">Critic→Reviser</span><span class="tag">Anthropic SDK</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Decision Agent &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-5</span>
+          <span class="card-repo"><code>vppuri-vjra/vp-multiagent-decision-pipeline</code></span>
+        </div>
+      </div>
+    </a>
+
+    <!-- NovaCart RAG Agent -->
+    <a class="card" href="/rag.html" data-tags="ik claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">F</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">M</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          </div>
+          <div class="card-title">NovaCart RAG Agent</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">RAG-powered knowledge agent ingesting 7 sources into Pinecone — auto-generates Monthly Financial Standing Reports and drafts stakeholder emails from grounded vector retrieval.</div>
+        <div class="card-tags">
+          <span class="tag">RAG Pipeline</span><span class="tag">Pinecone</span><span class="tag">531 Vectors</span><span class="tag">GPT-4o + Claude</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Knowledge Agent &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/rag-knowledge-agent</code></span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Project Nightingale -->
+    <a class="card" href="/launch.html" data-tags="ik claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">T</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">M</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          </div>
+          <div class="card-title">Project Nightingale</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">Multi-agent voice + text Launch Command Center with 4 specialist agents (Technical, GTM, Executive) auto-routing stakeholder questions to the right domain via ROUTE: signal pattern.</div>
+        <div class="card-tags">
+          <span class="tag">Multi-Agent</span><span class="tag">Voice AI</span><span class="tag">ROUTE: Signal</span><span class="tag">Pinecone</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Launch Command Center &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/product-launch-command-center</code></span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ══ SECTION 2 — UT AUSTIN ══ -->
+<div class="section" data-section="ut">
+  <div class="section-head">
+    <div class="section-title">UT Austin Program</div>
+    <span class="section-badge badge-ut">UT Austin</span>
+  </div>
+  <div class="grid">
+
+    <!-- GlobalEdge Financial Intelligence -->
+    <a class="card" href="/globaledge.html" data-tags="ut n8n">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">N</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">S</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          </div>
+          <div class="card-title">GlobalEdge Financial Intelligence</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-n8n">n8n</span>
+          <span class="pill pill-claude">Claude</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">No-code RAG financial intelligence system for 400 brokers — n8n workflows ingest news, stock prices, and SEC filings into Pinecone with LLM-as-a-Judge quality evaluation built in.</div>
+        <div class="card-tags">
+          <span class="tag">RAG Pipeline</span><span class="tag">LLM-as-Judge</span><span class="tag">Pinecone</span><span class="tag">n8n No-Code</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Intelligence Agent &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">GPT-4.1 + claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/globaledge-financial-intelligence</code></span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ══ SECTION 3 — INDEPENDENT ══ -->
+<div class="section" data-section="independent">
+  <div class="section-head">
+    <div class="section-title">Independent Projects</div>
+    <span class="section-badge badge-ind">Independent</span>
+  </div>
+  <div class="grid">
+
+    <!-- VP Portfolio Health Report -->
+    <a class="card" href="/portfolio.html" data-tags="independent claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">1</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">2</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">3</div>
+          </div>
+          <div class="card-title">VP Portfolio Health Report</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">3-agent Python pipeline automating Jira portfolio reporting — daily monitoring, escalation drafts, and a weekly 5-slide PPTX deck with Claude-generated analysis and executive narrative.</div>
+        <div class="card-tags">
+          <span class="tag">3 Agents</span><span class="tag">Jira API</span><span class="tag">PPTX Gen</span><span class="tag">Gmail SMTP</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Architecture &amp; Pipeline &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/vp-report-generator</code></span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Confluence Knowledge Agent -->
+    <a class="card" href="/confluence.html" data-tags="independent claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">P</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">C</div>
+          </div>
+          <div class="card-title">Confluence Knowledge Agent</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+          <span class="pill pill-api">MCP</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">Retrieval agent for organizational knowledge across 8 Confluence spaces — connected via native MCP server for grounded, hallucination-free answers with CQL full-site search.</div>
+        <div class="card-tags">
+          <span class="tag">MCP Server</span><span class="tag">CQL Search</span><span class="tag">8 Spaces</span><span class="tag">Grounded Answers</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Business Problem &amp; Solution &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/vjra-research</code></span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ══ SECTION 4 — FRAMEWORKS ══ -->
+<div class="section" data-section="frameworks">
+  <div class="section-head">
+    <div class="section-title">Frameworks &amp; Playbooks</div>
+    <span class="section-badge badge-fw">Independent</span>
+  </div>
+
+  <a class="fw-card" href="/transformations.html">
+    <div class="fw-icon" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">T</div>
+    <div class="fw-body">
+      <div class="fw-title">The Agentic TPM</div>
+      <div class="fw-desc">9–12 month transformation story — from manual coordination to designed agentic systems. Before/after across daily intelligence, knowledge access, program reviews, and blocker detection. Interview-ready STAR narratives included.</div>
+    </div>
+    <div class="fw-right">
+      <span class="fw-cta">Read the Transformation &rarr;</span>
+      <span class="fw-repo">4 transformations · 3 tabs</span>
+    </div>
+  </a>
+
+  <a class="fw-card" href="/ai-framework.html">
+    <div class="fw-icon" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">G</div>
+    <div class="fw-body">
+      <div class="fw-title">AI Governance Framework</div>
+      <div class="fw-desc">4-phase enterprise AI governance model — Full Review → Confidence Routing (≥0.85) → Exception-Based → Strategic Oversight. Includes AIGOV Jira project with 35 custom fields, review forms, and weekly reporting pipeline.</div>
+    </div>
+    <div class="fw-right">
+      <span class="fw-cta">Framework Overview &rarr;</span>
+      <span class="fw-repo"><code>AIGOV (Jira project)</code></span>
+    </div>
+  </a>
+
+  <a class="fw-card" href="/accessibility.html">
+    <div class="fw-icon" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">A</div>
+    <div class="fw-body">
+      <div class="fw-title">Accessibility Standards &amp; SDLC Playbook</div>
+      <div class="fw-desc">WCAG 2.1/2.2 AA + Section 508 mapped by POUR principle with severity triage and release-stopper classification, plus SDLC gates, testing toolchain, and developer/QA scope of work.</div>
+    </div>
+    <div class="fw-right">
+      <span class="fw-cta">Standards &amp; SDLC &rarr;</span>
+      <span class="fw-repo"><code>vppuri-vjra/vjra-research</code></span>
+    </div>
+  </a>
+
+</div>
+
+</main>
+
+<footer>vjra.us &nbsp;·&nbsp; Vipin Puri &nbsp;·&nbsp; AI Projects &amp; Research &nbsp;·&nbsp; 2026</footer>
+
+<script>
+function filter(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const sections = document.querySelectorAll('.section');
+  const cards = document.querySelectorAll('.card');
+
+  if (tag === 'all') {
+    sections.forEach(s => s.style.display = '');
+    cards.forEach(c => c.style.display = '');
+    return;
+  }
+
+  if (tag === 'n8n' || tag === 'claude') {
+    sections.forEach(s => s.style.display = '');
+    cards.forEach(c => {
+      c.style.display = (c.dataset.tags || '').includes(tag) ? '' : 'none';
+    });
+  } else {
+    const sectionMap = { ik: 'ik', ut: 'ut', independent: 'independent' };
+    sections.forEach(s => {
+      const sec = s.dataset.section;
+      s.style.display = (sec === sectionMap[tag] || sec === 'frameworks') ? '' : 'none';
+    });
+    cards.forEach(c => c.style.display = '');
+  }
+}
+</script>
+</body>
+</html>
