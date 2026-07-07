@@ -3,461 +3,477 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>vjra.us — AI Projects</title>
+<title>Vipin Puri — AI Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --accent: #b85042;
-    --ink: #1a1a2e;
-    --muted: #767676;
-    --bg: #f8f4ee;
+    --accent:  #b85042;
+    --ink:     #1a1a2e;
+    --muted:   #767676;
+    --bg:      #f8f4ee;
     --surface: #f4f3f0;
-    --border: #e8e6e1;
-    --green: #2d6a4f;
-    --amber: #b45309;
-    --purple: #6d28d9;
+    --border:  #e8e6e1;
+    --n8n-bg:    #fff0e6; --n8n-fg:    #c2410c; --n8n-bd:    #fbd5b5;
+    --claude-bg: #ede9fe; --claude-fg: #5b21b6; --claude-bd: #c4b5fd;
+    --api-bg:    #e0f2fe; --api-fg:    #0369a1; --api-bd:    #bae6fd;
+    --ik-bg:     #fef9c3; --ik-fg:     #854d0e; --ik-bd:     #fde68a;
+    --ut-bg:     #f0fdf4; --ut-fg:     #166534; --ut-bd:     #bbf7d0;
+    --ind-bg:    #f3f4f6; --ind-fg:    #374151; --ind-bd:    #d1d5db;
+    --fw-bg:     #ede9fe; --fw-fg:     #5b21b6; --fw-bd:     #c4b5fd;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
-    color: #2b2b2b;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
-  header {
-    border-bottom: 4px solid var(--accent);
-    padding: 2.5rem 2rem 1.5rem;
-    text-align: center;
-    background: var(--bg);
-  }
-  .kicker {
-    text-transform: uppercase; letter-spacing: .14em; font-size: .7rem;
-    font-weight: 700; color: var(--accent); margin-bottom: .4rem;
-  }
-  h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 2.2rem; color: var(--ink); font-weight: 400;
-    margin-bottom: .4rem;
-  }
-  .subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: .82rem; color: var(--muted); max-width: 50ch; margin: 0 auto;
-  }
-  main {
-    max-width: 1100px; margin: 0 auto;
-    padding: 2rem 1.5rem 3rem;
-  }
-  .section-label {
-    font-family: 'Inter', sans-serif;
-    font-size: .6rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .12em; color: var(--accent); margin-bottom: .75rem;
-  }
-  .projects {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .project-card {
-    border: 1px solid var(--border); border-radius: 12px;
-    background: #fff; text-decoration: none; color: inherit;
-    overflow: hidden; transition: border-color .2s, box-shadow .2s;
-    display: flex; flex-direction: column;
-  }
-  .project-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 4px 16px rgba(0,0,0,.06);
-  }
-  .card-header {
-    padding: 1.25rem 1.25rem .75rem;
-    display: flex; align-items: center; gap: .75rem;
-  }
-  .card-balls {
-    display: flex; gap: -4px;
-  }
-  .card-ball {
-    width: 28px; height: 28px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-family: 'Cormorant Garamond', serif;
-    font-weight: 600; font-size: .75rem;
-    box-shadow: inset -1px -1px 3px rgba(0,0,0,.3), inset 1px 1px 3px rgba(255,255,255,.2), 0 1px 4px rgba(0,0,0,.15);
-    margin-left: -6px;
-  }
-  .card-ball:first-child { margin-left: 0; }
-  .card-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.2rem; color: var(--ink); font-weight: 400;
-  }
-  .card-body {
-    padding: 0 1.25rem 1rem;
-    flex: 1;
-  }
-  .card-desc {
-    font-size: .75rem; color: var(--muted); line-height: 1.55;
-    margin-bottom: .65rem;
-  }
-  .card-tags {
-    display: flex; flex-wrap: wrap; gap: .35rem;
-  }
-  .card-tag {
-    font-size: .58rem; font-weight: 600; padding: .15rem .45rem;
-    border-radius: 3px; background: var(--surface); color: var(--muted);
-    border: 1px solid var(--border);
-  }
-  .card-footer {
-    padding: .65rem 1.25rem;
-    border-top: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .card-cta {
-    font-family: 'Inter', sans-serif;
-    font-size: .7rem; font-weight: 600; color: var(--accent);
-  }
-  .card-model {
-    font-size: .58rem; color: var(--muted);
-  }
-  .card-repo {
-    font-family: 'Inter', sans-serif;
-    font-size: .55rem; color: #a8a29e;
-    display: block; margin-top: .25rem;
-  }
-  .card-repo code {
-    font-size: .55rem; background: var(--surface); padding: 1px 4px;
-    border-radius: 3px; color: var(--muted);
-  }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: #2b2b2b; line-height: 1.6; min-height: 100vh; }
 
-  /* Research section */
-  .research-card {
-    border: 1px solid var(--border); border-radius: 10px;
-    background: #fff; text-decoration: none; color: inherit;
-    padding: 1rem 1.25rem; display: block;
-    transition: border-color .15s;
-  }
-  .research-card:hover { border-color: var(--accent); }
-  .research-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1rem; color: var(--ink); margin-bottom: .25rem;
-  }
-  .research-meta {
-    font-size: .7rem; color: var(--muted);
-  }
-  .research-meta span:not(:last-child)::after {
-    content: "·"; margin: 0 .4rem; color: var(--border);
-  }
+  /* HEADER */
+  header { border-bottom: 4px solid var(--accent); background: var(--bg); padding: 0; }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; display: grid; grid-template-columns: 220px 1fr 220px; align-items: center; gap: 1rem; }
+  .header-center { text-align: center; }
+  .kicker { text-transform: uppercase; letter-spacing: .16em; font-size: .65rem; font-weight: 700; color: var(--accent); margin-bottom: .4rem; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.6rem; color: var(--ink); font-weight: 400; margin-bottom: .25rem; white-space: nowrap; }
+  .header-subtitle { font-size: .75rem; color: var(--muted); max-width: 42ch; margin: 0 auto; }
+  .header-right { text-align: right; justify-self: end; }
+  .header-name { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.3rem; color: var(--ink); margin-bottom: .2rem; }
+  .header-role { font-size: .72rem; color: var(--muted); margin-bottom: .65rem; line-height: 1.5; }
+  .header-links { display: flex; gap: .5rem; justify-content: flex-end; flex-wrap: wrap; }
+  .header-link { font-size: .67rem; font-weight: 600; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: .22rem .65rem; border-radius: 20px; transition: background .15s, color .15s; }
+  .header-link:hover { background: var(--accent); color: #fff; }
 
-  footer {
-    text-align: center; padding: 1.5rem;
-    font-size: .7rem; color: var(--muted);
-    border-top: 1px solid var(--border);
-  }
+  /* FILTER BAR */
+  .filter-bar { display: flex; gap: .5rem; flex-wrap: wrap; max-width: 1100px; margin: 1.75rem auto 0; padding: 0 1.5rem; }
+  .filter-btn { font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .3rem .8rem; border-radius: 20px; border: 1px solid var(--border); background: #fff; cursor: pointer; transition: all .15s; color: var(--muted); }
+  .filter-btn:hover, .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* SECTION */
+  .section { margin-bottom: 2.5rem; }
+  .section-head { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--border); }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.25rem; color: var(--ink); }
+  .section-badge { font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: .2rem .6rem; border-radius: 20px; }
+  .badge-ik  { background: var(--ik-bg);  color: var(--ik-fg);  border: 1px solid var(--ik-bd); }
+  .badge-ut  { background: var(--ut-bg);  color: var(--ut-fg);  border: 1px solid var(--ut-bd); }
+  .badge-ind { background: var(--ind-bg); color: var(--ind-fg); border: 1px solid var(--ind-bd); }
+  .badge-fw  { background: var(--fw-bg);  color: var(--fw-fg);  border: 1px solid var(--fw-bd); }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* PROJECT CARD */
+  .card { border: 1px solid var(--border); border-radius: 12px; background: #fff; text-decoration: none; color: inherit; overflow: hidden; transition: border-color .18s, box-shadow .18s; display: flex; flex-direction: column; }
+  .card:hover { border-color: var(--accent); box-shadow: 0 6px 20px rgba(0,0,0,.07); }
+  .card-top { padding: 1.25rem 1.25rem .75rem; display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+  .card-left { display: flex; align-items: center; gap: .75rem; }
+  .balls { display: flex; }
+  .ball { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: .72rem; box-shadow: inset -1px -1px 3px rgba(0,0,0,.3), inset 1px 1px 3px rgba(255,255,255,.2), 0 1px 4px rgba(0,0,0,.15); margin-left: -6px; }
+  .ball:first-child { margin-left: 0; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.15rem; color: var(--ink); }
+  .card-pills { display: flex; gap: .3rem; flex-wrap: wrap; justify-content: flex-end; }
+  .pill { font-size: .55rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; padding: .18rem .5rem; border-radius: 20px; white-space: nowrap; }
+  .pill-n8n    { background: var(--n8n-bg);    color: var(--n8n-fg);    border: 1px solid var(--n8n-bd); }
+  .pill-claude { background: var(--claude-bg); color: var(--claude-fg); border: 1px solid var(--claude-bd); }
+  .pill-api    { background: var(--api-bg);    color: var(--api-fg);    border: 1px solid var(--api-bd); }
+  .card-body { padding: 0 1.25rem .9rem; flex: 1; }
+  .card-desc { font-size: .75rem; color: var(--muted); line-height: 1.6; margin-bottom: .7rem; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .tag { font-size: .56rem; font-weight: 600; padding: .12rem .4rem; border-radius: 3px; background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+  .card-footer { padding: .65rem 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+  .card-cta { font-size: .68rem; font-weight: 600; color: var(--accent); white-space: nowrap; }
+  .card-meta { text-align: right; }
+  .card-model { font-size: .57rem; color: var(--muted); display: block; }
+  .card-repo  { font-size: .54rem; color: #a8a29e; display: block; margin-top: .2rem; }
+  .card-repo code { background: var(--surface); padding: 1px 4px; border-radius: 3px; color: var(--muted); font-size: .54rem; }
+
+  /* FRAMEWORK CARD (horizontal) */
+  .fw-card { border: 1px solid var(--border); border-radius: 10px; background: #fff; text-decoration: none; color: inherit; display: flex; align-items: center; gap: 1.25rem; padding: 1rem 1.25rem; transition: border-color .15s, box-shadow .15s; margin-bottom: .75rem; }
+  .fw-card:hover { border-color: var(--accent); box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+  .fw-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: #fff; }
+  .fw-body { flex: 1; }
+  .fw-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--ink); margin-bottom: .2rem; }
+  .fw-desc { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+  .fw-right { text-align: right; flex-shrink: 0; }
+  .fw-cta { font-size: .67rem; font-weight: 600; color: var(--accent); display: block; }
+  .fw-repo { font-size: .54rem; color: #a8a29e; margin-top: .3rem; display: block; }
+  .fw-repo code { background: var(--surface); padding: 1px 4px; border-radius: 3px; color: var(--muted); font-size: .54rem; }
+
+  footer { text-align: center; padding: 1.5rem; font-size: .68rem; color: var(--muted); border-top: 1px solid var(--border); }
 
   @media (max-width: 640px) {
-    .projects { grid-template-columns: 1fr 1fr; }
-    h1 { font-size: 1.6rem; }
-    header { padding: 1.5rem 1rem 1rem; }
+    .grid { grid-template-columns: 1fr; }
+    h1 { font-size: 1.9rem; }
+    header { padding: 2rem 1rem 1.5rem; }
+    .fw-card { flex-direction: column; align-items: flex-start; }
+    .fw-right { text-align: left; }
   }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
-  <div class="kicker">vjra.us</div>
-  <h1>AI Projects & Research</h1>
-  <p class="subtitle">Multi-agent systems, RAG pipelines, and applied AI — built with Claude, Pinecone, and OpenAI.</p>
+<div class="header-inner">
+  <div class="header-left">
+    <a class="header-link" href="https://www.linkedin.com/in/vipin-puri-13a8b82/" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+  <div class="header-center">
+    <div class="kicker">vjra.us</div>
+    <h1>AI Projects &amp; Research</h1>
+    <p class="header-subtitle">Multi-agent systems, RAG pipelines, and applied AI — built with Claude, Pinecone, and OpenAI.</p>
+  </div>
+  <div class="header-right">
+    <div class="header-name">Vipin Puri</div>
+    <div class="header-role">Technical Program Manager<br>Agentic AI Systems · Bay Area</div>
+    <div class="header-links">
+      <a class="header-link" href="https://github.com/vppuri-vjra" target="_blank">GitHub</a>
+      <a class="header-link" href="mailto:vp.puri@gmail.com">Contact</a>
+    </div>
+  </div>
+</div>
 </header>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all',this)">All Projects</button>
+  <button class="filter-btn" onclick="filter('ik',this)">IK AI PM/TPM</button>
+  <button class="filter-btn" onclick="filter('ut',this)">UT Austin</button>
+  <button class="filter-btn" onclick="filter('independent',this)">Independent</button>
+  <button class="filter-btn" onclick="filter('n8n',this)">n8n</button>
+  <button class="filter-btn" onclick="filter('claude',this)">Claude Code</button>
+</div>
 
 <main>
 
-  <div class="section-label">Projects</div>
-  <div class="projects">
-
-    <!-- Project Nightingale -->
-    <a class="project-card" href="/launch.html">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">T</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">M</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
-        </div>
-        <div class="card-title">Project Nightingale</div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc">Multi-agent voice + text AI Launch Command Center. 4 specialist agents (Technical, GTM, Executive) route stakeholder questions to the right domain automatically.</div>
-        <div class="card-tags">
-          <span class="card-tag">Multi-Agent</span>
-          <span class="card-tag">Voice AI</span>
-          <span class="card-tag">Claude API</span>
-          <span class="card-tag">ROUTE: Signal</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-cta">Launch Command Center &rarr;</span>
-        <div><span class="card-model">claude-sonnet-4-6</span><span class="card-repo"><code>vppuri-vjra/product-launch-command-center</code></span></div>
-      </div>
-    </a>
-
-    <!-- NovaCart RAG -->
-    <a class="project-card" href="/rag.html">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">F</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">M</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
-        </div>
-        <div class="card-title">NovaCart RAG Agent</div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc">RAG-powered knowledge agent that ingests 7 sources into Pinecone, auto-generates Monthly Financial Standing Reports, and drafts stakeholder emails.</div>
-        <div class="card-tags">
-          <span class="card-tag">RAG Pipeline</span>
-          <span class="card-tag">Pinecone</span>
-          <span class="card-tag">531 Vectors</span>
-          <span class="card-tag">GPT-4o + Claude</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-cta">Knowledge Agent &rarr;</span>
-        <div><span class="card-model">claude-sonnet-4-6</span><span class="card-repo"><code>vppuri-vjra/rag-knowledge-agent</code></span></div>
-      </div>
-    </a>
-
-    <!-- Decision Pipeline -->
-    <a class="project-card" href="/decision.html">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">P</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">A</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">C</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
-        </div>
-        <div class="card-title">Decision Pipeline</div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc">8-agent pipeline: Decision Brief → Planner → Researcher → dual Analyzers → Synthesis → Critic → Reviser → Confidence → paste-ready Decision Memo.</div>
-        <div class="card-tags">
-          <span class="card-tag">8 Agents</span>
-          <span class="card-tag">Adversarial</span>
-          <span class="card-tag">Anthropic SDK</span>
-          <span class="card-tag">Critic→Reviser</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-cta">Decision Agent &rarr;</span>
-        <div><span class="card-model">claude-sonnet-4-5</span><span class="card-repo"><code>vppuri-vjra/vp-multiagent-decision-pipeline</code></span></div>
-      </div>
-    </a>
-
-    <!-- GlobalEdge Financial Intelligence -->
-    <a class="project-card" href="/globaledge.html">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">N</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">S</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
-        </div>
-        <div class="card-title">GlobalEdge Intelligence</div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc">No-code RAG financial intelligence for 400 brokers — n8n workflows ingest news, stock prices, and SEC filings into Pinecone with LLM-as-a-Judge quality evaluation.</div>
-        <div class="card-tags">
-          <span class="card-tag">n8n No-Code</span>
-          <span class="card-tag">LLM-as-Judge</span>
-          <span class="card-tag">Pinecone</span>
-          <span class="card-tag">GPT-4.1</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-cta">Intelligence Agent &rarr;</span>
-        <div><span class="card-model">GPT-4.1 + claude-sonnet-4-6</span><span class="card-repo"><code>vppuri-vjra/globaledge-financial-intelligence</code></span></div>
-      </div>
-    </a>
-
-    <!-- VP Portfolio Health Report -->
-    <a class="project-card" href="/portfolio.html">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">1</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">2</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">3</div>
-        </div>
-        <div class="card-title">VP Portfolio Health Report</div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc">3-agent pipeline automating Jira portfolio reporting — daily monitoring, escalation drafts, and a biweekly 5-slide PPTX deck with Claude-generated RAG analysis and exec narrative.</div>
-        <div class="card-tags">
-          <span class="card-tag">3 Agents</span>
-          <span class="card-tag">Jira API</span>
-          <span class="card-tag">PPTX Gen</span>
-          <span class="card-tag">Gmail SMTP</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-cta">Architecture &amp; Pipeline &rarr;</span>
-        <div><span class="card-model">claude-sonnet-4-6</span><span class="card-repo"><code>vppuri-vjra/vp-report-generator</code></span></div>
-      </div>
-    </a>
+<!-- ══ SECTION 1 — IK ══ -->
+<div class="section" data-section="ik">
+  <div class="section-head">
+    <div class="section-title">IK AI PM/TPM Program</div>
+    <span class="section-badge badge-ik">Interview Kickstart</span>
+  </div>
+  <div class="grid">
 
     <!-- Engineering Leadership Daily Digest -->
-    <a class="project-card" href="/digest.html">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">S</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">J</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">C</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">X</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">P</div>
+    <a class="card" href="/digest.html" data-tags="ik n8n">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">S</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">J</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">C</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">X</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">P</div>
+          </div>
+          <div class="card-title">Engineering Leadership Daily Digest</div>
         </div>
-        <div class="card-title">Engineering Leadership Daily Digest</div>
+        <div class="card-pills">
+          <span class="pill pill-n8n">n8n</span>
+          <span class="pill pill-api">GPT-4.1</span>
+        </div>
       </div>
       <div class="card-body">
-        <div class="card-desc">5-agent n8n workflow delivering a daily executive briefing — Slack, Jira, and Calendar specialist agents synthesized by an Executive agent and formatted for Slack. 3-layer architecture: Control, Execution, Reliability.</div>
+        <div class="card-desc">5-agent n8n workflow delivering a daily executive briefing from Slack, Jira, and Calendar — with confidential routing, orchestration-level graceful degradation, and error handling. 3-layer architecture: Control, Execution, Reliability.</div>
         <div class="card-tags">
-          <span class="card-tag">5 Agents</span>
-          <span class="card-tag">n8n No-Code</span>
-          <span class="card-tag">3 Data Sources</span>
-          <span class="card-tag">Tiered LLMs</span>
+          <span class="tag">5 Agents</span><span class="tag">43 Nodes</span><span class="tag">Guardrail</span><span class="tag">Tiered LLMs</span><span class="tag">Week 5</span>
         </div>
       </div>
       <div class="card-footer">
         <span class="card-cta">Architecture &amp; Workflow &rarr;</span>
-        <div><span class="card-model">gpt-4.1-mini + gpt-5-mini</span><span class="card-repo"><code>vppuri-vjra/engineering-leadership-digest</code></span></div>
+        <div class="card-meta">
+          <span class="card-model">gpt-4.1-mini · gpt-5-mini</span>
+          <span class="card-repo"><code>vppuri-vjra/engineering-leadership-digest</code></span>
+        </div>
       </div>
     </a>
 
-    <!-- AI Governance Framework -->
-    <a class="project-card" href="/ai-framework.html">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">P1</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">P2</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">P3</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">P4</div>
+    <!-- Decision Pipeline -->
+    <a class="card" href="/decision.html" data-tags="ik claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">P</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">A</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">C</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          </div>
+          <div class="card-title">Decision Pipeline</div>
         </div>
-        <div class="card-title">AI Governance Framework</div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+        </div>
       </div>
       <div class="card-body">
-        <div class="card-desc">4-phase enterprise governance model for AI adoption — full review → confidence routing → exception-based → strategic oversight. Includes Jira (AIGOV) project design, review forms, and weekly reporting.</div>
+        <div class="card-desc">8-agent adversarial pipeline: Greeter → Planner → dual Analyzers → Synthesizer → Critic → Reviser → Publisher. Routes any decision brief through structured debate to produce a paste-ready Decision Memo.</div>
         <div class="card-tags">
-          <span class="card-tag">Jira Governance</span>
-          <span class="card-tag">Confidence Routing</span>
-          <span class="card-tag">35 Custom Fields</span>
-          <span class="card-tag">4 Phases</span>
+          <span class="tag">8 Agents</span><span class="tag">Adversarial</span><span class="tag">Critic→Reviser</span><span class="tag">Anthropic SDK</span>
         </div>
       </div>
       <div class="card-footer">
-        <span class="card-cta">Framework Overview &rarr;</span>
-        <div><span class="card-model">Governance design</span><span class="card-repo"><code>AIGOV (Jira project)</code></span></div>
+        <span class="card-cta">Decision Agent &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-5</span>
+          <span class="card-repo"><code>vppuri-vjra/vp-multiagent-decision-pipeline</code></span>
+        </div>
       </div>
     </a>
 
-    <!-- Confluence Knowledge Agent -->
-    <a class="project-card" href="/confluence.html">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">P</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">C</div>
+    <!-- NovaCart RAG Agent -->
+    <a class="card" href="/rag.html" data-tags="ik claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">F</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">M</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          </div>
+          <div class="card-title">NovaCart RAG Agent</div>
         </div>
-        <div class="card-title">Confluence Knowledge Agent</div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+        </div>
       </div>
       <div class="card-body">
-        <div class="card-desc">Retrieval agent for organizational knowledge scattered across 8 Confluence spaces, connected directly through the official Confluence MCP server &mdash; no browser, no CORS workaround. Includes a real case study: an earlier proxy-based version silently hallucinated on a large page; switching to native MCP retrieval fixed it.</div>
+        <div class="card-desc">RAG-powered knowledge agent ingesting 7 sources into Pinecone — auto-generates Monthly Financial Standing Reports and drafts stakeholder emails from grounded vector retrieval.</div>
         <div class="card-tags">
-          <span class="card-tag">MCP Server</span>
-          <span class="card-tag">CQL Search</span>
-          <span class="card-tag">Grounded Answers</span>
+          <span class="tag">RAG Pipeline</span><span class="tag">Pinecone</span><span class="tag">531 Vectors</span><span class="tag">GPT-4o + Claude</span>
         </div>
       </div>
       <div class="card-footer">
-        <span class="card-cta">Business Problem &amp; Solution &rarr;</span>
-        <div><span class="card-model">claude-sonnet-4-6</span><span class="card-repo"><code>vppuri-vjra/vjra-research</code></span></div>
+        <span class="card-cta">Knowledge Agent &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/rag-knowledge-agent</code></span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Project Nightingale -->
+    <a class="card" href="/launch.html" data-tags="ik claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">T</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">M</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          </div>
+          <div class="card-title">Project Nightingale</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">Multi-agent voice + text Launch Command Center with 4 specialist agents (Technical, GTM, Executive) auto-routing stakeholder questions to the right domain via ROUTE: signal pattern.</div>
+        <div class="card-tags">
+          <span class="tag">Multi-Agent</span><span class="tag">Voice AI</span><span class="tag">ROUTE: Signal</span><span class="tag">Pinecone</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Launch Command Center &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/product-launch-command-center</code></span>
+        </div>
       </div>
     </a>
 
   </div>
+</div>
 
-  </div><!-- .projects (AI Projects) -->
+<!-- ══ SECTION 2 — UT AUSTIN ══ -->
+<div class="section" data-section="ut">
+  <div class="section-head">
+    <div class="section-title">UT Austin Program</div>
+    <span class="section-badge badge-ut">UT Austin</span>
+  </div>
+  <div class="grid">
 
-  <div class="section-label">TPM Transformation</div>
-  <div class="projects">
-
-    <!-- The Agentic TPM -->
-    <a class="project-card" href="/transformations.html" style="grid-column: 1 / -1; max-width: 640px;">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#d0d0d0,#888,#444);">T</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">A</div>
+    <!-- GlobalEdge Financial Intelligence -->
+    <a class="card" href="/globaledge.html" data-tags="ut n8n">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">G</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">N</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">S</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          </div>
+          <div class="card-title">GlobalEdge Financial Intelligence</div>
         </div>
-        <div class="card-title">The Agentic TPM</div>
+        <div class="card-pills">
+          <span class="pill pill-n8n">n8n</span>
+          <span class="pill pill-claude">Claude</span>
+        </div>
       </div>
       <div class="card-body">
-        <div class="card-desc">How Technical Program Management transforms over 9–12 months of AI adoption — from manual coordination to designed agentic systems. Before/after for daily intelligence, knowledge access, program reviews, and blocker detection.</div>
+        <div class="card-desc">No-code RAG financial intelligence system for 400 brokers — n8n workflows ingest news, stock prices, and SEC filings into Pinecone with LLM-as-a-Judge quality evaluation built in.</div>
         <div class="card-tags">
-          <span class="card-tag">Transformation Story</span>
-          <span class="card-tag">Interview Ready</span>
-          <span class="card-tag">TPM × AI</span>
-          <span class="card-tag">Playbook</span>
+          <span class="tag">RAG Pipeline</span><span class="tag">LLM-as-Judge</span><span class="tag">Pinecone</span><span class="tag">n8n No-Code</span>
         </div>
       </div>
       <div class="card-footer">
-        <span class="card-cta">Read the Transformation &rarr;</span>
-        <div><span class="card-model">4 transformations · 3 tabs</span></div>
+        <span class="card-cta">Intelligence Agent &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">GPT-4.1 + claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/globaledge-financial-intelligence</code></span>
+        </div>
       </div>
     </a>
 
-  </div><!-- .projects (TPM) -->
+  </div>
+</div>
 
-  <div class="section-label">Accessibility &amp; Compliance</div>
-  <div class="projects">
+<!-- ══ SECTION 3 — INDEPENDENT ══ -->
+<div class="section" data-section="independent">
+  <div class="section-head">
+    <div class="section-title">Independent Projects</div>
+    <span class="section-badge badge-ind">Independent</span>
+  </div>
+  <div class="grid">
 
-    <!-- Accessibility Standards & SDLC Playbook -->
-    <a class="project-card" href="/accessibility.html" style="grid-column: 1 / -1; max-width: 640px;">
-      <div class="card-header">
-        <div class="card-balls">
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">A</div>
-          <div class="card-ball" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">S</div>
+    <!-- VP Portfolio Health Report -->
+    <a class="card" href="/portfolio.html" data-tags="independent claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">1</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">2</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">3</div>
+          </div>
+          <div class="card-title">VP Portfolio Health Report</div>
         </div>
-        <div class="card-title">Accessibility Standards &amp; SDLC Playbook</div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+        </div>
       </div>
       <div class="card-body">
-        <div class="card-desc">WCAG 2.1/2.2 AA + Section 508 mapped by POUR principle with severity and release-stopper triage, plus the SDLC gates, testing toolchain, and developer/tester scope of work needed to actually run an accessibility program.</div>
+        <div class="card-desc">3-agent Python pipeline automating Jira portfolio reporting — daily monitoring, escalation drafts, and a weekly 5-slide PPTX deck with Claude-generated analysis and executive narrative.</div>
         <div class="card-tags">
-          <span class="card-tag">WCAG 2.1/2.2 AA</span>
-          <span class="card-tag">Section 508</span>
-          <span class="card-tag">VPAT / ACR</span>
-          <span class="card-tag">Dev &amp; QA Scope</span>
+          <span class="tag">3 Agents</span><span class="tag">Jira API</span><span class="tag">PPTX Gen</span><span class="tag">Gmail SMTP</span>
         </div>
       </div>
       <div class="card-footer">
-        <span class="card-cta">Standards &amp; SDLC &rarr;</span>
-        <div><span class="card-model">Program playbook</span><span class="card-repo"><code>vppuri-vjra/vjra-research</code></span></div>
+        <span class="card-cta">Architecture &amp; Pipeline &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/vp-report-generator</code></span>
+        </div>
       </div>
     </a>
 
-  </div><!-- .projects (Accessibility) -->
+    <!-- Confluence Knowledge Agent -->
+    <a class="card" href="/confluence.html" data-tags="independent claude">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="balls">
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">P</div>
+            <div class="ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">C</div>
+          </div>
+          <div class="card-title">Confluence Knowledge Agent</div>
+        </div>
+        <div class="card-pills">
+          <span class="pill pill-claude">Claude Code</span>
+          <span class="pill pill-api">MCP</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">Retrieval agent for organizational knowledge across 8 Confluence spaces — connected via native MCP server for grounded, hallucination-free answers with CQL full-site search.</div>
+        <div class="card-tags">
+          <span class="tag">MCP Server</span><span class="tag">CQL Search</span><span class="tag">8 Spaces</span><span class="tag">Grounded Answers</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Business Problem &amp; Solution &rarr;</span>
+        <div class="card-meta">
+          <span class="card-model">claude-sonnet-4-6</span>
+          <span class="card-repo"><code>vppuri-vjra/vjra-research</code></span>
+        </div>
+      </div>
+    </a>
 
-  <div class="section-label">Research Library</div>
-  <a class="research-card" href="/research/2026-semiconductor-industry-outlook-deloitte-insights.html">
-    <div class="research-title">2026 Global Semiconductor Industry Outlook</div>
-    <div class="research-meta">
-      <span>Deloitte Insights</span>
-      <span>11-min read</span>
-      <span>05 February 2026</span>
+  </div>
+</div>
+
+<!-- ══ SECTION 4 — FRAMEWORKS ══ -->
+<div class="section" data-section="frameworks">
+  <div class="section-head">
+    <div class="section-title">Frameworks &amp; Playbooks</div>
+    <span class="section-badge badge-fw">Independent</span>
+  </div>
+
+  <a class="fw-card" href="/transformations.html">
+    <div class="fw-icon" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">T</div>
+    <div class="fw-body">
+      <div class="fw-title">The Agentic TPM</div>
+      <div class="fw-desc">9–12 month transformation story — from manual coordination to designed agentic systems. Before/after across daily intelligence, knowledge access, program reviews, and blocker detection. Interview-ready STAR narratives included.</div>
+    </div>
+    <div class="fw-right">
+      <span class="fw-cta">Read the Transformation &rarr;</span>
+      <span class="fw-repo">4 transformations · 3 tabs</span>
     </div>
   </a>
 
+  <a class="fw-card" href="/ai-framework.html">
+    <div class="fw-icon" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">G</div>
+    <div class="fw-body">
+      <div class="fw-title">AI Governance Framework</div>
+      <div class="fw-desc">4-phase enterprise AI governance model — Full Review → Confidence Routing (≥0.85) → Exception-Based → Strategic Oversight. Includes AIGOV Jira project with 35 custom fields, review forms, and weekly reporting pipeline.</div>
+    </div>
+    <div class="fw-right">
+      <span class="fw-cta">Framework Overview &rarr;</span>
+      <span class="fw-repo"><code>AIGOV (Jira project)</code></span>
+    </div>
+  </a>
+
+  <a class="fw-card" href="/accessibility.html">
+    <div class="fw-icon" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">A</div>
+    <div class="fw-body">
+      <div class="fw-title">Accessibility Standards &amp; SDLC Playbook</div>
+      <div class="fw-desc">WCAG 2.1/2.2 AA + Section 508 mapped by POUR principle with severity triage and release-stopper classification, plus SDLC gates, testing toolchain, and developer/QA scope of work.</div>
+    </div>
+    <div class="fw-right">
+      <span class="fw-cta">Standards &amp; SDLC &rarr;</span>
+      <span class="fw-repo"><code>vppuri-vjra/vjra-research</code></span>
+    </div>
+  </a>
+
+</div>
+
 </main>
 
-<footer>
-  vjra.us — Vipin Puri · AI Projects & Research
-</footer>
+<footer>vjra.us &nbsp;·&nbsp; Vipin Puri &nbsp;·&nbsp; AI Projects &amp; Research &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; <a href="/research.html" style="color:var(--accent);text-decoration:none;font-weight:600;">Research Library &rarr;</a></footer>
 
+<script>
+function filter(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const sections = document.querySelectorAll('.section');
+  const cards = document.querySelectorAll('.card');
+
+  if (tag === 'all') {
+    sections.forEach(s => s.style.display = '');
+    cards.forEach(c => c.style.display = '');
+    return;
+  }
+
+  if (tag === 'n8n' || tag === 'claude') {
+    sections.forEach(s => s.style.display = '');
+    cards.forEach(c => {
+      c.style.display = (c.dataset.tags || '').includes(tag) ? '' : 'none';
+    });
+  } else {
+    const sectionMap = { ik: 'ik', ut: 'ut', independent: 'independent' };
+    sections.forEach(s => {
+      const sec = s.dataset.section;
+      s.style.display = (sec === sectionMap[tag] || sec === 'frameworks') ? '' : 'none';
+    });
+    cards.forEach(c => c.style.display = '');
+  }
+}
+</script>
 </body>
 </html>
