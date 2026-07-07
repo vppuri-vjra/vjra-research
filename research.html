@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Library — vjra.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #b85042; --ink: #1a1a2e; --muted: #767676;
+    --bg: #f8f4ee; --surface: #f4f3f0; --border: #e8e6e1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: #2b2b2b; line-height: 1.6; min-height: 100vh; }
+  header { border-bottom: 4px solid var(--accent); padding: 2rem 2.5rem; background: var(--bg); display: flex; align-items: center; justify-content: space-between; }
+  .header-left a { font-size: .7rem; font-weight: 600; color: var(--accent); text-decoration: none; }
+  .header-left a:hover { text-decoration: underline; }
+  .header-center { text-align: center; }
+  .kicker { text-transform: uppercase; letter-spacing: .16em; font-size: .65rem; font-weight: 700; color: var(--accent); margin-bottom: .3rem; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.8rem; color: var(--ink); font-weight: 400; }
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .section-label { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: .75rem; }
+  .research-card { border: 1px solid var(--border); border-radius: 10px; background: #fff; text-decoration: none; color: inherit; padding: 1rem 1.25rem; display: block; transition: border-color .15s, box-shadow .15s; margin-bottom: .75rem; }
+  .research-card:hover { border-color: var(--accent); box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+  .research-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: var(--ink); margin-bottom: .3rem; }
+  .research-meta { font-size: .7rem; color: var(--muted); }
+  .research-meta span:not(:last-child)::after { content: "·"; margin: 0 .4rem; color: var(--border); }
+  footer { text-align: center; padding: 1.5rem; font-size: .68rem; color: var(--muted); border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left"><a href="/sample.html">&larr; Back to Portfolio</a></div>
+  <div class="header-center">
+    <div class="kicker">vjra.us</div>
+    <h1>Research Library</h1>
+  </div>
+  <div style="width:120px"></div>
+</header>
+
+<main>
+  <div class="section-label">Industry Research</div>
+
+  <a class="research-card" href="/research/2026-semiconductor-industry-outlook-deloitte-insights.html">
+    <div class="research-title">2026 Global Semiconductor Industry Outlook</div>
+    <div class="research-meta">
+      <span>Deloitte Insights</span>
+      <span>11-min read</span>
+      <span>05 February 2026</span>
+    </div>
+  </a>
+
+</main>
+
+<footer>vjra.us &nbsp;·&nbsp; Vipin Puri &nbsp;·&nbsp; Research Library &nbsp;·&nbsp; 2026</footer>
+
+</body>
+</html>
