@@ -7,4 +7,5 @@
 - [VP RAG Eval](VP-RAG-Eval.md) — Completed eval: RAG pipeline on 20 cooking docs, 10-step methodology, 85% retrieval / 100% faithfulness
 - [AI Learning Roadmap](AI-Learning-Roadmap.md) — Steps 1–9 done (all RAG patterns, LangChain, LlamaIndex, MCP server). Next: Step 10 Portfolio Tell Phase
 - [Spiritual Science Sites](Spiritual-Science-Sites.md) — Two sites: Source Nature (Life Blosssoms) + Vjra Soul Seva healing practice. GitHub: vppuri-vjra/vjra-soul-seva
-- [vjra.us Portfolio Site](vjra-Portfolio-Site.md) — 6-page GitHub Pages site: Decision Pipeline, GlobalEdge, Launch, Portfolio Report, AI Governance. Claude browser API, multi-agent routing, eval dashboards, 4-phase AIGOV Jira model
+- [vjra.us Portfolio Site](vjra-Portfolio-Site.md) — 10-page GitHub Pages site: Decision Pipeline, GlobalEdge, Launch, Portfolio Report, AI Governance, Confluence Agent, Accessibility Playbook, Support Ticket Analysis. Claude browser API, multi-agent routing, eval dashboards, 4-phase AIGOV Jira model
+- [VP Support Ticket Analysis](VP-Support-Ticket-Analysis.md) — Completed UT Austin project (60/60): n8n + GPT-4.1 4-stage pipeline, LLM-as-a-Judge scoring. GitHub: vppuri-vjra/ai-support-ticket-intelligence
