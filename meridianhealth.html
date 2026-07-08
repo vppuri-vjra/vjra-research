@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeridianHealth — Policy RAG Assistant · vjra.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+    --bg: #f8f4ee;
+    --surface: #f4f3f0;
+    --border: #e8e6e1;
+    --green: #2d6a4f;
+    --amber: #b45309;
+    --purple: #6d28d9;
+    --blue: #1d4ed8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #2b2b2b;
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 4px solid var(--accent);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .7rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .2rem;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.7rem; color: var(--ink); font-weight: 400;
+    letter-spacing: .01em;
+  }
+  .agent-balls { display: flex; align-items: center; gap: 0; }
+  .agent-ball {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .6rem; font-weight: 700; color: #fff;
+    margin-left: -8px; border: 2px solid var(--bg);
+    flex-shrink: 0;
+  }
+  .agent-ball:first-child { margin-left: 0; }
+
+  /* ── Tabs ── */
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+    padding: 0 2rem;
+    gap: .25rem;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: .65rem 1.1rem;
+    font-size: .78rem; font-weight: 500;
+    background: none; border: none; cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── Tab panels ── */
+  .tab-panel { display: none; flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+  .tab-panel.active { display: block; }
+
+  /* ── Card sections ── */
+  .section-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: .75rem; }
+  .section-card-head {
+    background: var(--surface); padding: .5rem 1rem; border-bottom: 1px solid var(--border);
+    font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--accent);
+  }
+  .section-card-body { padding: 1rem 1.25rem; }
+  .card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; padding: 1rem 1.25rem; }
+  .card-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .6rem; padding: 1rem 1.25rem; }
+  .label-sm {
+    font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--accent); margin-bottom: .35rem;
+  }
+  .body-sm { font-size: .78rem; color: var(--muted); line-height: 1.6; }
+  .body-sm strong { color: var(--ink); }
+
+  /* ── Stat row ── */
+  .stat-row { display: flex; gap: 1.5rem; flex-wrap: wrap; padding: 1rem 1.25rem; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--ink); line-height: 1; }
+  .stat-label { font-size: .68rem; color: var(--muted); margin-top: .15rem; }
+
+  /* ── Architecture diagram ── */
+  .arch-layer { border: 1px solid var(--border); border-radius: 10px; margin-bottom: .75rem; overflow: hidden; }
+  .arch-layer-head { padding: .5rem 1rem; display: flex; align-items: center; gap: .75rem; border-bottom: 1px solid var(--border); }
+  .arch-layer-badge {
+    font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+    padding: .2rem .55rem; border-radius: 20px; white-space: nowrap;
+  }
+  .arch-layer-title { font-size: .8rem; font-weight: 600; color: var(--ink); }
+  .arch-layer-sub { font-size: .72rem; color: var(--muted); }
+  .arch-nodes { display: flex; gap: .75rem; padding: .85rem 1rem; flex-wrap: wrap; background: var(--bg); }
+  .arch-node { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .6rem .9rem; flex: 1; min-width: 200px; }
+  .arch-node-name { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin-bottom: .2rem; }
+  .arch-node-desc { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+
+  /* ── Pipeline visual ── */
+  .pipeline { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 1rem 1.25rem 1.25rem; flex-wrap: nowrap; }
+  .pipeline-agent { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; min-width: 108px; }
+  .pipeline-ball {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; font-weight: 700; color: #fff; margin-bottom: .4rem;
+  }
+  .pipeline-label { font-size: .65rem; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.3; }
+  .pipeline-sub { font-size: .6rem; color: var(--muted); text-align: center; margin-top: .15rem; }
+  .pipeline-connector { flex-shrink: 0; display: flex; align-items: center; padding: 0 .25rem; margin-top: 20px; color: var(--muted); font-size: .8rem; }
+
+  /* ── JSON viewer ── */
+  .json-toolbar {
+    display: flex; align-items: center; justify-content: space-between; padding: .65rem 1rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px 8px 0 0; border-bottom: none;
+  }
+  .json-toolbar-label { font-size: .72rem; font-weight: 600; color: var(--ink); }
+  .json-toolbar-actions { display: flex; gap: .5rem; }
+  .btn-sm {
+    padding: .3rem .75rem; font-size: .72rem; font-weight: 600; border-radius: 5px; border: 1px solid var(--border);
+    cursor: pointer; background: var(--bg); color: var(--ink); transition: background .15s, border-color .15s;
+  }
+  .btn-sm:hover { background: var(--surface); border-color: var(--accent); }
+  .btn-sm.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-sm.primary:hover { opacity: .88; }
+  .json-box {
+    background: #1a1a2e; border: 1px solid var(--border); border-radius: 0 0 8px 8px; padding: 1rem 1.25rem;
+    font-family: 'Menlo', 'Monaco', monospace; font-size: .7rem; line-height: 1.6;
+    overflow-x: auto; max-height: 520px; overflow-y: auto; color: #cdd6f4; white-space: pre;
+  }
+  .json-box .j-key { color: #89b4fa; }
+  .json-box .j-str { color: #a6e3a1; }
+  .json-box .j-num { color: #fab387; }
+  .json-box .j-bool { color: #cba6f7; }
+  .json-box .j-null { color: #f38ba8; }
+
+  /* ── back link ── */
+  .back-link { font-size: .75rem; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: .3rem; }
+  .back-link:hover { color: var(--accent); }
+
+  /* ── tag chips ── */
+  .chip-row { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+  .chip { font-size: .65rem; font-weight: 600; padding: .2rem .55rem; border-radius: 12px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+
+  /* ── data table ── */
+  table.data-table { width: 100%; border-collapse: collapse; font-size: .74rem; }
+  table.data-table th {
+    text-align: left; padding: .5rem .75rem; background: var(--surface); border-bottom: 1px solid var(--border);
+    font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: .05em; font-size: .62rem;
+  }
+  table.data-table td { padding: .5rem .75rem; border-bottom: 1px solid #f4f3f0; color: var(--muted); vertical-align: top; }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table td strong { color: var(--ink); }
+  .verdict-pass { color: var(--green); font-weight: 700; }
+  .verdict-fail { color: var(--accent); font-weight: 700; }
+
+  /* ── score bar ── */
+  .score-row { display: flex; align-items: center; gap: .6rem; padding: .35rem 0; }
+  .score-label { font-size: .72rem; font-weight: 600; color: var(--ink); width: 150px; flex-shrink: 0; }
+  .score-track { flex: 1; height: 8px; background: var(--surface); border-radius: 5px; overflow: hidden; border: 1px solid var(--border); }
+  .score-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--accent), #d97a6c); }
+  .score-num { font-size: .72rem; font-weight: 700; color: var(--accent); width: 42px; text-align: right; flex-shrink: 0; }
+
+  /* ── walkthrough ── */
+  .walkthrough-step { border: 1px solid var(--border); border-radius: 8px; padding: .7rem .9rem; margin-bottom: .5rem; background: #fff; }
+  .walkthrough-step-label { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: .3rem; }
+  .walkthrough-step-body { font-size: .76rem; color: var(--ink); line-height: 1.6; }
+  .walkthrough-step-body ul { margin: 0 0 0 1.1rem; padding: 0; }
+  .walkthrough-arrow { text-align: center; color: var(--muted); font-size: .8rem; margin: .1rem 0; }
+
+  /* ── callout ── */
+  .callout { border-left: 3px solid var(--accent); background: #fef6f4; padding: .7rem 1rem; border-radius: 0 6px 6px 0; font-size: .78rem; color: #6b2e26; line-height: 1.6; }
+  .callout strong { color: var(--accent); }
+
+  @media (max-width: 700px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+    header { padding: 1rem; }
+    .tab-panel { padding: 1rem; }
+    .score-label { width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">VJRA.US / UT AUSTIN</div>
+    <h1>MeridianHealth Insurance — Policy RAG Assistant</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="agent-balls">
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">I</div>
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">R</div>
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">A</div>
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+    </div>
+    <a href="/" class="back-link">&larr; All Projects</a>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('overview')">Business Problem &amp; Solution</button>
+  <button class="tab" onclick="switchTab('arch')">Architecture &amp; Pipeline</button>
+  <button class="tab" onclick="switchTab('workflow')">n8n Workflow</button>
+  <button class="tab" onclick="switchTab('eval')">Evaluation Results</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 1 — Business Problem & Solution
+═══════════════════════════════════════════════ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <!-- 01 Business Problem -->
+  <div class="section-card">
+    <div class="section-card-head">01 &middot; Business Problem</div>
+    <div class="card-grid-2">
+      <div>
+        <div class="label-sm">The Problem</div>
+        <div class="body-sm">MeridianHealth Insurance is a mid-sized health insurance carrier headquartered in Hartford, CT, licensed across <strong>22 states</strong>, serving <strong>~2.4M covered lives</strong> and booking <strong>~$4.1B</strong> in earned premiums. It sells through <strong>4,800 direct sales reps</strong>, <strong>28,000 independent agents/brokers</strong>, and <strong>14 employer-group partnerships</strong> across <strong>47 active plan designs</strong>. On a live sales call, reps get sharp, specific questions — waiting periods, deductible/copay structure, pre-existing condition coverage, exclusion status — and the answers are scattered across thousands of pages of brochures, terms &amp; conditions, exclusion lists, and claim guides. New reps (<strong>~35% of the field force</strong>, 28&ndash;30% attrition) often don't know where to look. The back-office helpdesk absorbs <strong>11,000&ndash;13,000 queries/month</strong> at 6&ndash;14 min each, and an estimated <strong>18&ndash;22% of sales conversations stall</strong> at the question-handling stage &mdash; with wrong answers carrying real misrepresentation and compliance risk.</div>
+      </div>
+      <div>
+        <div class="label-sm">The Solution</div>
+        <div class="body-sm">A <strong>RAG-based policy intelligence system</strong> built in n8n: the 4 policy documents are chunked and embedded into <strong>Pinecone</strong>, a rep's question is answered in real time by <strong>GPT-4.1-mini</strong> using only retrieved, source-tagged context, and every answer is scored automatically by a <strong>GPT-4.1 LLM-as-a-Judge</strong> across 4 dimensions before being logged to an audit table &mdash; so the system can be trusted (or flagged) before wider rollout, instead of reps guessing on a live call.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 By the Numbers -->
+  <div class="section-card">
+    <div class="section-card-head">02 &middot; By the Numbers</div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Policy Documents Ingested</div></div>
+      <div class="stat"><div class="stat-num">500/50</div><div class="stat-label">Chunk Size / Overlap</div></div>
+      <div class="stat"><div class="stat-num">10</div><div class="stat-label">Top-K Retrieval</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Benchmark Test Queries</div></div>
+      <div class="stat"><div class="stat-num">3/5</div><div class="stat-label">Passed LLM-Judge Gate</div></div>
+      <div class="stat"><div class="stat-num">4.05</div><div class="stat-label">Avg Judge Score /5</div></div>
+    </div>
+  </div>
+
+  <!-- 03 Knowledge Sources -->
+  <div class="section-card">
+    <div class="section-card-head">03 &middot; Embedded Knowledge Sources</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table">
+        <thead><tr><th>Source Tag</th><th>Document</th><th>Contains</th></tr></thead>
+        <tbody>
+          <tr><td><strong>[BROCHURE]</strong></td><td>Policy_brochure.pdf</td><td>Plain-language product overview &mdash; family floater details, benefits, eligibility, buying steps, claims, renewals, premium factors</td></tr>
+          <tr><td><strong>[TERMS]</strong></td><td>Health_Insurance_Policy_Terms_and_Conditions.pdf</td><td>Formal policy wording &mdash; definitions, covered benefits, general conditions, waiting periods, claim conditions, renewal terms</td></tr>
+          <tr><td><strong>[EXCLUSIONS]</strong></td><td>List_of_Standard_Claim_Exclusions.pdf</td><td>Non-payable items and charges, items only payable under specific wording, hospital-service/room-charge items that can't be billed separately</td></tr>
+          <tr><td><strong>[CLAIM_GUIDE]</strong></td><td>Health_Insurance_Claim_Guide.pdf</td><td>Reimbursement and cashless claim process, document requirements, claim status steps, policyholder FAQ</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 04 Sample Query Walkthrough -->
+  <div class="section-card">
+    <div class="section-card-head">04 &middot; Sample Query Walkthrough &mdash; Test Case #1</div>
+    <div class="section-card-body">
+      <div class="walkthrough-step">
+        <div class="walkthrough-step-label">Rep Question (live chat)</div>
+        <div class="walkthrough-step-body" style="color:var(--muted);font-style:italic;">"If I use the cashless claim process, how long does it generally take for the insurer to issue the initial pre-authorisation decision, and how long does it take for the final settlement approval after I submit post-discharge documents?"</div>
+      </div>
+      <div class="walkthrough-arrow">&darr; Retrieve top-10 chunks from Pinecone (semantic search over 4 documents)</div>
+      <div class="walkthrough-arrow">&darr; Question &amp; Answer Generation &mdash; GPT-4.1-mini, source-tagged, no-guessing system prompt</div>
+      <div class="walkthrough-step">
+        <div class="walkthrough-step-label">Generated Answer</div>
+        <div class="walkthrough-step-body">
+          <ul>
+            <li>Initial pre-authorisation decision is typically issued within 1 hour of receiving complete documents.</li>
+            <li>Final settlement approval is typically issued within 3 hours of receiving all post-discharge documents.</li>
+          </ul>
+          <div style="margin-top:.4rem;color:var(--muted);font-size:.7rem;">Sources: [CLAIM_GUIDE]</div>
+        </div>
+      </div>
+      <div class="walkthrough-arrow">&darr; LLM-as-a-Judge Evaluation &mdash; GPT-4.1, 4-dimension rubric</div>
+      <div class="walkthrough-step">
+        <div class="walkthrough-step-label">Verdict</div>
+        <div class="walkthrough-step-body">Relevance 5/5 &middot; Groundedness 5/5 &middot; Context Precision 5/5 &middot; Context Recall 5/5 &mdash; <span class="verdict-pass">PASS</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #tab-overview -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 2 — Architecture & Pipeline
+═══════════════════════════════════════════════ -->
+<div id="tab-arch" class="tab-panel">
+
+  <div class="section-card" style="margin-bottom:.75rem;">
+    <div class="section-card-head">Pipeline</div>
+    <div style="overflow-x:auto;">
+      <div class="pipeline">
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#d0d0d0,#888,#444);">&#9654;</div>
+          <div class="pipeline-label">Manual<br>Trigger</div>
+          <div class="pipeline-sub">Read 4 PDFs</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">C</div>
+          <div class="pipeline-label">Chunk +<br>Embed</div>
+          <div class="pipeline-sub">500/50, 512-dim</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">P</div>
+          <div class="pipeline-label">Pinecone<br>Store</div>
+          <div class="pipeline-sub">Vector index</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#81b4f0,#1d4ed8,#0a1f6b);">R</div>
+          <div class="pipeline-label">Chat Trigger<br>+ Retrieve</div>
+          <div class="pipeline-sub">Top-K = 10</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">A</div>
+          <div class="pipeline-label">Answer<br>Generation</div>
+          <div class="pipeline-sub">GPT-4.1-mini</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">E</div>
+          <div class="pipeline-label">LLM-as-<br>Judge</div>
+          <div class="pipeline-sub">GPT-4.1</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#f07070,#b85042,#6b1a10);">&#128190;</div>
+          <div class="pipeline-label">Data Table</div>
+          <div class="pipeline-sub">evaluation_results</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#f0fff8;">
+      <span class="arch-layer-badge" style="background:#2d6a4f;color:#fff;">Stage 1</span>
+      <div>
+        <div class="arch-layer-title">Document Ingestion</div>
+        <div class="arch-layer-sub">Read/Write Files &middot; Recursive Character Text Splitter &middot; Embeddings OpenAI &middot; Pinecone Vector Store</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">Load &amp; Split</div>
+        <div class="arch-node-desc">Reads all PDFs from <code>/data/shared/*.pdf</code>, extracts text via the PDF loader, and splits with a Recursive Character Text Splitter &mdash; <strong>chunk size 500, overlap 50</strong> &mdash; to preserve continuity across clause boundaries.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Embed &amp; Store</div>
+        <div class="arch-node-desc">OpenAI embeddings at <strong>512 dimensions</strong>, inserted into the Pinecone index <code>meridianhealth-insurancepolicy</code>, namespace <code>meridianhealth-insure</code>. Same embedding config is reused at query time so retrieval and ingestion stay aligned.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#eef4ff;">
+      <span class="arch-layer-badge" style="background:#1d4ed8;color:#fff;">Stage 2</span>
+      <div>
+        <div class="arch-layer-title">Retrieval</div>
+        <div class="arch-layer-sub">Chat Trigger &middot; Retrieve Chunks &middot; Vector Store Retriever (Chunk Limit)</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">Chat Trigger</div>
+        <div class="arch-node-desc">Fires on every incoming rep question (typed in the n8n chat interface). The raw <code>chatInput</code> feeds both the retrieval branch and the answer-generation branch in parallel.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Semantic Search</div>
+        <div class="arch-node-desc">Top-<strong>K = 10</strong> chunks pulled from Pinecone per query &mdash; enough breadth to cover cross-document questions (e.g. exclusions + terms together) without flooding the context window.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#fff8f0;">
+      <span class="arch-layer-badge" style="background:#b45309;color:#fff;">Stage 3</span>
+      <div>
+        <div class="arch-layer-title">Grounded Answer Generation</div>
+        <div class="arch-layer-sub">GPT-4.1-mini &middot; Question and Answer Generation (chainRetrievalQa)</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">System Prompt Rules</div>
+        <div class="arch-node-desc">Role: internal knowledge assistant for support staff on <strong>live calls</strong> &mdash; direct, technical, no soft language. <strong>No guessing:</strong> missing info &rarr; "Not in documents &mdash; escalate." <strong>Proactive exclusions:</strong> every coverage query must check [EXCLUSIONS] and [TERMS]. One-line bullets only, no source tags inside the answer body.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Source Tags</div>
+        <div class="arch-node-desc">Every retrieved chunk carries one of <code>[BROCHURE]</code> / <code>[EXCLUSIONS]</code> / <code>[TERMS]</code> / <code>[CLAIM_GUIDE]</code>, and the answer must cite which tags it drew from &mdash; giving the rep (and the auditor) a verifiable source trail.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#f5f0ff;">
+      <span class="arch-layer-badge" style="background:#6d28d9;color:#fff;">Stage 4</span>
+      <div>
+        <div class="arch-layer-title">LLM-as-a-Judge Evaluation</div>
+        <div class="arch-layer-sub">GPT-4.1 &middot; scores QUERY + RETRIEVED_CHUNKS + ANSWER</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">4-Dimension Rubric (1&ndash;5 each)</div>
+        <div class="arch-node-desc"><strong>Relevance</strong> &mdash; does the answer address the query? <strong>Groundedness</strong> &mdash; is every claim traceable to retrieved chunks? <strong>Context Precision</strong> &mdash; how much of what was retrieved was actually useful? <strong>Context Recall</strong> &mdash; did retrieval surface everything needed for a complete answer?</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Hard Groundedness Floor</div>
+        <div class="arch-node-desc">Verdict is FAIL if any dimension scores &le;3 &mdash; and a groundedness score of 1&ndash;2 <strong>always</strong> fails the verdict regardless of other scores, because a hallucinated policy detail on a live call is a compliance and mis-selling risk that overrides everything else.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#fdf0ec;">
+      <span class="arch-layer-badge" style="background:#b85042;color:#fff;">Stage 5</span>
+      <div>
+        <div class="arch-layer-title">Persist for Audit</div>
+        <div class="arch-layer-sub">Extract Metrics (Set) &middot; Insert row &middot; evaluation_results data table</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">What Gets Logged</div>
+        <div class="arch-node-desc">Every query, the generated answer, all 4 metric scores, and the final PASS/FAIL verdict &mdash; giving product and compliance teams a queryable audit trail of what the system told the field, and a way to flag low-confidence responses for human review.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Design Notes</div>
+    <div class="card-grid-2">
+      <div>
+        <div class="label-sm">Why a Separate Judge Model?</div>
+        <div class="body-sm">Answer generation runs on the cheaper, faster <strong>GPT-4.1-mini</strong> since it's on the live-call critical path; evaluation runs on the larger <strong>GPT-4.1</strong> since it's async and needs to be a stricter, more reliable check on the mini model's output.</div>
+      </div>
+      <div>
+        <div class="label-sm">Why the Groundedness Hard Floor?</div>
+        <div class="body-sm">In a regulated insurance context, a fluent but hallucinated answer is worse than an honest "escalate" &mdash; so the rubric is deliberately asymmetric: relevance and recall failures are recoverable product gaps, but a groundedness failure is a compliance failure and always fails the gate.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #tab-arch -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 3 — n8n Workflow
+═══════════════════════════════════════════════ -->
+<div id="tab-workflow" class="tab-panel">
+
+  <div style="margin-bottom:.75rem;">
+    <div class="json-toolbar">
+      <div>
+        <div class="json-toolbar-label">VP_MeridianHealth_Data_Ingestion — n8n Workflow JSON</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:.1rem;">22 nodes &nbsp;&middot;&nbsp; Pinecone + OpenAI + GPT-4.1-mini + GPT-4.1 judge &nbsp;&middot;&nbsp; ingestion + chat + eval in one workflow</div>
+      </div>
+      <div class="json-toolbar-actions">
+        <button class="btn-sm" onclick="copyJson()">Copy JSON</button>
+        <button class="btn-sm primary" onclick="downloadJson()">Download .json</button>
+      </div>
+    </div>
+    <div class="json-box" id="jsonBox"></div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">How to Import into n8n</div>
+    <div class="card-grid-3" style="padding:1rem 1.25rem;">
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">01 &middot; Download</div>
+        <div class="body-sm">Click "Download .json" above to get the workflow file.</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">02 &middot; Import</div>
+        <div class="body-sm">In n8n: Menu &rarr; Workflows &rarr; Import from File. Select the downloaded JSON.</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">03 &middot; Credentials</div>
+        <div class="body-sm">Connect your Pinecone API key and OpenAI API key on the respective nodes.</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">04 &middot; Setup</div>
+        <div class="body-sm">Upload the 4 PDFs to <code>/data/shared/</code>, create the <code>evaluation_results</code> data table, run the ingestion trigger once, then open chat.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #tab-workflow -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 4 — Evaluation Results
+═══════════════════════════════════════════════ -->
+<div id="tab-eval" class="tab-panel">
+
+  <div class="section-card">
+    <div class="section-card-head">LLM-as-a-Judge Scores &mdash; 5/5 Test Queries (/5)</div>
+    <div class="section-card-body">
+      <div class="score-row"><div class="score-label">Relevance</div><div class="score-track"><div class="score-fill" style="width:92%;"></div></div><div class="score-num">4.6</div></div>
+      <div class="score-row"><div class="score-label">Groundedness</div><div class="score-track"><div class="score-fill" style="width:80%;"></div></div><div class="score-num">4.0</div></div>
+      <div class="score-row"><div class="score-label">Context Precision</div><div class="score-track"><div class="score-fill" style="width:72%;"></div></div><div class="score-num">3.6</div></div>
+      <div class="score-row"><div class="score-label">Context Recall</div><div class="score-track"><div class="score-fill" style="width:80%;"></div></div><div class="score-num">4.0</div></div>
+      <div style="margin-top:.75rem;font-size:.72rem;color:var(--muted);">Overall average: <strong style="color:var(--ink);">4.05/5</strong> &nbsp;&middot;&nbsp; Pass rate: <strong style="color:var(--ink);">3/5 (60%)</strong></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Key Finding</div>
+    <div class="section-card-body">
+      <div class="callout"><strong>Both failures are compound questions</strong> &mdash; each bundles an eligibility/waiting-period sub-question with a consumables-exclusion sub-question in a single query (newborn add-age + infant formula/wipes; maternity coverage + baby food/diapers/delivery kit). The three single-topic procedural questions (claim timing, exclusion-only, device-only) all scored 4&ndash;5 across every dimension. The worst score, context precision 2/5 on the maternity query, shows retrieval pulling mostly noise when a query needs two distinct clause types satisfied at once; the newborn-age answer is even internally inconsistent ("91&ndash;180 days" vs. "Day 1 if newborn cover opted"), suggesting the top-K=10 single-pass retrieval never cleanly resolved to one specific figure. This is a classic multi-hop retrieval weakness, not a hallucination problem &mdash; the fix is decomposing compound queries into sub-retrievals rather than raising K on a single pass.</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Test Case Results</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Query Topic</th><th>Rel</th><th>Ground</th><th>CtxPrec</th><th>CtxRecall</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Cashless claim timing &mdash; pre-auth decision vs. final settlement approval</td><td>5</td><td>5</td><td>5</td><td>5</td><td><span class="verdict-pass">PASS</span></td></tr>
+          <tr><td>2</td><td>Domiciliary hospitalisation for asthma (spouse, Family Floater) + oxygen mask/nebuliser coverage</td><td>5</td><td>5</td><td>4</td><td>5</td><td><span class="verdict-pass">PASS</span></td></tr>
+          <tr><td>3</td><td>Newborn addition to Family Floater (earliest age) + infant formula/baby wipes coverage</td><td>4</td><td>3</td><td>3</td><td>3</td><td><span class="verdict-fail">FAIL</span></td></tr>
+          <tr><td>4</td><td>CPAP machine + arm sling coverage after accidental injury hospitalization</td><td>4</td><td>4</td><td>4</td><td>4</td><td><span class="verdict-pass">PASS</span></td></tr>
+          <tr><td>5</td><td>Pregnancy/childbirth coverage + baby food/diapers/delivery kit reimbursement</td><td>5</td><td>3</td><td>2</td><td>3</td><td><span class="verdict-fail">FAIL</span></td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:.5rem;">Rel = Relevance, Ground = Groundedness, CtxPrec = Context Precision, CtxRecall = Context Recall (all /5). Verdict rule: FAIL if any dimension &le;3, with groundedness &le;2 as a hard floor. Full query/answer text and raw scores in <code>data/evaluation_results.xlsx</code>.</div>
+    </div>
+  </div>
+
+</div><!-- #tab-eval -->
+
+<script>
+const WORKFLOW_JSON = {"name":"VP_MeridianHealth_Data_Ingestion","nodes":[{"parameters":{},"type":"n8n-nodes-base.manualTrigger","typeVersion":1,"position":[-448,-48],"id":"03403afb-3e36-4efc-a09d-05327ad77cc4","name":"When clicking ‘Execute workflow’"},{"parameters":{"fileSelector":"/data/shared/*.pdf","options":{}},"type":"n8n-nodes-base.readWriteFile","typeVersion":1.1,"position":[-240,-48],"id":"a30236c1-dfce-43d2-9bff-036242dcc886","name":"Read/Write Files from Disk"},{"parameters":{"mode":"insert","pineconeIndex":{"__rl":true,"value":"meridianhealth-insurancepolicy","mode":"list","cachedResultName":"meridianhealth-insurancepolicy"},"options":{"pineconeNamespace":"meridianhealth-insure"}},"type":"@n8n/n8n-nodes-langchain.vectorStorePinecone","typeVersion":1.3,"position":[-32,-48],"id":"d8940305-5698-4733-aaa6-719ea5d6f0ae","name":"Pinecone Vector Store","credentials":{"pineconeApi":{"id":"LpmqkNCBsNd8irdn","name":"PineconeApi account 1151"}}},{"parameters":{"dataType":"binary","loader":"pdfLoader","textSplittingMode":"custom","options":{}},"type":"@n8n/n8n-nodes-langchain.documentDefaultDataLoader","typeVersion":1.1,"position":[96,368],"id":"2754a25e-f09f-4182-a70d-f2665a39149f","name":"Default Data Loader"},{"parameters":{"chunkSize":500,"chunkOverlap":50,"options":{}},"type":"@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter","typeVersion":1,"position":[272,656],"id":"026cfe08-da54-486a-b6a0-4b46462f166c","name":"Recursive Character Text Splitter"},{"parameters":{"options":{"dimensions":512}},"type":"@n8n/n8n-nodes-langchain.embeddingsOpenAi","typeVersion":1.2,"position":[-144,704],"id":"b1106c72-59e6-4b24-801d-b95eef0c15b2","name":"Embeddings OpenAI","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"options":{}},"type":"@n8n/n8n-nodes-langchain.chatTrigger","typeVersion":1.4,"position":[224,-384],"id":"95481c83-6965-4621-97d3-90a021671a72","name":"When chat message received","webhookId":"8a8b34ae-4b64-4ee1-bf25-b859bdbc2a1d"},{"parameters":{"model":{"__rl":true,"mode":"list","value":"gpt-4.1-mini"},"builtInTools":{},"options":{}},"type":"@n8n/n8n-nodes-langchain.lmChatOpenAi","typeVersion":1.3,"position":[720,-368],"id":"c5970312-65eb-44a0-9034-255889ef5ddf","name":"OpenAI Chat Model","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"assignments":{"assignments":[{"id":"a580369b-1c96-4d7a-b803-cbdfeb070216","name":"chatInput","value":"={{ $('When chat message received').item.json.chatInput }}","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[1616,-128],"id":"9375c272-6dbf-470e-8269-6410779d5467","name":"ChatOutput"},{"parameters":{"topK":10},"type":"@n8n/n8n-nodes-langchain.retrieverVectorStore","typeVersion":1,"position":[1104,-144],"id":"6cb8d9a1-cb04-4684-8f59-35b18d99f9d2","name":"Chunk Limit"},{"parameters":{"pineconeIndex":{"__rl":true,"value":"meridianhealth-insurancepolicy","mode":"list","cachedResultName":"meridianhealth-insurancepolicy"},"options":{"pineconeNamespace":"meridianhealth-insure"}},"type":"@n8n/n8n-nodes-langchain.vectorStorePinecone","typeVersion":1.3,"position":[1024,144],"id":"f5df4478-534e-489d-8b80-6b8bdbfa7e92","name":"Retriever","credentials":{"pineconeApi":{"id":"LpmqkNCBsNd8irdn","name":"PineconeApi account 1151"}}},{"parameters":{"mode":"load","pineconeIndex":{"__rl":true,"value":"meridianhealth-insurancepolicy","mode":"list","cachedResultName":"meridianhealth-insurancepolicy"},"prompt":"={{ $json.chatInput }}","topK":10,"options":{"pineconeNamespace":"meridianhealth-insure"}},"type":"@n8n/n8n-nodes-langchain.vectorStorePinecone","typeVersion":1.3,"position":[656,-160],"id":"c6d4abbf-28f3-4844-a0cb-3ea5c717675b","name":"Retreive Chunks","notesInFlow":true,"credentials":{"pineconeApi":{"id":"LpmqkNCBsNd8irdn","name":"PineconeApi account 1151"}},"notes":"always output data"},{"parameters":{"options":{"systemPromptTemplate":"Role: Internal Knowledge Assistant for support staff on LIVE calls.\n**Tone:** Direct, technical, and precise. No customer-facing disclaimers or soft language.\n\n---\n\n### 1. Knowledge Sources\nRefer to these tags in the `<context>`:\n* **[BROCHURE]**: Individual/Family/Senior Plans\n* **[EXCLUSIONS]**: Policy Exclusions\n* **[TERMS]**: Terms & Conditions\n* **[CLAIM_GUIDE]**: Process & Documents\n\n---\n\n### 2. Strict Constraints\n* **No Guessing:** If info is missing, reply: \"Not in documents — escalate to [team/contact].\"\n* **Proactive Exclusions:** For every coverage query, you **must** check `[EXCLUSIONS]` and `[TERMS]`. Flag waiting periods or partial coverage immediately.\n* **Clarity:** Use one-line bullets. No paragraphs. No [SOURCE TAGS] inside the \"Answer\" section.\n* **Ambiguity:** If chunks are partial, state: \"Partial match — verify policy schedule before confirming.\"\n\n---\n\n### 3. Output Format\nFollow this structure exactly. Skip sections that do not apply.\n\n**Answer**\n\n**Sources:** [TAGS USED]\n\n---\n**Context:**\n{context}\n\n### Key Improvements Made:\n* **Redundancy Removal:** Merged \"Operating Rules\" and \"What You Must Never Do\" into a single **Strict Constraints** section.\n* **Formatting:** Converted the source table into a concise list.\n* **Logic Density:** Shortened the instructions for each section of the output format while keeping the \"read aloud\" and \"paste-ready\" requirements.\n* **Instructional Clarity:** Placed the `{context}` variable at the bottom to ensure the model focuses on the instructions first, then applies them to the data."}},"type":"@n8n/n8n-nodes-langchain.chainRetrievalQa","typeVersion":1.7,"position":[768,-720],"id":"3481aa0b-8033-47d3-8ca0-e32492506c80","name":"Question and Answer Generation"},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"content":"=You are a RAG evaluation judge for an insurance customer support system.\nYou will be given four inputs and must score the quality of a retrieval-augmented \ngeneration response across four dimensions.\n\nDo not use any outside knowledge. Base all scores strictly on what is provided.\n\n---\n\n### INPUTS YOU WILL RECEIVE\n\n- QUERY: The question the support agent typed\n- RETRIEVED_CHUNKS: The document chunks retrieved from the vector store, \n  each tagged with its source [BROCHURE] / [EXCLUSIONS] / [TERMS] / [CLAIM_GUIDE]\n- ANSWER: The response generated by the RAG system\n\n---\n\n### EVALUATION DIMENSIONS\n\nScore each dimension from 1 to 5 using the rubrics below.\nBe strict. Reserve 5 for genuinely excellent responses.\n\n---\n\n#### 1. RELEVANCE (1–5)\nDoes the ANSWER actually address what the QUERY is asking?\nPenalise answers that are technically accurate but answer a different question,\nor that bury the actual answer under excessive background.\n\n5 — Answer directly and fully addresses the query. Nothing irrelevant included.\n4 — Answer addresses the query well. Minor tangential detail included.\n3 — Answer partially addresses the query. Key part of the question left vague or incomplete.\n2 — Answer is loosely related but misses the core of what was asked.\n1 — Answer does not address the query at all, or answers a different question.\n\n---\n\n#### 2. GROUNDEDNESS (1–5)\nIs every claim in the ANSWER supported by content in RETRIEVED_CHUNKS?\nPenalise any claim that is not traceable to the provided chunks — even if the \nclaim is factually correct in the real world.\n\n5 — Every claim in the answer is directly supported by the retrieved chunks. \n    No information introduced from outside the context.\n4 — Nearly all claims are grounded. One minor detail may be inferred but not hallucinated.\n3 — Most claims are grounded but one claim is unsupported or loosely inferred.\n2 — Multiple claims are not present in the retrieved chunks. Significant hallucination risk.\n1 — Answer contains claims that directly contradict the chunks, or are fabricated.\n\n---\n\n#### 3. CONTEXT PRECISION (1–5)\nOf the chunks that were retrieved, how many were actually useful for answering \nthe query? This measures retrieval signal-to-noise ratio.\nHigh precision = most retrieved chunks contributed to the answer.\nLow precision = many retrieved chunks were irrelevant and cluttered the context window.\n\n5 — All or nearly all retrieved chunks were relevant and used in the answer.\n4 — Most chunks were relevant. One chunk was tangential but not harmful.\n3 — Roughly half the chunks were relevant. Noticeable noise in the retrieval.\n2 — Only a minority of chunks were relevant. The answer had to filter out significant noise.\n1 — Retrieved chunks were almost entirely irrelevant to the query.\n\n---\n\n#### 4. CONTEXT RECALL (1–5)\nDid the retrieved chunks contain all the information needed to fully answer the query?\nThis measures whether the retrieval missed anything important.\nHigh recall = everything needed was retrieved.\nLow recall = the answer is incomplete because key information was not in the chunks.\n\n5 — Retrieved chunks contained all information needed for a complete answer.\n4 — Chunks covered the query well. One minor relevant detail may have been absent.\n3 — Chunks covered the main point but missed one important detail \n    (e.g. a waiting period, sub-limit, or claim step).\n2 — Chunks were significantly incomplete. The answer is materially weaker \n    because of missing context.\n1 — Retrieved chunks did not contain the information needed to answer the query.\n    A complete answer was impossible from what was retrieved.\n\n---\n\n### OUTPUT FORMAT\n\nReturn your evaluation as valid JSON only.\nNo preamble, no explanation outside the JSON block.\n\nReturn output ONLY in the following JSON format:\n\n{\n\"relevance\": <score>,\n\"groundedness\": <score>,\n\"context_precision\": <score>,\n\"context_recall\": <score>,\n\"final_verdict\": \"PASS | FAIL\"\n}\n\n---\n\n### VERDICT THRESHOLDS\n\nVerdict Rules:\n- FAIL if relevance <= 3\n- FAIL if groundedness <= 3\n- FAIL if context_precision <= 3\n- FAIL if context_recall <= 3\n- Otherwise PASS\n\nGroundedness has a hard floor: a score of 1 or 2 on groundedness always results in FAIL regardless of other scores. An agent sharing hallucinated policy details on a live call is a compliance and misselling risk — it overrides all other dimensions.\n\n---\n\n### EVALUATION INPUT\n\nQUERY:\n {{ $('When chat message received').item.json.chatInput }}\n\nRETRIEVED_CHUNKS:\n{{ $('Retreive Chunks').all().map(item => item.json.document?.pageContent || item.json.pageContent || item.json.text || item.json.metadata?.text || JSON.stringify(item.json)).join('\\n\\n---\\n\\n') }}\n\nANSWER:\n{{ $('Question and Answer Generation').item.json.response }}"}]},"builtInTools":{},"options":{}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[1568,-592],"id":"d1c9b96a-cf9b-4747-90f0-454f2bf360f9","name":"Evaluation (LLM-as-a-Judge)","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"mode":"combine","combineBy":"combineByPosition","options":{}},"type":"n8n-nodes-base.merge","typeVersion":3.2,"position":[1280,-656],"id":"fca5b435-2e6b-4d35-96f7-386f6bf82813","name":"Merge Answer + Chunks"},{"parameters":{"assignments":{"assignments":[{"id":"ffce7bb6-817f-402d-bc0f-3e4484bfcf70","name":"chatInput","value":"={{ $('When chat message received').item.json.chatInput }}","type":"string"},{"id":"dfabe607-22e3-4bbe-a463-c13aa765c448","name":"verdict","value":"={{ JSON.parse($json.output[0].content[0].text).final_verdict }}","type":"string"},{"id":"7f8a2107-8909-4fa1-89b7-4054978942d0","name":"response","value":"={{ $('Question and Answer Generation').item.json.response }}","type":"string"},{"id":"25468baf-fc26-46d8-86c1-015fac33d588","name":"relevance","value":"={{ JSON.parse($json.output[0].content[0].text).relevance }}","type":"string"},{"id":"2fc25899-6405-4f4a-8549-320564e43931","name":"groundedness","value":"={{ JSON.parse($json.output[0].content[0].text).groundedness }}","type":"string"},{"id":"ecce50ce-e6ee-465b-8e5f-84ed0a884bb8","name":"context_recall","value":"={{ JSON.parse($json.output[0].content[0].text).context_recall }}","type":"string"},{"id":"c120c7bb-fe18-48d8-8f1d-bd91d6dbe6c5","name":"context_precision","value":"={{ JSON.parse($json.output[0].content[0].text).context_precision }}","type":"string"},{"id":"74f53998-d63e-4459-bc29-b097f84ab074","name":"userquery","value":"={{ $('When chat message received').item.json.chatInput }}","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[1920,-592],"id":"40e9602b-0fbf-471c-8ad8-e69ce198d99d","name":"Extract Metrics"},{"parameters":{"dataTableId":{"__rl":true,"value":"Qlu8QqDzkZKeCu5s","mode":"list","cachedResultName":"evaluation_results","cachedResultUrl":"/projects/9d520e26-a78f-4b33-a7ca-964b49b2bc8d/datatables/Qlu8QqDzkZKeCu5s"},"columns":{"mappingMode":"defineBelow","value":{"chatinput":"={{ $json.chatInput }}","Answer":"={{ $json.response }}","relevance":"={{ $json.relevance }}","groundedness":"={{ $json.groundedness }}","context_precision":"={{ $json.context_precision }}","context_recall":"={{ $json.context_recall }}","verdict":"={{ $json.verdict }}","userquery":"={{ $json.userquery }}"},"matchingColumns":[],"schema":[{"id":"chatinput","displayName":"chatinput","required":false,"defaultMatch":false,"display":true,"type":"string","readOnly":false,"removed":false},{"id":"Answer","displayName":"Answer","required":false,"defaultMatch":false,"display":true,"type":"string","readOnly":false,"removed":false},{"id":"relevance","displayName":"relevance","required":false,"defaultMatch":false,"display":true,"type":"string","readOnly":false,"removed":false},{"id":"groundedness","displayName":"groundedness","required":false,"defaultMatch":false,"display":true,"type":"string","readOnly":false,"removed":false},{"id":"context_precision","displayName":"context_precision","required":false,"defaultMatch":false,"display":true,"type":"string","readOnly":false,"removed":false},{"id":"context_recall","displayName":"context_recall","required":false,"defaultMatch":false,"display":true,"type":"string","readOnly":false,"removed":false},{"id":"verdict","displayName":"verdict","required":false,"defaultMatch":false,"display":true,"type":"string","readOnly":false,"removed":false},{"id":"userquery","displayName":"userquery","required":false,"defaultMatch":false,"display":true,"type":"string","readOnly":false,"removed":false}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"type":"n8n-nodes-base.dataTable","typeVersion":1.1,"position":[2128,-592],"id":"1f0bb7a0-31d9-4cb8-9ba7-baf0059a7881","name":"Insert row"},{"parameters":{"options":{"dimensions":512}},"type":"@n8n/n8n-nodes-langchain.embeddingsOpenAi","typeVersion":1.2,"position":[592,48],"id":"9227ec03-5d30-4ca2-83c5-319819fe106d","name":"Embeddings OpenAI1","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"options":{"dimensions":512}},"type":"@n8n/n8n-nodes-langchain.embeddingsOpenAi","typeVersion":1.2,"position":[768,512],"id":"fd8c0afe-2b43-4a99-a048-19c87aa50c19","name":"Embeddings OpenAI2","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}}],"pinData":{},"connections":{"When clicking ‘Execute workflow’":{"main":[[{"node":"Read/Write Files from Disk","type":"main","index":0}]]},"Read/Write Files from Disk":{"main":[[{"node":"Pinecone Vector Store","type":"main","index":0}]]},"Default Data Loader":{"ai_document":[[{"node":"Pinecone Vector Store","type":"ai_document","index":0}]]},"Recursive Character Text Splitter":{"ai_textSplitter":[[{"node":"Default Data Loader","type":"ai_textSplitter","index":0}]]},"Embeddings OpenAI":{"ai_embedding":[[{"node":"Pinecone Vector Store","type":"ai_embedding","index":0}]]},"When chat message received":{"main":[[{"node":"Question and Answer Generation","type":"main","index":0},{"node":"Retreive Chunks","type":"main","index":0}]]},"OpenAI Chat Model":{"ai_languageModel":[[{"node":"Question and Answer Generation","type":"ai_languageModel","index":0}]]},"Chunk Limit":{"ai_retriever":[[{"node":"Question and Answer Generation","type":"ai_retriever","index":0}]]},"Retriever":{"ai_vectorStore":[[{"node":"Chunk Limit","type":"ai_vectorStore","index":0}]]},"Retreive Chunks":{"main":[[{"node":"Merge Answer + Chunks","type":"main","index":1}]]},"Question and Answer Generation":{"main":[[{"node":"ChatOutput","type":"main","index":0},{"node":"Merge Answer + Chunks","type":"main","index":0}]]},"Evaluation (LLM-as-a-Judge)":{"main":[[{"node":"Extract Metrics","type":"main","index":0}]]},"Merge Answer + Chunks":{"main":[[{"node":"Evaluation (LLM-as-a-Judge)","type":"main","index":0}]]},"Extract Metrics":{"main":[[{"node":"Insert row","type":"main","index":0}]]},"Embeddings OpenAI1":{"ai_embedding":[[{"node":"Retreive Chunks","type":"ai_embedding","index":0}]]},"Embeddings OpenAI2":{"ai_embedding":[[{"node":"Retriever","type":"ai_embedding","index":0}]]}},"active":false,"settings":{"executionOrder":"v1","availableInMCP":false},"versionId":"50937b65-f394-420a-83db-c332964599e2","meta":{"templateCredsSetupCompleted":true,"instanceId":"9eec91ab028da3044b893ad93da376fcd67c0d37224cdead88c7c3ba95ce47dc"},"id":"7WN5ZMIFhfO3AFu76G21e","tags":[]};
+
+function switchTab(name) {
+  const order = ['overview','arch','workflow','eval'];
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', order[i] === name);
+  });
+  order.forEach(n => {
+    document.getElementById('tab-' + n).classList.toggle('active', n === name);
+  });
+}
+
+function syntaxHighlight(obj) {
+  const json = JSON.stringify(obj, null, 2);
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+    let cls = 'j-num';
+    if (/^"/.test(match)) {
+      cls = /:$/.test(match) ? 'j-key' : 'j-str';
+    } else if (/true|false/.test(match)) {
+      cls = 'j-bool';
+    } else if (/null/.test(match)) {
+      cls = 'j-null';
+    }
+    return `<span class="${cls}">${match}</span>`;
+  });
+}
+
+document.getElementById('jsonBox').innerHTML = syntaxHighlight(WORKFLOW_JSON);
+
+function copyJson() {
+  navigator.clipboard.writeText(JSON.stringify(WORKFLOW_JSON, null, 2)).then(() => {
+    const btn = document.querySelector('.btn-sm:not(.primary)');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy JSON', 1500);
+  });
+}
+
+function downloadJson() {
+  const blob = new Blob([JSON.stringify(WORKFLOW_JSON, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'VP_MeridianHealth_Data_Ingestion.json';
+  a.click();
+}
+</script>
+</body>
+</html>
