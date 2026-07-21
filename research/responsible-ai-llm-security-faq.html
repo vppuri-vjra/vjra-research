@@ -5,114 +5,229 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ: Responsible AI and LLM Security — vjra.us Research</title>
 <meta name="description" content="A six-question primer on why LLMs need guardrails, the confidentiality/integrity/availability risk model applied to generative AI, real-world examples, and layered mitigation strategies. Archived on vjra.us for reference.">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
   :root {
-    --accent: #b85042;
-    --ink: #1a1a2e;
-    --muted: #767676;
+    --cream: #f8f4ee;
+    --ink: #1a1410;
+    --ink-mid: #4a4038;
+    --ink-light: #8a8078;
+    --red-soft: #b85042;
+    --nav-h: 64px;
   }
-  * { box-sizing: border-box; }
+
   body {
-    font-family: Georgia, 'Times New Roman', serif;
-    max-width: 760px; margin: 0 auto; padding: 0 1.5rem 4rem;
-    color: #2b2b2b; line-height: 1.7; background: #fdfdfb;
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
   }
-  .topnav {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    font-size: .85rem; padding: 1.25rem 0; color: var(--muted);
+
+  /* ── Nav ── */
+  .site-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(0,0,0,.08);
   }
-  .topnav a { color: var(--accent); text-decoration: none; font-weight: 600; }
-  .topnav a:hover { text-decoration: underline; }
-  header.article-header {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    border-bottom: 4px solid var(--accent);
-    padding-bottom: 1.5rem; margin-bottom: 2rem;
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; align-items: center;
+    height: var(--nav-h); padding: 0 40px;
+    position: relative;
   }
-  .kicker {
-    text-transform: uppercase; letter-spacing: .12em; font-size: .75rem;
-    font-weight: 700; color: var(--accent); margin-bottom: .75rem;
+  .nav-left { display: flex; gap: 24px; align-items: center; flex: 1; }
+  .nav-left a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: .9rem; color: var(--ink-mid);
+    text-decoration: none; letter-spacing: .02em;
+    transition: color .2s;
   }
-  .article-meta {
-    display: flex; flex-wrap: wrap; gap: .5rem 1rem; font-size: .8rem;
-    color: var(--muted); margin-bottom: 1rem;
+  .nav-left a:hover { color: var(--ink); }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 400;
+    color: var(--ink); text-decoration: none;
+    letter-spacing: .04em; white-space: nowrap;
+    position: absolute; left: 50%; transform: translateX(-50%);
   }
-  .article-meta span:not(:last-child)::after { content: "•"; margin-left: 1rem; color: #ccc; }
-  h1.title {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 2.4rem; line-height: 1.2; color: var(--ink); margin: 0 0 1rem;
+
+  /* ── Page ── */
+  .page-wrap {
+    max-width: 780px; margin: 0 auto;
+    padding: 72px 40px 100px;
+    position: relative; z-index: 1;
   }
-  .dek { font-size: 1.15rem; color: #444; font-style: italic; margin: 0; }
-  h1, h2, h3 { font-family: -apple-system, Helvetica, Arial, sans-serif; color: var(--ink); }
-  h2 { font-size: 1.2rem; margin-top: 2.25rem; padding-bottom: .4rem; border-bottom: 1px solid #eee; }
-  p { margin: 0 0 1.1rem; }
-  ul { margin: 0 0 1.1rem 1.25rem; padding: 0; }
-  li { margin-bottom: .5rem; }
-  a { color: var(--accent); }
+  .page-kicker {
+    font-family: 'Inter', sans-serif;
+    font-size: .72rem; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--red-soft); margin-bottom: 18px;
+  }
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 300;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.1; color: var(--ink);
+    margin-bottom: 20px;
+  }
+  .page-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 1.2rem;
+    color: var(--ink-light); margin-bottom: 24px;
+    max-width: 640px; line-height: 1.6;
+  }
+  .page-source {
+    font-family: 'Inter', sans-serif;
+    font-size: .78rem; color: var(--ink-light);
+    margin-bottom: 56px; letter-spacing: .02em;
+  }
+
+  /* ── FAQ list ── */
+  .faq-list { margin-top: 8px; }
+  .faq-row {
+    padding: 32px 0;
+    border-top: 1px solid rgba(0,0,0,.09);
+  }
+  .faq-row:first-child { border-top: none; padding-top: 0; }
+  .faq-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 500;
+    font-size: 1.5rem; line-height: 1.35;
+    color: var(--ink); margin-bottom: 14px;
+  }
+  .faq-question .q-num {
+    font-family: 'Inter', sans-serif;
+    font-style: normal; font-size: .72rem;
+    font-weight: 500; letter-spacing: .06em;
+    color: var(--red-soft); display: block;
+    margin-bottom: 6px;
+  }
+  .faq-answer {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.12rem; line-height: 1.65;
+    color: var(--ink-mid); max-width: 660px;
+  }
+  .faq-answer p { margin-bottom: .9rem; }
+  .faq-answer p:last-child { margin-bottom: 0; }
+  .faq-answer ul { margin: 0 0 0 1.15rem; }
+  .faq-answer li { margin-bottom: .55rem; }
+  .faq-answer li:last-child { margin-bottom: 0; }
+  .faq-answer strong { color: var(--ink); font-weight: 600; }
+
   footer.page-footer {
-    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #eee;
-    font-size: .8rem; color: #999; font-family: -apple-system, Helvetica, Arial, sans-serif;
+    margin-top: 56px; padding-top: 24px;
+    border-top: 1px solid rgba(0,0,0,.08);
+    font-family: 'Inter', sans-serif;
+    font-size: .74rem; color: var(--ink-light);
+    letter-spacing: .02em;
+  }
+
+  @media (max-width: 700px) {
+    .nav-inner { padding: 0 20px; }
+    .nav-logo { position: static; transform: none; }
+    .page-wrap { padding: 48px 20px 72px; }
   }
 </style>
 </head>
 <body>
-<nav class="topnav"><a href="/research.html">&larr; vjra.us / research</a></nav>
-<header class="article-header">
-  <div class="kicker">FAQ · REFERENCE</div>
-  <h1 class="title">FAQ: Responsible AI and LLM Security</h1>
-  <p class="dek">Six questions on why LLMs need guardrails, the confidentiality / integrity / availability risk model applied to generative AI, real-world failure examples, and the layered defenses that keep systems safe.</p>
-  <div class="article-meta">
-    <span>SECURITY &amp; GOVERNANCE</span>
-    <span>ARCHIVED 20 JULY 2026</span>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/research.html">&larr; Research Library</a>
+    </div>
+    <a href="/index.html" class="nav-logo">vjra.us</a>
   </div>
-</header>
-<article>
+</nav>
 
-<h2>1. Why do Large Language Models (LLMs) require guardrails for safe and responsible use?</h2>
-<p>LLMs can generate inaccurate, biased, or unsafe responses because they don't have true understanding or intent. Guardrails such as content filters, policies, and monitoring help ensure outputs remain safe, reliable, and aligned with ethical and organizational standards.</p>
+<div class="page-wrap">
 
-<h2>2. What types of security risks are most common in LLMs?</h2>
-<p>LLMs face three primary categories of risks:</p>
-<ul>
-  <li><strong>Confidentiality risks</strong> — leakage of sensitive data.</li>
-  <li><strong>Integrity risks</strong> — prompt injection or manipulated inputs altering behavior.</li>
-  <li><strong>Availability risks</strong> — attacks or misuse that disrupt service.</li>
-</ul>
+  <div class="page-kicker">FAQ &middot; Reference</div>
+  <h1 class="page-title">Responsible AI and LLM Security</h1>
+  <p class="page-sub">Six questions on why LLMs need guardrails, the confidentiality / integrity / availability risk model applied to generative AI, real-world failure examples, and the layered defenses that keep systems safe.</p>
+  <p class="page-source">Security &amp; Governance &middot; Archived 20 July 2026</p>
 
-<h2>3. How do confidentiality, integrity, and availability concerns apply to LLMs?</h2>
-<ul>
-  <li><strong>Confidentiality:</strong> Models may expose sensitive training data or user information.</li>
-  <li><strong>Integrity:</strong> Attackers may use prompt injection to bypass rules or introduce false outputs.</li>
-  <li><strong>Availability:</strong> Adversarial inputs or spam can overload the system, making it unusable.</li>
-</ul>
+  <div class="faq-list">
 
-<h2>4. What are some real-world examples of security risks in generative AI systems?</h2>
-<ul>
-  <li>A chatbot accidentally revealed customer PII (confidentiality breach).</li>
-  <li>Malicious prompts override system instructions to extract hidden data (integrity breach).</li>
-  <li>Spam or adversarial queries cause downtime (availability risk).</li>
-  <li>AI-generated harmful or offensive responses damage brand reputation.</li>
-</ul>
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">01</span>Why do Large Language Models (LLMs) require guardrails for safe and responsible use?</div>
+      <div class="faq-answer">
+        <p>LLMs can generate inaccurate, biased, or unsafe responses because they don't have true understanding or intent. Guardrails such as content filters, policies, and monitoring help ensure outputs remain safe, reliable, and aligned with ethical and organizational standards.</p>
+      </div>
+    </div>
 
-<h2>5. What layers of risk mitigation can organizations implement to secure LLMs?</h2>
-<p>Organizations can implement multi-layer defenses, such as:</p>
-<ul>
-  <li><strong>Input filtering</strong> — block malicious prompts.</li>
-  <li><strong>Output monitoring</strong> — detect unsafe or biased responses.</li>
-  <li><strong>Human oversight</strong> — add checks for sensitive use cases.</li>
-  <li><strong>Authentication and rate-limiting</strong> — prevent misuse of APIs.</li>
-  <li><strong>Red-teaming and audits</strong> — test models for vulnerabilities.</li>
-</ul>
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">02</span>What types of security risks are most common in LLMs?</div>
+      <div class="faq-answer">
+        <p>LLMs face three primary categories of risks:</p>
+        <ul>
+          <li><strong>Confidentiality risks</strong> — leakage of sensitive data.</li>
+          <li><strong>Integrity risks</strong> — prompt injection or manipulated inputs altering behavior.</li>
+          <li><strong>Availability risks</strong> — attacks or misuse that disrupt service.</li>
+        </ul>
+      </div>
+    </div>
 
-<h2>6. What key considerations should be kept in mind when designing a secure generative AI solution?</h2>
-<ul>
-  <li><strong>Secure architecture:</strong> Isolate sensitive data, control access, log activity.</li>
-  <li><strong>Compliance:</strong> Align with laws and ethical guidelines.</li>
-  <li><strong>Governance:</strong> Define policies for safe use, accountability, and monitoring.</li>
-  <li><strong>Continuous monitoring:</strong> Update defenses as threats evolve.</li>
-  <li><strong>Responsible design:</strong> Balance innovation with safety, fairness, and transparency.</li>
-</ul>
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">03</span>How do confidentiality, integrity, and availability concerns apply to LLMs?</div>
+      <div class="faq-answer">
+        <ul>
+          <li><strong>Confidentiality:</strong> Models may expose sensitive training data or user information.</li>
+          <li><strong>Integrity:</strong> Attackers may use prompt injection to bypass rules or introduce false outputs.</li>
+          <li><strong>Availability:</strong> Adversarial inputs or spam can overload the system, making it unusable.</li>
+        </ul>
+      </div>
+    </div>
 
-</article>
-<footer class="page-footer">vjra.us · Research Library · Archived 20 July 2026</footer>
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">04</span>What are some real-world examples of security risks in generative AI systems?</div>
+      <div class="faq-answer">
+        <ul>
+          <li>A chatbot accidentally revealed customer PII (confidentiality breach).</li>
+          <li>Malicious prompts override system instructions to extract hidden data (integrity breach).</li>
+          <li>Spam or adversarial queries cause downtime (availability risk).</li>
+          <li>AI-generated harmful or offensive responses damage brand reputation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">05</span>What layers of risk mitigation can organizations implement to secure LLMs?</div>
+      <div class="faq-answer">
+        <p>Organizations can implement multi-layer defenses, such as:</p>
+        <ul>
+          <li><strong>Input filtering</strong> — block malicious prompts.</li>
+          <li><strong>Output monitoring</strong> — detect unsafe or biased responses.</li>
+          <li><strong>Human oversight</strong> — add checks for sensitive use cases.</li>
+          <li><strong>Authentication and rate-limiting</strong> — prevent misuse of APIs.</li>
+          <li><strong>Red-teaming and audits</strong> — test models for vulnerabilities.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">06</span>What key considerations should be kept in mind when designing a secure generative AI solution?</div>
+      <div class="faq-answer">
+        <ul>
+          <li><strong>Secure architecture:</strong> Isolate sensitive data, control access, log activity.</li>
+          <li><strong>Compliance:</strong> Align with laws and ethical guidelines.</li>
+          <li><strong>Governance:</strong> Define policies for safe use, accountability, and monitoring.</li>
+          <li><strong>Continuous monitoring:</strong> Update defenses as threats evolve.</li>
+          <li><strong>Responsible design:</strong> Balance innovation with safety, fairness, and transparency.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="page-footer">vjra.us &nbsp;&middot;&nbsp; Research Library &nbsp;&middot;&nbsp; Archived 20 July 2026</footer>
+
+</div>
+
 </body>
 </html>
