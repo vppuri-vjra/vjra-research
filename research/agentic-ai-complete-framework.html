@@ -5,82 +5,143 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agentic AI: A Complete Framework — vjra.us Research</title>
 <meta name="description" content="A single-diagram map of how AI & ML, Deep Learning, Gen AI, AI Agents, and Agentic AI build on each other, from foundational disciplines to governance and guardrails. Archived on vjra.us for reference.">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
   :root {
+    --cream: #f8f4ee;
+    --ink: #1a1410;
+    --ink-mid: #4a4038;
+    --ink-light: #8a8078;
     --accent: #b85042;
-    --ink: #1a1a2e;
-    --muted: #767676;
+    --nav-h: 64px;
   }
-  * { box-sizing: border-box; }
+
   body {
-    font-family: Georgia, 'Times New Roman', serif;
-    max-width: 760px; margin: 0 auto; padding: 0 1.5rem 4rem;
-    color: #2b2b2b; line-height: 1.7; background: #fdfdfb;
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--ink-mid);
+    line-height: 1.7;
   }
-  .topnav {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    font-size: .85rem; padding: 1.25rem 0; color: var(--muted);
+
+  .site-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(0,0,0,.08);
   }
-  .topnav a { color: var(--accent); text-decoration: none; font-weight: 600; }
-  .topnav a:hover { text-decoration: underline; }
-  header.article-header {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    border-bottom: 4px solid var(--accent);
-    padding-bottom: 1.5rem; margin-bottom: 2rem;
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; align-items: center;
+    height: var(--nav-h); padding: 0 40px;
+    position: relative;
   }
+  .nav-left { display: flex; gap: 24px; align-items: center; flex: 1; }
+  .nav-left a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: .9rem; color: var(--ink-mid);
+    text-decoration: none; letter-spacing: .02em;
+  }
+  .nav-left a:hover { color: var(--ink); }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 400;
+    color: var(--ink); text-decoration: none;
+    letter-spacing: .04em; white-space: nowrap;
+    position: absolute; left: 50%; transform: translateX(-50%);
+  }
+
+  .page-wrap { max-width: 720px; margin: 0 auto; padding: 56px 40px 96px; }
+
   .kicker {
-    text-transform: uppercase; letter-spacing: .12em; font-size: .75rem;
-    font-weight: 700; color: var(--accent); margin-bottom: .75rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .72rem; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 18px;
+  }
+  h1.title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 300;
+    font-size: clamp(2rem, 4.6vw, 3rem);
+    line-height: 1.15; color: var(--ink); margin: 0 0 16px;
+  }
+  .dek {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 1.15rem;
+    color: var(--ink-light); line-height: 1.6;
+    margin: 0 0 20px; max-width: 620px;
   }
   .article-meta {
-    display: flex; flex-wrap: wrap; gap: .5rem 1rem; font-size: .8rem;
-    color: var(--muted); margin-bottom: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .76rem; color: var(--ink-light);
+    letter-spacing: .02em; display: flex; flex-wrap: wrap;
+    gap: .4rem 1rem; margin-bottom: 40px;
   }
-  .article-meta span:not(:last-child)::after { content: "•"; margin-left: 1rem; color: #ccc; }
-  h1.title {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 2.4rem; line-height: 1.2; color: var(--ink); margin: 0 0 1rem;
+  .article-meta span:not(:last-child)::after { content: "·"; margin-left: 1rem; color: var(--ink-light); opacity: .5; }
+
+  article h1 {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
+    font-size: 1.7rem; color: var(--ink); margin-top: 2.6rem;
+    padding-bottom: .5rem; border-bottom: 1px solid rgba(0,0,0,.09);
   }
-  .dek { font-size: 1.15rem; color: #444; font-style: italic; margin: 0; }
-  h1, h2, h3 { font-family: -apple-system, Helvetica, Arial, sans-serif; color: var(--ink); }
-  h1 { font-size: 1.6rem; margin-top: 2.5rem; padding-bottom: .4rem; border-bottom: 1px solid #eee; }
-  h2 { font-size: 1.25rem; margin-top: 2rem; }
-  p { margin: 0 0 1.1rem; }
-  a { color: var(--accent); }
+  article h2 {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
+    font-size: 1.3rem; color: var(--ink); margin-top: 2rem;
+  }
+  article p { margin: 0 0 1.1rem; font-size: 1.05rem; }
+  article a { color: var(--accent); }
   figure { margin: 0 0 2rem; }
   figure img {
-    width: 100%; height: auto; border: 1px solid #e8e6e1; border-radius: 10px;
+    width: 100%; height: auto; border: 1px solid rgba(0,0,0,.09); border-radius: 8px;
     display: block;
   }
   figcaption {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    font-size: .75rem; color: var(--muted); text-align: center; margin-top: .6rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .74rem; color: var(--ink-light); text-align: center; margin-top: .6rem;
   }
-  table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; font-size: .85rem; font-family: -apple-system, Helvetica, Arial, sans-serif; }
-  th, td { border: 1px solid #ddd; padding: .5rem .7rem; text-align: left; vertical-align: top; }
-  th { background: #f4f1ec; }
+  table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; font-family: 'Inter', sans-serif; font-size: .82rem; }
+  th, td { border: 1px solid rgba(0,0,0,.12); padding: .55rem .75rem; text-align: left; vertical-align: top; }
+  th { background: rgba(0,0,0,.03); font-weight: 500; }
   .note {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    font-size: .8rem; color: #6b2e26; background: #fef6f4; border-left: 3px solid var(--accent);
+    font-family: 'Inter', sans-serif;
+    font-size: .8rem; color: var(--ink-mid); background: rgba(184,80,66,.06);
+    border-left: 3px solid var(--accent);
     padding: .75rem 1rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0;
   }
   footer.page-footer {
-    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #eee;
-    font-size: .8rem; color: #999; font-family: -apple-system, Helvetica, Arial, sans-serif;
+    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(0,0,0,.08);
+    font-family: 'Inter', sans-serif; font-size: .78rem; color: var(--ink-light);
+  }
+
+  @media (max-width: 700px) {
+    .nav-inner { padding: 0 20px; }
+    .nav-logo { position: static; transform: none; }
+    .page-wrap { padding: 40px 20px 72px; }
   }
 </style>
 </head>
 <body>
-<nav class="topnav"><a href="/research.html">&larr; vjra.us / research</a></nav>
-<header class="article-header">
-  <div class="kicker">FRAMEWORK · REFERENCE</div>
-  <h1 class="title">Agentic AI: A Complete Framework</h1>
-  <p class="dek">A single-diagram map of how AI &amp; ML, Deep Learning, Gen AI, AI Agents, and Agentic AI build on each other — from foundational disciplines through creation, action, and operations, out to governance.</p>
-  <div class="article-meta">
-    <span>REFERENCE DIAGRAM</span>
-    <span>ARCHIVED 08 JULY 2026</span>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/research.html">&larr; Research Library</a>
+    </div>
+    <a href="/index.html" class="nav-logo">vjra.us</a>
   </div>
-</header>
+</nav>
+
+<div class="page-wrap">
+<div class="kicker">Framework &middot; Reference</div>
+<h1 class="title">Agentic AI: A Complete Framework</h1>
+<p class="dek">A single-diagram map of how AI &amp; ML, Deep Learning, Gen AI, AI Agents, and Agentic AI build on each other — from foundational disciplines through creation, action, and operations, out to governance.</p>
+<div class="article-meta">
+  <span>Reference Diagram</span>
+  <span>Archived 08 July 2026</span>
+</div>
 <article>
 
 <figure>
@@ -122,5 +183,7 @@
 
 </article>
 <footer class="page-footer">vjra.us · Research Library · Archived 08 July 2026</footer>
+</div>
+
 </body>
 </html>

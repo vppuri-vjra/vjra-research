@@ -5,72 +5,132 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026 Global Semiconductor Industry Outlook | Deloitte Insights — vjra.us Research</title>
 <meta name="description" content="2026 Global Semiconductor Industry Outlook, summarized from Deloitte Insights, hosted on vjra.us for the NovaCart Product Finance Reporting Agent knowledge base.">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
   :root {
+    --cream: #f8f4ee;
+    --ink: #1a1410;
+    --ink-mid: #4a4038;
+    --ink-light: #8a8078;
     --accent: #b85042;
-    --ink: #1a1a2e;
-    --muted: #767676;
+    --nav-h: 64px;
   }
-  * { box-sizing: border-box; }
+
   body {
-    font-family: Georgia, 'Times New Roman', serif;
-    max-width: 760px; margin: 0 auto; padding: 0 1.5rem 4rem;
-    color: #2b2b2b; line-height: 1.7; background: #fdfdfb;
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--ink-mid);
+    line-height: 1.7;
   }
-  .topnav {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    font-size: .85rem; padding: 1.25rem 0; color: var(--muted);
+
+  .site-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(0,0,0,.08);
   }
-  .topnav a { color: var(--accent); text-decoration: none; font-weight: 600; }
-  .topnav a:hover { text-decoration: underline; }
-  header.article-header {
-    font-family: -apple-system, Helvetica, Arial, sans-serif;
-    border-bottom: 4px solid var(--accent);
-    padding-bottom: 1.5rem; margin-bottom: 2rem;
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; align-items: center;
+    height: var(--nav-h); padding: 0 40px;
+    position: relative;
   }
+  .nav-left { display: flex; gap: 24px; align-items: center; flex: 1; }
+  .nav-left a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: .9rem; color: var(--ink-mid);
+    text-decoration: none; letter-spacing: .02em;
+  }
+  .nav-left a:hover { color: var(--ink); }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 400;
+    color: var(--ink); text-decoration: none;
+    letter-spacing: .04em; white-space: nowrap;
+    position: absolute; left: 50%; transform: translateX(-50%);
+  }
+
+  .page-wrap { max-width: 720px; margin: 0 auto; padding: 56px 40px 96px; }
+
   .kicker {
-    text-transform: uppercase; letter-spacing: .12em; font-size: .75rem;
-    font-weight: 700; color: var(--accent); margin-bottom: .75rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .72rem; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 18px;
+  }
+  h1.title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 300;
+    font-size: clamp(2rem, 4.6vw, 3rem);
+    line-height: 1.15; color: var(--ink); margin: 0 0 16px;
+  }
+  .dek {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 1.15rem;
+    color: var(--ink-light); line-height: 1.6;
+    margin: 0 0 20px; max-width: 620px;
   }
   .article-meta {
-    display: flex; flex-wrap: wrap; gap: .5rem 1rem; font-size: .8rem;
-    color: var(--muted); margin-bottom: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .76rem; color: var(--ink-light);
+    letter-spacing: .02em; display: flex; flex-wrap: wrap;
+    gap: .4rem 1rem; margin-bottom: 40px;
   }
-  .article-meta span:not(:last-child)::after { content: "•"; margin-left: 1rem; color: #ccc; }
-  h1.title {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 2.4rem; line-height: 1.2; color: var(--ink); margin: 0 0 1rem;
+  .article-meta span:not(:last-child)::after { content: "·"; margin-left: 1rem; color: var(--ink-light); opacity: .5; }
+
+  article h1 {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
+    font-size: 1.7rem; color: var(--ink); margin-top: 2.6rem;
+    padding-bottom: .5rem; border-bottom: 1px solid rgba(0,0,0,.09);
   }
-  .dek { font-size: 1.15rem; color: #444; font-style: italic; margin: 0; }
-  h1, h2, h3 { font-family: -apple-system, Helvetica, Arial, sans-serif; color: var(--ink); }
-  h1 { font-size: 1.6rem; margin-top: 2.5rem; padding-bottom: .4rem; border-bottom: 1px solid #eee; }
-  h2 { font-size: 1.25rem; margin-top: 2rem; }
-  p { margin: 0 0 1.1rem; }
-  table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; font-size: .85rem; font-family: -apple-system, Helvetica, Arial, sans-serif; }
-  th, td { border: 1px solid #ddd; padding: .5rem .7rem; text-align: left; }
-  th { background: #f4f1ec; }
+  article h2 {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
+    font-size: 1.3rem; color: var(--ink); margin-top: 2rem;
+  }
+  article p { margin: 0 0 1.1rem; font-size: 1.05rem; }
+  article a { color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; font-family: 'Inter', sans-serif; font-size: .82rem; }
+  th, td { border: 1px solid rgba(0,0,0,.12); padding: .5rem .7rem; text-align: left; vertical-align: top; }
+  th { background: rgba(0,0,0,.03); font-weight: 500; }
   sup { color: var(--accent); font-weight: 700; font-size: .7em; }
-  a { color: var(--accent); }
-  ol { font-size: .85rem; color: #555; font-family: -apple-system, Helvetica, Arial, sans-serif; }
+  ol { font-family: 'Inter', sans-serif; font-size: .82rem; color: var(--ink-light); padding-left: 1.2rem; }
   ol li { margin-bottom: .6rem; }
   footer.page-footer {
-    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #eee;
-    font-size: .8rem; color: #999; font-family: -apple-system, Helvetica, Arial, sans-serif;
+    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(0,0,0,.08);
+    font-family: 'Inter', sans-serif; font-size: .78rem; color: var(--ink-light);
+  }
+
+  @media (max-width: 700px) {
+    .nav-inner { padding: 0 20px; }
+    .nav-logo { position: static; transform: none; }
+    .page-wrap { padding: 40px 20px 72px; }
   }
 </style>
 </head>
 <body>
-<nav class="topnav"><a href="/">&larr; vjra.us / research</a></nav>
-<header class="article-header">
-  <div class="kicker">ARTICLE</div>
-  <h1 class="title">2026 Global Semiconductor Industry Outlook</h1>
-  <p class="dek">While chip sales continue to soar in 2026, the industry focus may shift to risk mitigation for demand correction, integrated system architecture, and a balanced investment approach</p>
-  <div class="article-meta">
-    <span>11-MIN READ</span>
-    <span>05 FEBRUARY 2026</span>
-    <span>Deloitte Center for Technology, Media & Telecommunications</span>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/research.html">&larr; Research Library</a>
+    </div>
+    <a href="/index.html" class="nav-logo">vjra.us</a>
   </div>
-</header>
+</nav>
+
+<div class="page-wrap">
+<div class="kicker">Article</div>
+<h1 class="title">2026 Global Semiconductor Industry Outlook</h1>
+<p class="dek">While chip sales continue to soar in 2026, the industry focus may shift to risk mitigation for demand correction, integrated system architecture, and a balanced investment approach</p>
+<div class="article-meta">
+  <span>11-min read</span>
+  <span>05 February 2026</span>
+  <span>Deloitte Center for Technology, Media &amp; Telecommunications</span>
+</div>
 <article>
 <p>The semiconductor industry is navigating a high-stakes paradox in 2026. While soaring artificial intelligence- driven demand is pushing revenues to unprecedented levels, this boom has its risks. The industry seems to have placed all its eggs in the AI basket, which may be fine if the AI boom continues. But the industry should also consider planning for scenarios in which AI demand slows or shrinks.</p>
 <h1>The state of the market today</h1>
@@ -205,5 +265,7 @@
   Source: Deloitte Insights, &ldquo;2026 Global Semiconductor Industry Outlook&rdquo; (5 Feb 2026), Deloitte Center for Technology, Media &amp; Telecommunications.
   Republished for internal knowledge-base use by the NovaCart Product Finance Reporting Agent.
 </footer>
+</div>
+
 </body>
 </html>

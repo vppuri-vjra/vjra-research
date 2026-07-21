@@ -6,98 +6,204 @@
 <title>Research Library — vjra.us</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
   :root {
-    --accent: #b85042; --ink: #1a1a2e; --muted: #767676;
-    --bg: #f8f4ee; --surface: #f4f3f0; --border: #e8e6e1;
+    --cream: #f8f4ee;
+    --ink: #1a1410;
+    --ink-mid: #4a4038;
+    --ink-light: #8a8078;
+    --accent: #b85042;
+    --nav-h: 64px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: #2b2b2b; line-height: 1.6; min-height: 100vh; }
-  header { border-bottom: 4px solid var(--accent); padding: 2rem 2.5rem; background: var(--bg); display: flex; align-items: center; justify-content: space-between; }
-  .header-left a { font-size: .7rem; font-weight: 600; color: var(--accent); text-decoration: none; }
-  .header-left a:hover { text-decoration: underline; }
-  .header-center { text-align: center; }
-  .kicker { text-transform: uppercase; letter-spacing: .16em; font-size: .65rem; font-weight: 700; color: var(--accent); margin-bottom: .3rem; }
-  h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.8rem; color: var(--ink); font-weight: 400; }
-  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-  .section-label { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: .75rem; }
-  .research-card { border: 1px solid var(--border); border-radius: 10px; background: #fff; text-decoration: none; color: inherit; padding: 1rem 1.25rem; display: block; transition: border-color .15s, box-shadow .15s; margin-bottom: .75rem; }
-  .research-card:hover { border-color: var(--accent); box-shadow: 0 4px 14px rgba(0,0,0,.06); }
-  .research-title { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: var(--ink); margin-bottom: .3rem; }
-  .research-meta { font-size: .7rem; color: var(--muted); }
-  .research-meta span:not(:last-child)::after { content: "·"; margin: 0 .4rem; color: var(--border); }
-  footer { text-align: center; padding: 1.5rem; font-size: .68rem; color: var(--muted); border-top: 1px solid var(--border); }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── Nav ── */
+  .site-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(0,0,0,.08);
+  }
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; align-items: center;
+    height: var(--nav-h); padding: 0 40px;
+    position: relative;
+  }
+  .nav-left { display: flex; gap: 24px; align-items: center; flex: 1; }
+  .nav-left a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: .9rem; color: var(--ink-mid);
+    text-decoration: none; letter-spacing: .02em;
+    transition: color .2s;
+  }
+  .nav-left a:hover { color: var(--ink); }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 400;
+    color: var(--ink); text-decoration: none;
+    letter-spacing: .04em; white-space: nowrap;
+    position: absolute; left: 50%; transform: translateX(-50%);
+  }
+
+  /* ── Page ── */
+  .page-wrap {
+    max-width: 780px; margin: 0 auto;
+    padding: 72px 40px 100px;
+    position: relative; z-index: 1;
+  }
+  .page-kicker {
+    font-family: 'Inter', sans-serif;
+    font-size: .72rem; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 18px;
+  }
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 300;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.1; color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .page-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 1.2rem;
+    color: var(--ink-light); margin-bottom: 56px;
+    max-width: 620px; line-height: 1.6;
+  }
+
+  /* ── Section groups ── */
+  .section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: .72rem; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 4px;
+  }
+  .section-label:not(:first-of-type) { margin-top: 44px; }
+
+  /* ── Research list ── */
+  .research-list { margin-top: 8px; }
+  .research-row {
+    display: block; text-decoration: none; color: inherit;
+    padding: 18px 0;
+    border-top: 1px solid rgba(0,0,0,.09);
+    transition: opacity .15s;
+  }
+  .research-row:hover { opacity: .7; }
+  .research-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 500;
+    font-size: 1.3rem; color: var(--ink);
+    margin-bottom: 6px; line-height: 1.35;
+  }
+  .research-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: .8rem; color: var(--ink-light);
+    letter-spacing: .01em; line-height: 1.5;
+  }
+  .research-meta span:not(:last-child)::after { content: "·"; margin: 0 .5rem; color: var(--ink-light); opacity: .5; }
+
+  footer.page-footer {
+    max-width: 780px; margin: 0 auto;
+    padding: 24px 40px 56px;
+    font-family: 'Inter', sans-serif;
+    font-size: .74rem; color: var(--ink-light);
+    letter-spacing: .02em; text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    .nav-inner { padding: 0 20px; }
+    .nav-logo { position: static; transform: none; }
+    .page-wrap { padding: 48px 20px 72px; }
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-left"><a href="/sample.html">&larr; Back to Portfolio</a></div>
-  <div class="header-center">
-    <div class="kicker">vjra.us</div>
-    <h1>Research Library</h1>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/sample.html">&larr; Portfolio</a>
+    </div>
+    <a href="/index.html" class="nav-logo">vjra.us</a>
   </div>
-  <div style="width:120px"></div>
-</header>
+</nav>
 
-<main>
+<div class="page-wrap">
+
+  <div class="page-kicker">vjra.us</div>
+  <h1 class="page-title">Research Library</h1>
+  <p class="page-sub">Reference material, frameworks, and archived reading behind the projects on vjra.us — kept here for the next time it's needed.</p>
+
   <div class="section-label">AI in Product &amp; Leadership</div>
+  <div class="research-list">
+    <a class="research-row" href="https://theskip.substack.com/p/how-meta-is-reinventing-product-management" target="_blank" rel="noopener">
+      <div class="research-title">How Meta Is Reinventing Product Management</div>
+      <div class="research-meta">
+        <span>The Skip · Nikhyl Singhal</span>
+        <span>Substack</span>
+        <span>Meta replaced documentation with AI agents — enabling PMs to focus on strategic judgment over process management</span>
+      </div>
+    </a>
+  </div>
 
-  <a class="research-card" href="https://theskip.substack.com/p/how-meta-is-reinventing-product-management" target="_blank" rel="noopener">
-    <div class="research-title">How Meta Is Reinventing Product Management</div>
-    <div class="research-meta">
-      <span>The Skip · Nikhyl Singhal</span>
-      <span>Substack</span>
-      <span>Meta replaced documentation with AI agents — enabling PMs to focus on strategic judgment over process management</span>
-    </div>
-  </a>
+  <div class="section-label">Tools &amp; Frameworks</div>
+  <div class="research-list">
+    <a class="research-row" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <div class="research-title">Superpowers — Agentic Skills Framework for Coding Agents</div>
+      <div class="research-meta">
+        <span>github.com/obra</span>
+        <span>Open Source</span>
+        <span>Composable skills that activate across Claude Code, Cursor, Copilot — structured workflows from design through deployment</span>
+      </div>
+    </a>
 
-  <div class="section-label" style="margin-top:1.75rem;">Tools &amp; Frameworks</div>
+    <a class="research-row" href="/research/agentic-ai-complete-framework.html">
+      <div class="research-title">Agentic AI: A Complete Framework</div>
+      <div class="research-meta">
+        <span>Reference Diagram</span>
+        <span>Archived</span>
+        <span>Nested-layer map from AI &amp; ML through Deep Learning, Gen AI, AI Agents, to Agentic AI — governance and guardrails as a first-class layer</span>
+      </div>
+    </a>
+  </div>
 
-  <a class="research-card" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
-    <div class="research-title">Superpowers — Agentic Skills Framework for Coding Agents</div>
-    <div class="research-meta">
-      <span>github.com/obra</span>
-      <span>Open Source</span>
-      <span>Composable skills that activate across Claude Code, Cursor, Copilot — structured workflows from design through deployment</span>
-    </div>
-  </a>
+  <div class="section-label">Responsible AI &amp; Security</div>
+  <div class="research-list">
+    <a class="research-row" href="/research/responsible-ai-llm-security-faq.html">
+      <div class="research-title">FAQ: Responsible AI and LLM Security</div>
+      <div class="research-meta">
+        <span>Reference FAQ</span>
+        <span>Archived</span>
+        <span>Guardrails, the CIA risk model applied to LLMs, real-world failure examples, and layered mitigation strategies</span>
+      </div>
+    </a>
+  </div>
 
-  <a class="research-card" href="/research/agentic-ai-complete-framework.html">
-    <div class="research-title">Agentic AI: A Complete Framework</div>
-    <div class="research-meta">
-      <span>Reference Diagram</span>
-      <span>Archived</span>
-      <span>Nested-layer map from AI &amp; ML through Deep Learning, Gen AI, AI Agents, to Agentic AI — governance and guardrails as a first-class layer</span>
-    </div>
-  </a>
+  <div class="section-label">Industry Research</div>
+  <div class="research-list">
+    <a class="research-row" href="/research/2026-semiconductor-industry-outlook-deloitte-insights.html">
+      <div class="research-title">2026 Global Semiconductor Industry Outlook</div>
+      <div class="research-meta">
+        <span>Deloitte Insights</span>
+        <span>11-min read</span>
+        <span>05 February 2026</span>
+      </div>
+    </a>
+  </div>
 
-  <div class="section-label" style="margin-top:1.75rem;">Responsible AI &amp; Security</div>
+</div>
 
-  <a class="research-card" href="/research/responsible-ai-llm-security-faq.html">
-    <div class="research-title">FAQ: Responsible AI and LLM Security</div>
-    <div class="research-meta">
-      <span>Reference FAQ</span>
-      <span>Archived</span>
-      <span>Guardrails, the CIA risk model applied to LLMs, real-world failure examples, and layered mitigation strategies</span>
-    </div>
-  </a>
-
-  <div class="section-label" style="margin-top:1.75rem;">Industry Research</div>
-
-  <a class="research-card" href="/research/2026-semiconductor-industry-outlook-deloitte-insights.html">
-    <div class="research-title">2026 Global Semiconductor Industry Outlook</div>
-    <div class="research-meta">
-      <span>Deloitte Insights</span>
-      <span>11-min read</span>
-      <span>05 February 2026</span>
-    </div>
-  </a>
-
-</main>
-
-<footer>vjra.us &nbsp;·&nbsp; Vipin Puri &nbsp;·&nbsp; Research Library &nbsp;·&nbsp; 2026</footer>
+<footer class="page-footer">vjra.us &nbsp;&middot;&nbsp; Vipin Puri &nbsp;&middot;&nbsp; Research Library &nbsp;&middot;&nbsp; 2026</footer>
 
 </body>
 </html>
