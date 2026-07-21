@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ: Responsible AI and LLM Security — vjra.us Research</title>
+<meta name="description" content="A six-question primer on why LLMs need guardrails, the confidentiality/integrity/availability risk model applied to generative AI, real-world examples, and layered mitigation strategies. Archived on vjra.us for reference.">
+<style>
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 760px; margin: 0 auto; padding: 0 1.5rem 4rem;
+    color: #2b2b2b; line-height: 1.7; background: #fdfdfb;
+  }
+  .topnav {
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: .85rem; padding: 1.25rem 0; color: var(--muted);
+  }
+  .topnav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .topnav a:hover { text-decoration: underline; }
+  header.article-header {
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    border-bottom: 4px solid var(--accent);
+    padding-bottom: 1.5rem; margin-bottom: 2rem;
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .75rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .75rem;
+  }
+  .article-meta {
+    display: flex; flex-wrap: wrap; gap: .5rem 1rem; font-size: .8rem;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+  .article-meta span:not(:last-child)::after { content: "•"; margin-left: 1rem; color: #ccc; }
+  h1.title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 2.4rem; line-height: 1.2; color: var(--ink); margin: 0 0 1rem;
+  }
+  .dek { font-size: 1.15rem; color: #444; font-style: italic; margin: 0; }
+  h1, h2, h3 { font-family: -apple-system, Helvetica, Arial, sans-serif; color: var(--ink); }
+  h2 { font-size: 1.2rem; margin-top: 2.25rem; padding-bottom: .4rem; border-bottom: 1px solid #eee; }
+  p { margin: 0 0 1.1rem; }
+  ul { margin: 0 0 1.1rem 1.25rem; padding: 0; }
+  li { margin-bottom: .5rem; }
+  a { color: var(--accent); }
+  footer.page-footer {
+    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #eee;
+    font-size: .8rem; color: #999; font-family: -apple-system, Helvetica, Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+<nav class="topnav"><a href="/research.html">&larr; vjra.us / research</a></nav>
+<header class="article-header">
+  <div class="kicker">FAQ · REFERENCE</div>
+  <h1 class="title">FAQ: Responsible AI and LLM Security</h1>
+  <p class="dek">Six questions on why LLMs need guardrails, the confidentiality / integrity / availability risk model applied to generative AI, real-world failure examples, and the layered defenses that keep systems safe.</p>
+  <div class="article-meta">
+    <span>SECURITY &amp; GOVERNANCE</span>
+    <span>ARCHIVED 20 JULY 2026</span>
+  </div>
+</header>
+<article>
+
+<h2>1. Why do Large Language Models (LLMs) require guardrails for safe and responsible use?</h2>
+<p>LLMs can generate inaccurate, biased, or unsafe responses because they don't have true understanding or intent. Guardrails such as content filters, policies, and monitoring help ensure outputs remain safe, reliable, and aligned with ethical and organizational standards.</p>
+
+<h2>2. What types of security risks are most common in LLMs?</h2>
+<p>LLMs face three primary categories of risks:</p>
+<ul>
+  <li><strong>Confidentiality risks</strong> — leakage of sensitive data.</li>
+  <li><strong>Integrity risks</strong> — prompt injection or manipulated inputs altering behavior.</li>
+  <li><strong>Availability risks</strong> — attacks or misuse that disrupt service.</li>
+</ul>
+
+<h2>3. How do confidentiality, integrity, and availability concerns apply to LLMs?</h2>
+<ul>
+  <li><strong>Confidentiality:</strong> Models may expose sensitive training data or user information.</li>
+  <li><strong>Integrity:</strong> Attackers may use prompt injection to bypass rules or introduce false outputs.</li>
+  <li><strong>Availability:</strong> Adversarial inputs or spam can overload the system, making it unusable.</li>
+</ul>
+
+<h2>4. What are some real-world examples of security risks in generative AI systems?</h2>
+<ul>
+  <li>A chatbot accidentally revealed customer PII (confidentiality breach).</li>
+  <li>Malicious prompts override system instructions to extract hidden data (integrity breach).</li>
+  <li>Spam or adversarial queries cause downtime (availability risk).</li>
+  <li>AI-generated harmful or offensive responses damage brand reputation.</li>
+</ul>
+
+<h2>5. What layers of risk mitigation can organizations implement to secure LLMs?</h2>
+<p>Organizations can implement multi-layer defenses, such as:</p>
+<ul>
+  <li><strong>Input filtering</strong> — block malicious prompts.</li>
+  <li><strong>Output monitoring</strong> — detect unsafe or biased responses.</li>
+  <li><strong>Human oversight</strong> — add checks for sensitive use cases.</li>
+  <li><strong>Authentication and rate-limiting</strong> — prevent misuse of APIs.</li>
+  <li><strong>Red-teaming and audits</strong> — test models for vulnerabilities.</li>
+</ul>
+
+<h2>6. What key considerations should be kept in mind when designing a secure generative AI solution?</h2>
+<ul>
+  <li><strong>Secure architecture:</strong> Isolate sensitive data, control access, log activity.</li>
+  <li><strong>Compliance:</strong> Align with laws and ethical guidelines.</li>
+  <li><strong>Governance:</strong> Define policies for safe use, accountability, and monitoring.</li>
+  <li><strong>Continuous monitoring:</strong> Update defenses as threats evolve.</li>
+  <li><strong>Responsible design:</strong> Balance innovation with safety, fairness, and transparency.</li>
+</ul>
+
+</article>
+<footer class="page-footer">vjra.us · Research Library · Archived 20 July 2026</footer>
+</body>
+</html>
