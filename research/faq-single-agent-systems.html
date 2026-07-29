@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ: Single-Agent Systems — vjra.us Research</title>
+<meta name="description" content="A five-question primer on the language model's role as an agent's reasoning engine, tools and multi-tool use, the ReAct thought-action-observation loop, the main AI agent architectures, and the role of memory. Archived on vjra.us for reference.">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  :root {
+    --cream: #f8f4ee;
+    --ink: #1a1410;
+    --ink-mid: #4a4038;
+    --ink-light: #8a8078;
+    --accent: #b85042;
+    --nav-h: 64px;
+  }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── Nav ── */
+  .site-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(0,0,0,.08);
+  }
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; align-items: center;
+    height: var(--nav-h); padding: 0 40px;
+    position: relative;
+  }
+  .nav-left { display: flex; gap: 24px; align-items: center; flex: 1; }
+  .nav-left a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: .9rem; color: var(--ink-mid);
+    text-decoration: none; letter-spacing: .02em;
+    transition: color .2s;
+  }
+  .nav-left a:hover { color: var(--ink); }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 400;
+    color: var(--ink); text-decoration: none;
+    letter-spacing: .04em; white-space: nowrap;
+    position: absolute; left: 50%; transform: translateX(-50%);
+  }
+
+  /* ── Page ── */
+  .page-wrap {
+    max-width: 780px; margin: 0 auto;
+    padding: 72px 40px 100px;
+    position: relative; z-index: 1;
+  }
+  .page-kicker {
+    font-family: 'Inter', sans-serif;
+    font-size: .72rem; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 18px;
+  }
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 300;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.1; color: var(--ink);
+    margin-bottom: 20px;
+  }
+  .page-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 1.2rem;
+    color: var(--ink-light); margin-bottom: 24px;
+    max-width: 640px; line-height: 1.6;
+  }
+  .page-source {
+    font-family: 'Inter', sans-serif;
+    font-size: .78rem; color: var(--ink-light);
+    margin-bottom: 56px; letter-spacing: .02em;
+  }
+
+  /* ── FAQ list ── */
+  .faq-list { margin-top: 8px; }
+  .faq-row {
+    padding: 32px 0;
+    border-top: 1px solid rgba(0,0,0,.09);
+  }
+  .faq-row:first-child { border-top: none; padding-top: 0; }
+  .faq-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 500;
+    font-size: 1.5rem; line-height: 1.35;
+    color: var(--ink); margin-bottom: 14px;
+  }
+  .faq-question .q-num {
+    font-family: 'Inter', sans-serif;
+    font-style: normal; font-size: .72rem;
+    font-weight: 500; letter-spacing: .06em;
+    color: var(--accent); display: block;
+    margin-bottom: 6px;
+  }
+  .faq-answer {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.12rem; line-height: 1.65;
+    color: var(--ink-mid); max-width: 660px;
+  }
+  .faq-answer p { margin-bottom: .9rem; }
+  .faq-answer p:last-child { margin-bottom: 0; }
+  .faq-answer ul { margin: 0 0 .9rem 1.15rem; }
+  .faq-answer ul:last-child { margin-bottom: 0; }
+  .faq-answer li { margin-bottom: .55rem; }
+  .faq-answer li:last-child { margin-bottom: 0; }
+  .faq-answer strong { color: var(--ink); font-weight: 600; }
+  .faq-answer .sub-block { margin-bottom: 1rem; }
+  .faq-answer .sub-block:last-child { margin-bottom: 0; }
+  .faq-answer .sub-label { color: var(--ink); font-weight: 600; }
+
+  /* ── Further reading ── */
+  .refs-block {
+    margin-top: 48px; padding-top: 32px;
+    border-top: 1px solid rgba(0,0,0,.09);
+  }
+  .refs-label {
+    font-family: 'Inter', sans-serif;
+    font-size: .72rem; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+  }
+  .refs-list { list-style: none; }
+  .refs-list li { margin-bottom: .6rem; }
+  .refs-list li:last-child { margin-bottom: 0; }
+  .refs-list a {
+    font-family: 'Inter', sans-serif;
+    font-size: .82rem; color: var(--ink-mid);
+    text-decoration: none; word-break: break-word;
+    border-bottom: 1px solid rgba(0,0,0,.15);
+  }
+  .refs-list a:hover { color: var(--accent); border-color: var(--accent); }
+
+  footer.page-footer {
+    margin-top: 56px; padding-top: 24px;
+    border-top: 1px solid rgba(0,0,0,.08);
+    font-family: 'Inter', sans-serif;
+    font-size: .74rem; color: var(--ink-light);
+    letter-spacing: .02em;
+  }
+
+  @media (max-width: 700px) {
+    .nav-inner { padding: 0 20px; }
+    .nav-logo { position: static; transform: none; }
+    .page-wrap { padding: 48px 20px 72px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/research.html">&larr; Research Library</a>
+    </div>
+    <a href="/index.html" class="nav-logo">vjra.us</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="page-kicker">FAQ &middot; Reference</div>
+  <h1 class="page-title">Single-Agent Systems</h1>
+  <p class="page-sub">Five questions on the language model's role as an agent's reasoning engine, tools and multi-tool use, the ReAct thought-action-observation loop, the main AI agent architectures, and the role of memory.</p>
+  <p class="page-source">Agents &amp; Architecture &middot; Archived 28 July 2026</p>
+
+  <div class="faq-list">
+
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">01</span>What role does a language model play in agents?</div>
+      <div class="faq-answer">
+        <p>In the framework of agents, the language model is pivotal, acting much like a central processing unit that drives all decision-making. It evaluates the current situation, processes available information, and uses its reasoning capabilities to determine the optimal sequence of actions. This role of the language model is crucial for enabling agents to be adaptive, making decisions that are tailored to real-time circumstances rather than relying on predetermined scripts.</p>
+      </div>
+    </div>
+
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">02</span>What are tools in the context of agents, and can multiple tools be used within a single agent?</div>
+      <div class="faq-answer">
+        <ul>
+          <li><strong>Tools:</strong> In the context of agents, "tools" refer to various capabilities or functionalities that an agent can employ. These include software libraries, APIs, data processing modules, communication interfaces, and more.</li>
+          <li><strong>Purpose of tools:</strong> These tools enable the agent to perform a range of tasks, from processing data and understanding natural language to interacting with other systems or users.</li>
+          <li><strong>Use of multiple tools:</strong> Multiple tools can indeed be used within a single agent. Integrating diverse tools allows the agent to tackle complex and varied tasks efficiently.</li>
+          <li><strong>Benefits:</strong> Using multiple tools enhances the agent's adaptability and effectiveness, allowing it to operate across different domains and adapt to dynamic environments effectively. Usage of multiple tools makes the agent more autonomous.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">03</span>How does the ReAct framework utilize the components of Reasoning Engine, Action Space, and Observation to achieve an agent's objectives?</div>
+      <div class="faq-answer">
+        <div class="sub-block">
+          <div class="sub-label">Reasoning Engine</div>
+          <ul>
+            <li>The ReAct framework utilizes a Large Language Model (LLM) as its reasoning engine. The LLM generates a reasoning trace, or thought, which guides the agent's decision-making process by suggesting a specific course of action.</li>
+            <li>A stronger LLM, equipped with more advanced reasoning capabilities and a broader knowledge base, can generate more accurate and effective reasoning traces or thoughts. This enhances the agent's ability to quickly identify and execute the most effective actions, potentially reducing the number of cycles in the thought-action-observation loop.</li>
+            <li>Conversely, a weaker LLM might struggle with generating effective reasoning traces, leading to less optimal or irrelevant action suggestions. This can increase the number of iterations needed to reach the solution, as the agent may frequently encounter outcomes that do not meet the objective, triggering additional cycles.</li>
+          </ul>
+        </div>
+        <div class="sub-block">
+          <div class="sub-label">Action Space</div>
+          <ul>
+            <li>The action space in ReAct is a predefined set of possible actions that the agent can execute, such as performing web searches or using calculators. This limitation helps to focus the agent's actions and streamline its decision-making process.</li>
+          </ul>
+        </div>
+        <div class="sub-block">
+          <div class="sub-label">Observation</div>
+          <ul>
+            <li>After executing an action from the action space, the agent produces an observation, which is the outcome of that action. The LLM then assesses this observation to determine if the original objective has been fulfilled.</li>
+          </ul>
+        </div>
+        <div class="sub-block">
+          <div class="sub-label">Iterative Process</div>
+          <ul>
+            <li>If the observation indicates that the objective is unfulfilled, the ReAct framework prompts another cycle of thought, action, and observation. This iterative process continues until the observation aligns with the agent's objective.</li>
+          </ul>
+        </div>
+        <div class="sub-block">
+          <div class="sub-label">Conclusion of Process</div>
+          <ul>
+            <li>Once the outcome of an action satisfies the original objective, the ReAct approach concludes the sequence. The agent then reports the final solution, marking the completion of its task.</li>
+          </ul>
+        </div>
+        <p>This structured approach within the ReAct framework ensures that the agent efficiently navigates towards achieving its objectives, leveraging continuous feedback and adjustments based on real-time observations.</p>
+      </div>
+    </div>
+
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">04</span>What are the main architectures of AI agents, and how do they differ in function and application?</div>
+      <div class="faq-answer">
+        <p>AI agents can be categorized into a few main architectures, each with distinct roles and use cases:</p>
+        <ul>
+          <li><strong>Single-Agent Systems</strong> &mdash; Function: a single agent handles all tasks independently, making decisions and taking actions without collaborating with other agents. Example: a standalone customer support chatbot that answers queries for a company without interacting with other systems or agents.</li>
+          <li><strong>Multi-Agent Systems</strong> &mdash; Function: multiple agents with distinct roles collaborate to complete tasks, often communicating and coordinating actions. Example: an e-commerce system where a sales agent, an inventory agent, and a logistics agent work together to fulfill orders efficiently.</li>
+          <li><strong>Tool-Augmented Agents</strong> &mdash; Function: agents (single or multi) extend their capabilities by calling external tools, APIs, or databases to perform tasks they cannot handle internally. Example: an AI agent that uses an LLM to generate recommendations but calls a web search API to fetch current market trends.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-row">
+      <div class="faq-question"><span class="q-num">05</span>What role does memory play in AI agents?</div>
+      <div class="faq-answer">
+        <p>Memory enables agents to recall past interactions, maintain context across longer conversations, learn user preferences over time, and handle multi-step reasoning or tasks requiring long-term knowledge.</p>
+        <p>There are two types of memory:</p>
+        <ul>
+          <li><strong>Short-term memory</strong> &mdash; stores temporary context within a session.</li>
+          <li><strong>Long-term memory</strong> &mdash; persists information across multiple sessions.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="refs-block">
+    <div class="refs-label">Further Reading</div>
+    <ul class="refs-list">
+      <li><a href="https://truera.com/ai-quality-education/generative-ai-agents/what-are-llm-powered-autonomous-agents/" target="_blank" rel="noopener">TruEra — What Are LLM-Powered Autonomous Agents?</a></li>
+      <li><a href="https://arize.com/blog/react-agent-llm/" target="_blank" rel="noopener">Arize — ReAct Agent LLM</a></li>
+      <li><a href="https://www.dataiku.com/blog" target="_blank" rel="noopener">Dataiku Blog</a></li>
+      <li><a href="https://www.promptingguide.ai/research/llm-agents" target="_blank" rel="noopener">Prompting Guide — LLM Agents</a></li>
+    </ul>
+  </div>
+
+  <footer class="page-footer">vjra.us &nbsp;&middot;&nbsp; Research Library &nbsp;&middot;&nbsp; Archived 28 July 2026</footer>
+
+</div>
+
+</body>
+</html>
