@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Llama 3.1 8B — Fine-Tuning · vjra.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #b85042;
+    --ink: #1a1a2e;
+    --muted: #767676;
+    --bg: #f8f4ee;
+    --surface: #f4f3f0;
+    --border: #e8e6e1;
+    --green: #2d6a4f;
+    --amber: #b45309;
+    --purple: #6d28d9;
+    --blue: #1d4ed8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #2b2b2b;
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    border-bottom: 4px solid var(--accent);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .12em; font-size: .7rem;
+    font-weight: 700; color: var(--accent); margin-bottom: .2rem;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.7rem; color: var(--ink); font-weight: 400;
+    letter-spacing: .01em;
+  }
+  .agent-balls { display: flex; align-items: center; gap: 0; }
+  .agent-ball {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .6rem; font-weight: 700; color: #fff;
+    margin-left: -8px; border: 2px solid var(--bg);
+    flex-shrink: 0;
+  }
+  .agent-ball:first-child { margin-left: 0; }
+
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+    padding: 0 2rem;
+    gap: .25rem;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: .65rem 1.1rem;
+    font-size: .78rem; font-weight: 500;
+    background: none; border: none; cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-panel { display: none; flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+  .tab-panel.active { display: block; }
+
+  .section-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: .75rem; }
+  .section-card-head {
+    background: var(--surface); padding: .5rem 1rem; border-bottom: 1px solid var(--border);
+    font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--accent);
+  }
+  .section-card-body { padding: 1rem 1.25rem; }
+  .card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; padding: 1rem 1.25rem; }
+  .card-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .6rem; padding: 1rem 1.25rem; }
+  .label-sm {
+    font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--accent); margin-bottom: .35rem;
+  }
+  .body-sm { font-size: .78rem; color: var(--muted); line-height: 1.6; }
+  .body-sm strong { color: var(--ink); }
+
+  .stat-row { display: flex; gap: 1.5rem; flex-wrap: wrap; padding: 1rem 1.25rem; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--ink); line-height: 1; }
+  .stat-label { font-size: .68rem; color: var(--muted); margin-top: .15rem; }
+
+  .arch-layer { border: 1px solid var(--border); border-radius: 10px; margin-bottom: .75rem; overflow: hidden; }
+  .arch-layer-head { padding: .5rem 1rem; display: flex; align-items: center; gap: .75rem; border-bottom: 1px solid var(--border); }
+  .arch-layer-badge {
+    font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+    padding: .2rem .55rem; border-radius: 20px; white-space: nowrap;
+  }
+  .arch-layer-title { font-size: .8rem; font-weight: 600; color: var(--ink); }
+  .arch-layer-sub { font-size: .72rem; color: var(--muted); }
+  .arch-nodes { display: flex; gap: .75rem; padding: .85rem 1rem; flex-wrap: wrap; background: var(--bg); }
+  .arch-node { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .6rem .9rem; flex: 1; min-width: 200px; }
+  .arch-node-name { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin-bottom: .2rem; }
+  .arch-node-desc { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+
+  .pipeline { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 1rem 1.25rem 1.25rem; flex-wrap: nowrap; }
+  .pipeline-agent { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; min-width: 108px; }
+  .pipeline-ball {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; font-weight: 700; color: #fff; margin-bottom: .4rem;
+  }
+  .pipeline-label { font-size: .65rem; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.3; }
+  .pipeline-sub { font-size: .6rem; color: var(--muted); text-align: center; margin-top: .15rem; }
+  .pipeline-connector { flex-shrink: 0; display: flex; align-items: center; padding: 0 .25rem; margin-top: 20px; color: var(--muted); font-size: .8rem; }
+
+  .json-toolbar {
+    display: flex; align-items: center; justify-content: space-between; padding: .65rem 1rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px 8px 0 0; border-bottom: none;
+  }
+  .json-toolbar-label { font-size: .72rem; font-weight: 600; color: var(--ink); }
+  .json-toolbar-actions { display: flex; gap: .5rem; }
+  .btn-sm {
+    padding: .3rem .75rem; font-size: .72rem; font-weight: 600; border-radius: 5px; border: 1px solid var(--border);
+    cursor: pointer; background: var(--bg); color: var(--ink); transition: background .15s, border-color .15s;
+  }
+  .btn-sm:hover { background: var(--surface); border-color: var(--accent); }
+  .btn-sm.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-sm.primary:hover { opacity: .88; }
+  .json-box {
+    background: #1a1a2e; border: 1px solid var(--border); border-radius: 0 0 8px 8px; padding: 1rem 1.25rem;
+    font-family: 'Menlo', 'Monaco', monospace; font-size: .7rem; line-height: 1.6;
+    overflow-x: auto; max-height: 520px; overflow-y: auto; color: #cdd6f4; white-space: pre;
+  }
+  .json-box .j-key { color: #89b4fa; }
+  .json-box .j-str { color: #a6e3a1; }
+  .json-box .j-num { color: #fab387; }
+  .json-box .j-bool { color: #cba6f7; }
+  .json-box .j-null { color: #f38ba8; }
+
+  .back-link { font-size: .75rem; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: .3rem; }
+  .back-link:hover { color: var(--accent); }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+  .chip { font-size: .65rem; font-weight: 600; padding: .2rem .55rem; border-radius: 12px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+
+  table.data-table { width: 100%; border-collapse: collapse; font-size: .74rem; }
+  table.data-table th {
+    text-align: left; padding: .5rem .75rem; background: var(--surface); border-bottom: 1px solid var(--border);
+    font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: .05em; font-size: .62rem;
+  }
+  table.data-table td { padding: .5rem .75rem; border-bottom: 1px solid #f4f3f0; color: var(--muted); vertical-align: top; }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table td strong { color: var(--ink); }
+  .verdict-pass { color: var(--green); font-weight: 700; }
+  .verdict-fail { color: var(--accent); font-weight: 700; }
+
+  .score-row { display: flex; align-items: center; gap: .6rem; padding: .35rem 0; }
+  .score-label { font-size: .72rem; font-weight: 600; color: var(--ink); width: 220px; flex-shrink: 0; }
+  .score-track { flex: 1; height: 8px; background: var(--surface); border-radius: 5px; overflow: hidden; border: 1px solid var(--border); }
+  .score-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--accent), #d97a6c); }
+  .score-num { font-size: .72rem; font-weight: 700; color: var(--accent); width: 42px; text-align: right; flex-shrink: 0; }
+
+  .callout { border-left: 3px solid var(--accent); background: #fef6f4; padding: .7rem 1rem; border-radius: 0 6px 6px 0; font-size: .78rem; color: #6b2e26; line-height: 1.6; }
+  .callout strong { color: var(--accent); }
+
+  .img-row { display: flex; gap: .6rem; flex-wrap: wrap; padding: 1rem 1.25rem; }
+  .img-row img { width: 120px; height: auto; border: 1px solid var(--border); border-radius: 6px; }
+
+  @media (max-width: 700px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+    header { padding: 1rem; }
+    .tab-panel { padding: 1rem; }
+    .score-label { width: 130px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">VJRA.US / IK AI PM/TPM</div>
+    <h1>Llama 3.1 8B — Fine-Tuning</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="agent-balls">
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#b0b0b0,#606060,#2a2a2a);">L</div>
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">C</div>
+      <div class="agent-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">I</div>
+    </div>
+    <a href="/" class="back-link">&larr; All Projects</a>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('overview')">Business Problem &amp; Solution</button>
+  <button class="tab" onclick="switchTab('arch')">Fine-Tuning Approach</button>
+  <button class="tab" onclick="switchTab('workflow')">n8n Workflow</button>
+  <button class="tab" onclick="switchTab('eval')">Evaluation Results</button>
+</div>
+
+<!-- ══════ TAB 1 — Business Problem & Solution ══════ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="section-card">
+    <div class="section-card-head">01 &middot; Business Problem</div>
+    <div class="card-grid-2">
+      <div>
+        <div class="label-sm">The Problem</div>
+        <div class="body-sm">When a base model (<code>meta-llama/Llama-3.1-8B-Instruct</code>) receives vague feedback like <em>"This app is garbage"</em>, it tends to <strong>invent technical details</strong> — fabricated system names, made-up reproduction steps, imaginary root causes. This is hallucination: the model generates a confident, professional-looking engineering ticket from nothing, which is exactly the wrong behavior to ship to an engineering team.</div>
+      </div>
+      <div>
+        <div class="label-sm">The Solution</div>
+        <div class="body-sm">A <strong>2-agent n8n pipeline</strong> — Feedback Classifier → Engineering Insight Writer — run entirely on a <strong>local Llama 3.1 8B Instruct model</strong> (Apple Silicon, MLX-LM, 4-bit). Two small <strong>LoRA adapters</strong> (~40 MB each, 0.131% of parameters trainable) are fine-tuned to teach each agent the correct behavior on vague input: flag it as <code>UNCLEAR</code> / <code>AFFECTED_SYSTEM: UNKNOWN</code> instead of fabricating a ticket. Before/after behavior is measured with DeepEval using <code>gpt-4o</code> as judge.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">02 &middot; By the Numbers</div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">2</div><div class="stat-label">LoRA Adapters</div></div>
+      <div class="stat"><div class="stat-num">0.131%</div><div class="stat-label">Params Trainable</div></div>
+      <div class="stat"><div class="stat-num">15</div><div class="stat-label">Examples / Adapter</div></div>
+      <div class="stat"><div class="stat-num">~40MB</div><div class="stat-label">Adapter Size</div></div>
+      <div class="stat"><div class="stat-num">8/8</div><div class="stat-label">Test Cases Run</div></div>
+      <div class="stat"><div class="stat-num">75%</div><div class="stat-label">Pass Rate (Before &amp; After)</div></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">03 &middot; Sample Case — F1 (Detailed Feedback)</div>
+    <div class="section-card-body">
+      <div class="body-sm" style="font-style:italic;margin-bottom:.6rem;">"The checkout page keeps freezing when I try to apply a discount code on my iPhone 14. Happens every time. I've lost 3 orders this week because of it. Using Safari, latest iOS." — App Store review, 1 star</div>
+      <table class="data-table">
+        <thead><tr><th>Field</th><th>Baseline Llama result</th><th>Expected result</th></tr></thead>
+        <tbody>
+          <tr><td>Category / ticket type</td><td>PERFORMANCE_ISSUE</td><td>BUG_REPORT / BUG</td></tr>
+          <tr><td>Priority</td><td>P2-HIGH</td><td>P1-CRITICAL</td></tr>
+        </tbody>
+      </table>
+      <div class="body-sm" style="margin-top:.6rem;">The base model extracted system, platform, and reproduction hints correctly, but treated a deterministic functional freeze as a performance issue and understated the priority despite 3 lost orders — a clear fine-tuning target.</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">04 &middot; n8n Execution Evidence (Baseline)</div>
+    <div class="img-row">
+      <img src="https://raw.githubusercontent.com/vppuri-vjra/llama-fine-tuning/main/assets/Llama%20Baseline%20F1%20-%20n8n%20Success.png" alt="F1 baseline n8n execution success">
+      <img src="https://raw.githubusercontent.com/vppuri-vjra/llama-fine-tuning/main/assets/Llama%20Baseline%20F4%20-%20n8n%20Success.png" alt="F4 baseline n8n execution success">
+      <img src="https://raw.githubusercontent.com/vppuri-vjra/llama-fine-tuning/main/assets/Llama%20Baseline%20F7%20-%20n8n%20Success.png" alt="F7 baseline n8n execution success">
+    </div>
+    <div class="body-sm" style="padding:0 1.25rem 1rem;">All 8 baseline cases (F1–F8) completed successfully end-to-end: Chat Trigger → Feedback Classifier → Classifier LLM → Engineering Insight Writer → Insight LLM. Full screenshot set in the <a href="https://github.com/vppuri-vjra/llama-fine-tuning/tree/main/assets" target="_blank" style="color:var(--accent);">repo's assets/ folder</a>.</div>
+  </div>
+
+</div><!-- #tab-overview -->
+
+<!-- ══════ TAB 2 — Fine-Tuning Approach ══════ -->
+<div id="tab-arch" class="tab-panel">
+
+  <div class="section-card" style="margin-bottom:.75rem;">
+    <div class="section-card-head">Pipeline</div>
+    <div style="overflow-x:auto;">
+      <div class="pipeline">
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#d0d0d0,#888,#444);">&#128172;</div>
+          <div class="pipeline-label">Chat<br>Trigger</div>
+          <div class="pipeline-sub">n8n</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#6ecfa0,#2d6a4f,#0f3320);">C</div>
+          <div class="pipeline-label">Feedback<br>Classifier</div>
+          <div class="pipeline-sub">classifier-n8n LoRA</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#f0c060,#b45309,#6b2e00);">I</div>
+          <div class="pipeline-label">Engineering<br>Insight Writer</div>
+          <div class="pipeline-sub">insight LoRA</div>
+        </div>
+        <div class="pipeline-connector">&rarr;</div>
+        <div class="pipeline-agent">
+          <div class="pipeline-ball" style="background:radial-gradient(circle at 35% 35%,#b48df0,#6d28d9,#320a7a);">&#128190;</div>
+          <div class="pipeline-label">Structured<br>Ticket</div>
+          <div class="pipeline-sub">output</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#f0fff8;">
+      <span class="arch-layer-badge" style="background:#2d6a4f;color:#fff;">Stage 1</span>
+      <div>
+        <div class="arch-layer-title">Base Model &amp; Local Serving</div>
+        <div class="arch-layer-sub">MLX-LM &middot; mlx-community/Llama-3.1-8B-Instruct-4bit &middot; FastAPI compatibility adapter</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">4-bit MLX Build</div>
+        <div class="arch-node-desc">~4.2 GB, ~8.03B parameters, chosen because it represents the instructor's Llama 3.1 8B Instruct model in a format that runs natively on Apple Silicon.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">n8n Compatibility Adapter</div>
+        <div class="arch-node-desc">A local FastAPI service exposes two model aliases (<code>classifier-llama</code>, <code>insight-llama</code>) routing to two MLX inference services on ports 8006/8007, relaying streamed Chat Completions so n8n's LLM nodes work unmodified. ngrok tunnels it to hosted n8n.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-layer">
+    <div class="arch-layer-head" style="background:#eef4ff;">
+      <span class="arch-layer-badge" style="background:#1d4ed8;color:#fff;">Stage 2</span>
+      <div>
+        <div class="arch-layer-title">LoRA Fine-Tuning</div>
+        <div class="arch-layer-sub">MLX-LM LoRA &middot; rank 8, scale 20 &middot; 16 trainable layers</div>
+      </div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node">
+        <div class="arch-node-name">Two Adapters, One Base Model</div>
+        <div class="arch-node-desc">10.486M of 8.03B parameters trainable (<strong>0.131%</strong>). 15 training examples each, batch size 1, max sequence length 1,024, learning rate 1e-5, prompt loss masked so learning focuses on the assistant answer.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Classifier — 60 iterations</div>
+        <div class="arch-node-desc">Validation loss 1.413 &rarr; 0.013, training loss 0.085. Retrained a second time on the exact n8n system prompt after the first version misclassified live input (see lesson below).</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-node-name">Insight Writer — 60 + 30 iterations</div>
+        <div class="arch-node-desc">Validation loss 2.396 &rarr; 0.083 &rarr; 0.042. The 30-iteration continuation was added because the first sanity check stopped before the priority section.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Key Lesson — Training Prompts Must Match Inference Prompts</div>
+    <div class="section-card-body">
+      <div class="callout">The first classifier adapter memorized the 15 training examples perfectly (using the instructor's shorter system prompt) but misclassified live n8n input as <code>USABILITY_COMPLAINT</code> instead of <code>UNCLEAR</code>, because n8n sends a longer system prompt than the training data used. Retraining every example against the <strong>exact n8n system prompt</strong> fixed it. <strong>Low training loss alone does not guarantee correct production behavior</strong> if training and inference instructions diverge.</div>
+    </div>
+  </div>
+
+</div><!-- #tab-arch -->
+
+<!-- ══════ TAB 3 — n8n Workflow ══════ -->
+<div id="tab-workflow" class="tab-panel">
+
+  <div style="margin-bottom:.75rem;">
+    <div class="json-toolbar">
+      <div>
+        <div class="json-toolbar-label">Llama - Week - 7 Fine Tuning — n8n Workflow JSON</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:.1rem;">5 nodes &nbsp;&middot;&nbsp; Chat Trigger + Feedback Classifier agent + Engineering Insight Writer agent, both backed by local Llama LLM nodes</div>
+      </div>
+      <div class="json-toolbar-actions">
+        <button class="btn-sm" onclick="copyJson()">Copy JSON</button>
+        <button class="btn-sm primary" onclick="downloadJson()">Download .json</button>
+      </div>
+    </div>
+    <div class="json-box" id="jsonBox"></div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">How to Import into n8n</div>
+    <div class="card-grid-3" style="padding:1rem 1.25rem;">
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">01 &middot; Download</div>
+        <div class="body-sm">Click "Download .json" above to get the workflow file.</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">02 &middot; Import</div>
+        <div class="body-sm">In n8n: Menu &rarr; Workflows &rarr; Import from File. Select the downloaded JSON.</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:.3rem;">03 &middot; Local model</div>
+        <div class="body-sm">Both LLM nodes point at a local Llama endpoint via ngrok — swap in the compatibility adapter's public URL.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #tab-workflow -->
+
+<!-- ══════ TAB 4 — Evaluation Results ══════ -->
+<div id="tab-eval" class="tab-panel">
+
+  <div class="section-card">
+    <div class="section-card-head">Baseline vs. Post-Fine-Tuning (DeepEval, judge = gpt-4o)</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Baseline</th><th>Post-fine-tuning</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Overall test-case pass rate</td><td>75% (6/8)</td><td>75% (6/8)</td><td>No change</td></tr>
+          <tr><td>Detailed (F1–F4) Groundedness</td><td>0.79</td><td>0.75</td><td>−0.04</td></tr>
+          <tr><td>Detailed (F1–F4) Usefulness</td><td>0.95</td><td>0.86</td><td>−0.09</td></tr>
+          <tr><td>Detailed (F1–F4) Answer Relevancy</td><td>0.94</td><td>0.93</td><td>−0.01</td></tr>
+          <tr><td>Vague (F5–F8) Feedback Handling</td><td>0.56</td><td>0.57</td><td>+0.01</td></tr>
+          <tr><td>Vague (F5–F8) Answer Relevancy</td><td>0.68</td><td>0.76</td><td>+0.08</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:.6rem;font-size:.72rem;color:var(--muted);">GPT-4o is an LLM judge, so small score differences between runs shouldn't be treated as statistically significant without repeated evaluations.</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Key Finding</div>
+    <div class="section-card-body">
+      <div class="callout"><strong>Fine-tuning did not raise the overall pass rate.</strong> With only 15 training examples per adapter, the model learned the specific examples shown rather than the general rule. F8 — the exact pattern in the training data — went from failing (score 0.22) to passing strongly (1.00, correctly using <code>INVESTIGATION_NEEDED</code> / <code>P4-LOW</code> and keeping system/platform unknown). But F5 and F6, different negative phrasings the training set didn't cover, went from passing to failing — the fine-tuned model over-generalized toward <code>P1-CRITICAL</code> and invented reproduction context on those. This is a classic small-dataset generalization gap, not a broken approach — the fix is more diverse vague-negative training examples, not more iterations on the same 15.</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Vague-Feedback Case Results (F5–F8)</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table">
+        <thead><tr><th>Case</th><th>Feedback</th><th>Baseline</th><th>Post-fine-tuning</th></tr></thead>
+        <tbody>
+          <tr><td>F5</td><td>"This app is garbage..."</td><td><span class="verdict-pass">PASS</span></td><td><span class="verdict-fail">FAIL</span> (0.21) — used P1-CRITICAL, invented context</td></tr>
+          <tr><td>F6</td><td>"Terrible..."</td><td><span class="verdict-pass">PASS</span></td><td><span class="verdict-fail">FAIL</span> — invented checkout context, P1-CRITICAL</td></tr>
+          <tr><td>F7</td><td>"Meh. It's fine I guess."</td><td><span class="verdict-fail">FAIL</span> (0.34)</td><td><span class="verdict-pass">PASS</span> (0.81) — correct P4-LOW</td></tr>
+          <tr><td>F8</td><td>"Fix your stuff."</td><td><span class="verdict-fail">FAIL</span> (0.22) — asked for feedback again</td><td><span class="verdict-pass">PASS</span> (1.00) — exemplary INVESTIGATION_NEEDED / P4-LOW</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:.5rem;">Detailed cases F1–F4 passed all metrics both before and after. Full per-metric scores and DeepEval reasoning in the repo's <code>notes/</code> and <code>results/</code> folders.</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">Evaluation Limitation</div>
+    <div class="section-card-body">
+      <div class="body-sm">F1–F8 are present in the instructor-supplied training data, so this comparison measures how well the model learned <strong>known</strong> examples — not whether it generalizes to unseen feedback. A stronger follow-up would add an F9–F16 holdout set that is never included in training. Full source: <a href="https://github.com/vppuri-vjra/llama-fine-tuning" target="_blank" style="color:var(--accent);">github.com/vppuri-vjra/llama-fine-tuning</a></div>
+    </div>
+  </div>
+
+</div><!-- #tab-eval -->
+
+<script>
+const WORKFLOW_JSON = {"name":"Week - 7 Fine Tuning n8n","nodes":[{"parameters":{"options":{}},"id":"9d740dab-e664-4b5d-ae17-72cbfe1f7695","name":"When chat message received","type":"@n8n/n8n-nodes-langchain.chatTrigger","typeVersion":1.1,"position":[1296,48],"webhookId":"e2bb1fb7-5938-448f-9b57-c6b7198a59ae"},{"parameters":{"options":{"systemMessage":"=ROLE: User Feedback Classifier\n\nYou receive raw user feedback (app reviews, support tickets, survey responses, NPS comments) and produce a structured classification for the engineering team.\n\nOUTPUT FORMAT (return EXACTLY this structure):\n\nCATEGORY: [One of: BUG_REPORT, FEATURE_REQUEST, PERFORMANCE_ISSUE, USABILITY_COMPLAINT, INTEGRATION_REQUEST, SECURITY_CONCERN, PRAISE, UNCLEAR]\nSEVERITY: [CRITICAL / HIGH / MEDIUM / LOW]\nAFFECTED_SYSTEM: [Which technical system is likely involved, e.g., 'frontend/checkout', 'API', 'mobile-app/iOS', 'auth-service', 'billing-service', 'database', 'CDN', 'UNKNOWN']\nPLATFORM: [web / iOS / Android / API / desktop / UNKNOWN]\nENVIRONMENT: [Browser, OS, device, app version if mentioned. Otherwise 'NOT_PROVIDED']\nSENTIMENT: [POSITIVE / NEUTRAL / NEGATIVE / ANGRY]\nKEY_PHRASES: [3-5 EXACT quotes from the feedback that are technically relevant]\nREPRODUCTION_HINTS: [Any steps, conditions, or triggers the user mentioned that could help reproduce the issue]\nMISSING_TECHNICAL_CONTEXT: [What technical details are NOT provided but would be needed for engineering to investigate]\n\nRULES:\n- KEY_PHRASES must be EXACT quotes from the feedback. Do NOT paraphrase.\n- AFFECTED_SYSTEM must only be set if the user explicitly mentions a feature or area. Otherwise UNKNOWN.\n- REPRODUCTION_HINTS must only contain information the user actually described. Do NOT invent steps.\n- If the feedback is vague, set CATEGORY to UNCLEAR, AFFECTED_SYSTEM to UNKNOWN, and list everything missing in MISSING_TECHNICAL_CONTEXT.\n- Do NOT generate fixes, insights, or recommendations. Only classify and extract."}},"id":"438b88b6-3ece-462a-b42c-31ad4ac4a069","name":"Feedback Classifier","type":"@n8n/n8n-nodes-langchain.agent","typeVersion":1.7,"position":[1536,48]},{"parameters":{"model":"gpt-4.1","options":{}},"id":"a125d0fc-703f-49ce-9146-07a293c4f230","name":"Classifier LLM","type":"@n8n/n8n-nodes-langchain.lmChatOpenAi","typeVersion":1,"position":[1536,256],"credentials":{"openAiApi":{"id":"SOQqYR632q8ilTaH","name":"Yadhu Open AI token"}}},{"parameters":{"promptType":"define","text":"={{ $('When chat message received').item.json.chatInput }}","options":{"systemMessage":"=ROLE: Engineering Insight Writer\n\nYou receive classified user feedback and write a structured engineering insight that helps the engineering team understand, prioritize, and investigate the issue.\n\nOUTPUT FORMAT (return EXACTLY this structure):\n\n=== ENGINEERING INSIGHT ===\nTITLE: [One-line technical summary, e.g., 'Checkout freeze on iOS Safari when applying discount codes']\nTICKET_TYPE: [BUG / FEATURE / PERFORMANCE / INVESTIGATION_NEEDED]\nSEVERITY: [From classifier]\n\nTECHNICAL SUMMARY: [2-3 sentences describing the issue in engineering terms. Focus on what is broken, where, and under what conditions.]\n\nAFFECTED COMPONENTS:\n- System: [From classifier's AFFECTED_SYSTEM]\n- Platform: [From classifier's PLATFORM]\n- Environment: [From classifier's ENVIRONMENT]\n\nREPRODUCTION STEPS:\n[Numbered list based ONLY on what the user described. If insufficient info, write 'INSUFFICIENT DATA - steps below are what we know, not confirmed reproduction steps']\n1. ...\n\nINVESTIGATION CHECKLIST:\n- [ ] [First thing engineering should check]\n- [ ] [Second thing]\n- [ ] [Third thing]\n\nDATA GAPS FOR ENGINEERING:\n[What technical information is missing that engineering needs before they can start working]\n\nPRIORITY RECOMMENDATION: [P1-CRITICAL / P2-HIGH / P3-MEDIUM / P4-LOW]\nPRIORITY JUSTIFICATION: [Why this priority, in engineering terms - impact on users, blast radius, data integrity risk]\n\nRULES:\n- ONLY use information from the original feedback and the classifier output.\n- REPRODUCTION STEPS must come from user-described behavior. Do NOT invent steps the user did not mention.\n- INVESTIGATION CHECKLIST should be reasonable next steps but must NOT assume what the root cause is.\n- Do NOT invent error codes, log entries, commit hashes, or internal system names not mentioned.\n- Do NOT estimate user counts, revenue impact, or percentages. Write 'Unknown - single report' for scale.\n- If CATEGORY was UNCLEAR, set TICKET_TYPE to INVESTIGATION_NEEDED, write 'Insufficient feedback for engineering action' in TECHNICAL SUMMARY, and set INVESTIGATION CHECKLIST to only 'Reach out to user for technical details'.\n- For FEATURE_REQUEST or PRAISE, focus on what engineering would need to evaluate feasibility."}},"id":"81c8bcfb-9705-4269-b5a4-abb63baf0d1b","name":"Engineering Insight Writer","type":"@n8n/n8n-nodes-langchain.agent","typeVersion":1.7,"position":[1824,48]},{"parameters":{"model":"gpt-4.1","options":{}},"id":"971f1fef-8441-4c19-8025-48808c8798d0","name":"Insight LLM","type":"@n8n/n8n-nodes-langchain.lmChatOpenAi","typeVersion":1,"position":[1824,256],"credentials":{"openAiApi":{"id":"SOQqYR632q8ilTaH","name":"Yadhu Open AI token"}}}],"pinData":{},"connections":{"When chat message received":{"main":[[{"node":"Feedback Classifier","type":"main","index":0}]]},"Classifier LLM":{"ai_languageModel":[[{"node":"Feedback Classifier","type":"ai_languageModel","index":0}]]},"Feedback Classifier":{"main":[[{"node":"Engineering Insight Writer","type":"main","index":0}]]},"Insight LLM":{"ai_languageModel":[[{"node":"Engineering Insight Writer","type":"ai_languageModel","index":0}]]}},"active":false,"settings":{"executionOrder":"v1"},"versionId":"5ace776a-e025-4c39-a07f-9c2a7f40b52d","meta":{"templateCredsSetupCompleted":true,"instanceId":"f8915628d001c9f12c477501d438b0ef663b51074cad39b3fe2c37a0f1ebd929"},"id":"B9ilZqdqz20mT63H","tags":[]};
+
+function switchTab(name) {
+  const order = ['overview','arch','workflow','eval'];
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', order[i] === name);
+  });
+  order.forEach(n => {
+    document.getElementById('tab-' + n).classList.toggle('active', n === name);
+  });
+}
+
+function syntaxHighlight(obj) {
+  const json = JSON.stringify(obj, null, 2);
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+    let cls = 'j-num';
+    if (/^"/.test(match)) {
+      cls = /:$/.test(match) ? 'j-key' : 'j-str';
+    } else if (/true|false/.test(match)) {
+      cls = 'j-bool';
+    } else if (/null/.test(match)) {
+      cls = 'j-null';
+    }
+    return `<span class="${cls}">${match}</span>`;
+  });
+}
+
+document.getElementById('jsonBox').innerHTML = syntaxHighlight(WORKFLOW_JSON);
+
+function copyJson() {
+  navigator.clipboard.writeText(JSON.stringify(WORKFLOW_JSON, null, 2)).then(() => {
+    const btn = document.querySelector('.btn-sm:not(.primary)');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy JSON', 1500);
+  });
+}
+
+function downloadJson() {
+  const blob = new Blob([JSON.stringify(WORKFLOW_JSON, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Llama - Week - 7 Fine Tuning n8n.json';
+  a.click();
+}
+</script>
+</body>
+</html>
