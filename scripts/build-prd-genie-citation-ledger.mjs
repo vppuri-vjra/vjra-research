@@ -37,7 +37,7 @@ for(const source of packet.sources){
   for(const ref of refs){const match=deliveryRefs.get(ref);if(match)for(const type of Object.keys(hierarchy))for(const id of match[type])hierarchy[type].add(id)}
   const locations=[...new Set([...itemIds,...downstreamIds].map(id=>prdLocations.get(id)).filter(Boolean))];
   const strongest=decisionRecords.sort((a,b)=>(rank[b.disposition]||0)-(rank[a.disposition]||0))[0];
-  let outcome='Context only / not carried into delivery';
+  let outcome=itemIds.length?'Extracted item not in signed allowlist / no recorded disposition':'Source context / metadata';
   if(hierarchy.stories.size)outcome='Active delivery';
   else if(strongest?.disposition==='deferred_out_of_first_release')outcome='Deferred / PRD out of scope';
   else if(strongest?.disposition==='superseded')outcome='Superseded / audit only';
