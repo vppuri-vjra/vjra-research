@@ -272,7 +272,7 @@ DELIVERY = exactly one JSON report + one Markdown report</div></div></article>
   if(pm&&pmRoot){
     const maxCitations=Math.max(...pm.sources.map(source=>source.citation_count));
     const maxCategory=Math.max(...pm.category_counts.map(item=>item.count));
-    const categoryButtons=['All',...pm.category_counts.map(item=>item.category)].map((category,index)=>`<button class="metric-filter ${index===0?'active':''}" data-category="${esc(category)}">${esc(category)}${category==='All'?'':` · ${pm.category_counts.find(item=>item.category===category).count}`}</button>`).join('');
+    const categoryButtons=['All',...pm.category_counts.map(item=>item.category)].map((category,index)=>`<button class="metric-filter ${index===0?'active':''}" data-category="${esc(category)}">${esc(category)} · ${category==='All'?pm.approved_items.length:pm.category_counts.find(item=>item.category===category).count}</button>`).join('');
     const gapSources=[...new Set(pm.approved_items.flatMap(item=>(item.decision_details||[]).map(detail=>detail.gap_source)).filter(Boolean))];
     const gapSourceClass=source=>source.includes('amendment')?'amendment':source.includes('clarification')?'clarification':source.includes('Gap Analyzer')?'analyzer':'direct';
     const gapSourceButtons=['All sources',...gapSources].map((source,index)=>{const count=source==='All sources'?pm.approved_items.length:pm.approved_items.filter(item=>(item.decision_details||[]).some(detail=>detail.gap_source===source)).length;return `<button class="metric-filter source-filter ${index===0?'active':''} ${index===0?'':gapSourceClass(source)}" data-gap-source="${esc(source)}">${esc(source)} · ${count}</button>`}).join('');
