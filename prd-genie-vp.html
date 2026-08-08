@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="PRD Genie VP evaluation dashboard — deterministic T1–T10 evidence, grounded outputs, trace lineage, and Google Drive delivery.">
+<meta name="description" content="PRD Genie VP evaluation dashboard — human-reviewed T1–T12 ground truth, deterministic evidence, grounded outputs, trace lineage, and Google Drive delivery.">
 <meta property="og:title" content="PRD Genie VP · Evaluation Dashboard">
 <meta property="og:description" content="10/10 baseline tests passed · 100% groundedness · 0 unsupported claims">
 <meta property="og:type" content="website">
@@ -75,9 +75,19 @@
   .lineage{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.lineage-item{border-left:3px solid var(--accent);background:var(--surface);padding:.75rem;border-radius:0 8px 8px 0}.lineage-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}.lineage-value{font-size:.7rem;font-weight:600;color:var(--ink);margin-top:.2rem;overflow-wrap:anywhere}
   .callout{border:1px solid #b9dbc8;background:var(--green-bg);border-radius:10px;padding:.9rem 1rem;font-size:.72rem;color:var(--green);margin-top:1rem}.callout strong{display:block;margin-bottom:.2rem}
   .code{font-family:'Menlo','Monaco',monospace;font-size:.63rem;background:var(--ink);color:#d9e2f2;padding:1rem;border-radius:8px;overflow:auto;white-space:pre-wrap;line-height:1.7}
+  .dataset-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}
+  .dataset-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:10px;padding:1rem}
+  .dataset-range{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+  .dataset-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--ink);margin:.25rem 0}
+  .dataset-desc{font-size:.68rem;color:var(--muted);line-height:1.55}
+  .dataset-result{display:flex;align-items:center;gap:.35rem;margin-top:.65rem;font-size:.66rem;font-weight:700;color:var(--green)}
+  .dataset-result:before{content:"✓";width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:var(--green-bg)}
+  .principles{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem}
+  .principle{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem}
+  .principle strong{display:block;font-size:.68rem;color:var(--ink);margin-bottom:.2rem}.principle span{font-size:.62rem;color:var(--muted);line-height:1.5;display:block}
   footer{text-align:center;border-top:1px solid var(--border);padding:1.35rem;font-size:.65rem;color:var(--muted)}
-  @media(max-width:900px){.metrics{grid-template-columns:repeat(3,1fr)}.hero,.two-col{grid-template-columns:1fr}.lineage{grid-template-columns:1fr 1fr}}
-  @media(max-width:620px){header{padding:1rem;align-items:flex-start;flex-direction:column}.header-right{width:100%;justify-content:space-between}.tab-bar{padding:0 1rem}main{padding:1rem}.metrics{grid-template-columns:1fr 1fr}.lineage{grid-template-columns:1fr}.flow-arrow{display:none}.flow{display:grid;grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:105px 1fr 38px}}
+  @media(max-width:900px){.metrics{grid-template-columns:repeat(3,1fr)}.hero,.two-col{grid-template-columns:1fr}.lineage{grid-template-columns:1fr 1fr}.dataset-summary{grid-template-columns:1fr}.principles{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){header{padding:1rem;align-items:flex-start;flex-direction:column}.header-right{width:100%;justify-content:space-between}.tab-bar{padding:0 1rem}main{padding:1rem}.metrics{grid-template-columns:1fr 1fr}.lineage{grid-template-columns:1fr}.flow-arrow{display:none}.flow{display:grid;grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:105px 1fr 38px}.principles{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -88,6 +98,7 @@
 <nav class="tab-bar" aria-label="Dashboard sections">
   <button class="tab active" data-tab="overview">Executive Overview</button>
   <button class="tab" data-tab="tests">T1–T10 Results</button>
+  <button class="tab" data-tab="ground-truth">Ground Truth Dataset</button>
   <button class="tab" data-tab="evidence">Evidence &amp; Lineage</button>
 </nav>
 <main>
@@ -127,6 +138,38 @@
       <tr data-status="complete"><td class="test-id">T10</td><td class="input-cell">SSO requires new auth service from Team Alpha; ETA unknown.</td><td class="output-cell">Functional requirement, dependency, and risk retained with unknown ETA explicit.</td><td><span class="status complete">Complete</span></td><td>11</td><td><span class="pass">Pass</span></td></tr>
     </tbody></table></div>
     <div class="callout"><strong>How to read this table</strong>“Partial” is an intentional, correct output when an input is ambiguous, contradictory, or incomplete. The evaluator rewards faithful extraction and explicit uncertainty—not forced completeness.</div>
+  </section>
+
+  <section id="ground-truth" class="panel">
+    <h2 class="section-title">Human-reviewed ground truth dataset</h2>
+    <div class="hero">
+      <article class="card"><div class="card-head"><span class="card-title">Canonical evaluation baseline</span><span class="card-note">Dataset release 0.1.1</span></div><div class="card-body"><h2>Expectations are versioned independently from model output.</h2><p>The ground-truth dataset defines what PRD Genie is expected to produce before an actual run is scored. Each approved case preserves the authoritative input, canonical output, required exact values and relationships, allowed variations, prohibited claims, review notes, and reviewer decision.</p><div class="badge-row"><span class="badge green">12/12 approved</span><span class="badge blue">Human reviewed</span><span class="badge purple">Schema valid</span><span class="badge">Version controlled</span></div></div></article>
+      <article class="card"><div class="card-head"><span class="card-title">Release baseline</span><span class="card-note">T1–T12</span></div><div class="card-body"><div class="score-ring"><div class="score-value">12/12<small>Approved cases</small></div></div><div class="center-note">Requirement extraction → PRD → story hierarchy</div></div></article>
+    </div>
+
+    <div class="dataset-summary">
+      <article class="dataset-card"><div class="dataset-range">T1–T10</div><div class="dataset-name">Requirement Extraction</div><div class="dataset-desc">Ten inputs spanning precise requirements, ambiguity, contradictions, personas, dependencies, quantitative constraints, and a true no-requirements case.</div><div class="dataset-result">10/10 approved and passed</div></article>
+      <article class="dataset-card"><div class="dataset-range">T11</div><div class="dataset-name">PRD Generation</div><div class="dataset-desc">Approved T1 requirement package transformed into a grounded ten-section structured and Markdown PRD without unsupported scope.</div><div class="dataset-result">Approved · 100% grounded</div></article>
+      <article class="dataset-card"><div class="dataset-range">T12</div><div class="dataset-name">Story Breakdown</div><div class="dataset-desc">Approved PRD decomposed into one epic, one feature, one story, two acceptance criteria, and two unresolved questions with source links intact.</div><div class="dataset-result">Approved · 100% grounded</div></article>
+    </div>
+
+    <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Ground-truth review register</span><span class="card-note">Canonical expectations and human approval</span></div><div class="table-wrap" style="border:0;border-radius:0"><table><thead><tr><th>Cases</th><th>Capability</th><th>Dataset version</th><th>Canonical expectation</th><th>Human review</th><th>Release result</th></tr></thead><tbody>
+      <tr><td class="test-id">T1</td><td>Requirement Extraction</td><td><strong>0.1.1</strong></td><td class="output-cell">Complete extraction with relationship-scope adjudication.</td><td>Approved by Vipin · Aug 3, 2026</td><td><span class="pass">Pass</span></td></tr>
+      <tr><td class="test-id">T2–T8</td><td>Requirement Extraction</td><td><strong>0.1.0</strong></td><td class="output-cell">Case-specific exact values, item types, evidence, ambiguity and contradiction behavior.</td><td>Approved by Vipin · Aug 3, 2026</td><td><span class="pass">7/7 pass</span></td></tr>
+      <tr><td class="test-id">T9</td><td>Requirement Extraction</td><td><strong>0.1.1</strong></td><td class="output-cell">No-requirements result; approved wording adjudication prevents fabricated scope.</td><td>Approved by Vipin · Aug 3, 2026</td><td><span class="pass">Pass</span></td></tr>
+      <tr><td class="test-id">T10</td><td>Requirement Extraction</td><td><strong>0.1.0</strong></td><td class="output-cell">SSO requirement plus explicit dependency, risk, Team Alpha, and unknown ETA.</td><td>Approved by Vipin · Aug 3, 2026</td><td><span class="pass">Pass</span></td></tr>
+      <tr><td class="test-id">T11</td><td>PRD Generation</td><td><strong>0.1.0</strong></td><td class="output-cell">Ten-section JSON/Markdown PRD grounded only in approved T1 evidence.</td><td>Approved by Vipin · Aug 5, 2026</td><td><span class="pass">Pass</span></td></tr>
+      <tr><td class="test-id">T12</td><td>Story Breakdown</td><td><strong>Approved baseline</strong></td><td class="output-cell">1 epic · 1 feature · 1 story · 2 acceptance criteria · 2 unresolved questions.</td><td>Approved by Vipin · Aug 5, 2026</td><td><span class="pass">Pass</span></td></tr>
+    </tbody></table></div></article>
+
+    <div class="two-col">
+      <article class="card"><div class="card-head"><span class="card-title">Required case metadata</span></div><div class="card-body"><ul class="evidence-list"><li><span>Identity</span><strong>Dataset version + exact test ID</strong></li><li><span>Input boundary</span><strong>Exact source or approved upstream artifact</strong></li><li><span>Output contract</span><strong>Schema + canonical expected output</strong></li><li><span>Acceptance details</span><strong>Values, types, relationships, evidence</strong></li><li><span>Judgment boundaries</span><strong>Allowed variations + prohibited claims</strong></li><li><span>Governance</span><strong>Reviewer, date, status, notes</strong></li></ul></div></article>
+      <article class="card"><div class="card-head"><span class="card-title">Final baseline evidence</span></div><div class="card-body"><ul class="evidence-list"><li><span>T1–T10</span><strong>10/10 · execution 9833</strong></li><li><span>T11 PRD</span><strong>Execution 8621 · trace 05e9aa53…</strong></li><li><span>T12 stories</span><strong>Execution 8788 · trace 8e207893…</strong></li><li><span>Overall</span><strong>12/12 passed</strong></li><li><span>Groundedness</span><strong>100%</strong></li><li><span>Unsupported claims</span><strong>0</strong></li></ul></div></article>
+    </div>
+
+    <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Ground-truth principles</span></div><div class="card-body"><div class="principles"><div class="principle"><strong>Independent</strong><span>Model outputs never overwrite the approved expectation.</span></div><div class="principle"><strong>Source grounded</strong><span>Every factual element is reviewed against authoritative evidence.</span></div><div class="principle"><strong>Variation aware</strong><span>Permitted semantic differences are recorded explicitly.</span></div><div class="principle"><strong>Change controlled</strong><span>Updates require a reviewed version and documented rationale.</span></div></div></div></article>
+
+    <div class="callout"><strong>Why this matters</strong>The results tab shows what the system produced. This ground-truth tab shows the independent, human-approved standard used to judge those outputs—completing the line of sight from source input to expected behavior, actual output, deterministic score, and trace evidence.</div>
   </section>
 
   <section id="evidence" class="panel">
