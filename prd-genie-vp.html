@@ -85,9 +85,21 @@
   .principles{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem}
   .principle{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem}
   .principle strong{display:block;font-size:.68rem;color:var(--ink);margin-bottom:.2rem}.principle span{font-size:.62rem;color:var(--muted);line-height:1.5;display:block}
+  .case-nav{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+  .case-btn{width:42px;height:36px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--muted);font-size:.68rem;font-weight:700;cursor:pointer}
+  .case-btn:hover,.case-btn.active{background:var(--ink);border-color:var(--ink);color:#fff}
+  .case-toolbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem}
+  .case-heading{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--ink)}
+  .case-subtitle{font-size:.66rem;color:var(--muted)}
+  .case-arrows{display:flex;gap:.4rem}.case-arrow{border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:7px;padding:.35rem .65rem;font-size:.65rem;font-weight:600;cursor:pointer}.case-arrow:disabled{opacity:.35;cursor:not-allowed}
+  .source-quote{border-left:3px solid var(--accent);background:#fdfbf8;padding:1rem 1.1rem;font-family:'Cormorant Garamond',serif;font-size:1.08rem;color:var(--ink);line-height:1.55}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+  .detail-list{margin:0;padding-left:1.1rem}.detail-list li{font-size:.7rem;color:var(--muted);margin:.45rem 0}.detail-list li::marker{color:var(--accent)}
+  .handling-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.handling-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.7rem}.handling-label{font-size:.56rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700}.handling-value{font-size:.66rem;color:var(--muted);margin-top:.2rem}
+  .empty-state{font-size:.7rem;color:var(--muted);font-style:italic;padding:.6rem 0}
   footer{text-align:center;border-top:1px solid var(--border);padding:1.35rem;font-size:.65rem;color:var(--muted)}
-  @media(max-width:900px){.metrics{grid-template-columns:repeat(3,1fr)}.hero,.two-col{grid-template-columns:1fr}.lineage{grid-template-columns:1fr 1fr}.dataset-summary{grid-template-columns:1fr}.principles{grid-template-columns:1fr 1fr}}
-  @media(max-width:620px){header{padding:1rem;align-items:flex-start;flex-direction:column}.header-right{width:100%;justify-content:space-between}.tab-bar{padding:0 1rem}main{padding:1rem}.metrics{grid-template-columns:1fr 1fr}.lineage{grid-template-columns:1fr}.flow-arrow{display:none}.flow{display:grid;grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:105px 1fr 38px}.principles{grid-template-columns:1fr}}
+  @media(max-width:900px){.metrics{grid-template-columns:repeat(3,1fr)}.hero,.two-col,.detail-grid{grid-template-columns:1fr}.lineage{grid-template-columns:1fr 1fr}.dataset-summary{grid-template-columns:1fr}.principles{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){header{padding:1rem;align-items:flex-start;flex-direction:column}.header-right{width:100%;justify-content:space-between}.tab-bar{padding:0 1rem}main{padding:1rem}.metrics{grid-template-columns:1fr 1fr}.lineage{grid-template-columns:1fr}.flow-arrow{display:none}.flow{display:grid;grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:105px 1fr 38px}.principles,.handling-grid{grid-template-columns:1fr}.case-toolbar{align-items:flex-start;flex-direction:column}.case-btn{flex:1;min-width:42px}}
 </style>
 </head>
 <body>
@@ -99,6 +111,7 @@
   <button class="tab active" data-tab="overview">Executive Overview</button>
   <button class="tab" data-tab="tests">T1–T10 Results</button>
   <button class="tab" data-tab="ground-truth">Ground Truth Dataset</button>
+  <button class="tab" data-tab="ground-truth-details">T1–T10 Ground Truth Details</button>
   <button class="tab" data-tab="evidence">Evidence &amp; Lineage</button>
 </nav>
 <main>
@@ -172,6 +185,12 @@
     <div class="callout"><strong>Why this matters</strong>The results tab shows what the system produced. This ground-truth tab shows the independent, human-approved standard used to judge those outputs—completing the line of sight from source input to expected behavior, actual output, deterministic score, and trace evidence.</div>
   </section>
 
+  <section id="ground-truth-details" class="panel">
+    <h2 class="section-title">T1–T10 ground truth walkthrough</h2>
+    <div class="case-nav" id="case-nav" aria-label="Select a ground-truth case"></div>
+    <div id="case-detail" aria-live="polite"></div>
+  </section>
+
   <section id="evidence" class="panel">
     <h2 class="section-title">Evidence, controls, and delivery lineage</h2>
     <div class="lineage" style="margin-bottom:1rem"><div class="lineage-item"><div class="lineage-label">Workflow</div><div class="lineage-value">stmdp7YLv3zZxHM5</div></div><div class="lineage-item"><div class="lineage-label">Execution</div><div class="lineage-value">9833 · 6.628s</div></div><div class="lineage-item"><div class="lineage-label">Control SHA-256</div><div class="lineage-value">4ad3e09e…7eb0e26</div></div><div class="lineage-item"><div class="lineage-label">Lifecycle</div><div class="lineage-value">Inactive · unpublished</div></div></div>
@@ -192,6 +211,7 @@ DELIVERY = exactly one JSON report + one Markdown report</div></div></article>
   </section>
 </main>
 <footer>PRD Genie VP · Built by Vipin Puri · Evidence captured 8 August 2026</footer>
+<script src="/prd-genie-ground-truth-data.js"></script>
 <script>
   const tabs=[...document.querySelectorAll('.tab')];
   const panels=[...document.querySelectorAll('.panel')];
@@ -200,6 +220,39 @@ DELIVERY = exactly one JSON report + one Markdown report</div></div></article>
   const rows=[...document.querySelectorAll('tbody tr')];
   filters.forEach(btn=>btn.addEventListener('click',()=>{filters.forEach(f=>f.classList.remove('active'));btn.classList.add('active');rows.forEach(row=>row.hidden=btn.dataset.filter!=='all'&&row.dataset.status!==btn.dataset.filter)}));
   const initial=location.hash.slice(1);if(initial&&document.getElementById(initial)){document.querySelector(`[data-tab="${initial}"]`)?.click()}
+  const gtCases=window.PRD_GENIE_GROUND_TRUTH||[];
+  const gtNav=document.getElementById('case-nav');
+  const gtDetail=document.getElementById('case-detail');
+  let activeCase=0;
+  const esc=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+  const label=value=>String(value??'').replaceAll('_',' ').replace(/\b\w/g,char=>char.toUpperCase());
+  const list=(values,empty='None')=>values?.length?`<ul class="detail-list">${values.map(value=>`<li>${esc(typeof value==='string'?value:JSON.stringify(value))}</li>`).join('')}</ul>`:`<div class="empty-state">${esc(empty)}</div>`;
+  const renderCase=index=>{
+    activeCase=Math.max(0,Math.min(gtCases.length-1,index));
+    const c=gtCases[activeCase],o=c.canonical_output,items=o.items||[],missing=o.missing_information||[],contradictions=o.contradictions||[];
+    [...gtNav.children].forEach((button,i)=>button.classList.toggle('active',i===activeCase));
+    const itemRows=items.map(item=>`<tr><td class="test-id">${esc(item.id)}</td><td>${esc(label(item.type))}</td><td class="input-cell">${esc(item.statement)}</td><td>${esc(item.status)}</td><td class="output-cell">${esc(item.evidence?.[0]?.quote||'—')}</td><td>${item.related_item_ids?.length?esc(item.related_item_ids.join(', ')):'—'}</td></tr>`).join('');
+    const missingRows=missing.map(item=>`<tr><td class="test-id">${esc(item.id)}</td><td>${esc(label(item.category))}</td><td class="input-cell">${esc(item.description)}</td><td class="output-cell">${esc(item.clarification_question)}</td></tr>`).join('');
+    const handling=Object.entries(c.expected_special_handling||{}).map(([key,value])=>`<div class="handling-item"><div class="handling-label">${esc(label(key))}</div><div class="handling-value">${esc(value)}</div></div>`).join('');
+    gtDetail.innerHTML=`
+      <div class="case-toolbar"><div><div class="case-heading">Ground Truth ${esc(c.test_id)}</div><div class="case-subtitle">Dataset ${esc(c.dataset_version)} · ${esc(label(c.approval_status))} by ${esc(c.reviewer)} on ${esc(c.review_date)}</div></div><div class="case-arrows"><button class="case-arrow" id="case-prev" ${activeCase===0?'disabled':''}>← Previous</button><button class="case-arrow" id="case-next" ${activeCase===gtCases.length-1?'disabled':''}>Next →</button></div></div>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Authoritative source</span><span class="card-note">${esc(c.source.source_name)} · ${esc(c.source.location)}</span></div><div class="card-body"><div class="source-quote">${esc(c.source.input_text)}</div></div></article>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Canonical extraction review</span><span class="card-note">${esc(o.extraction_status)} · ${items.length} canonical item${items.length===1?'':'s'}</span></div><div class="table-wrap" style="border:0;border-radius:0"><table><thead><tr><th>ID</th><th>Type</th><th>Canonical interpretation</th><th>Status</th><th>Exact source evidence</th><th>Relationships</th></tr></thead><tbody>${itemRows||'<tr><td colspan="6" class="empty-state">No canonical requirement items. This is the approved behavior.</td></tr>'}</tbody></table></div></article>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Missing-information review</span><span class="card-note">${missing.length} clarification item${missing.length===1?'':'s'}</span></div><div class="table-wrap" style="border:0;border-radius:0"><table><thead><tr><th>ID</th><th>Category</th><th>Why information is missing</th><th>Approved clarification question</th></tr></thead><tbody>${missingRows||'<tr><td colspan="4" class="empty-state">No required missing-information records.</td></tr>'}</tbody></table></div></article>
+      <div class="detail-grid">
+        <article class="card"><div class="card-head"><span class="card-title">Required expectations</span></div><div class="card-body"><div class="handling-grid"><div class="handling-item"><div class="handling-label">Exact values</div>${list(c.required_expectations.required_exact_values)}</div><div class="handling-item"><div class="handling-label">Item types</div>${list((c.required_expectations.required_item_types||[]).map(label))}</div><div class="handling-item"><div class="handling-label">Relationships</div>${list(c.required_expectations.required_relationships,'No mandatory relationships')}</div><div class="handling-item"><div class="handling-label">Contradictions</div>${list(contradictions,'None')}</div></div></div></article>
+        <article class="card"><div class="card-head"><span class="card-title">Expected special handling</span></div><div class="card-body"><div class="handling-grid">${handling}</div></div></article>
+      </div>
+      <div class="detail-grid">
+        <article class="card"><div class="card-head"><span class="card-title">Allowed variations</span></div><div class="card-body">${list(c.allowed_variations)}</div></article>
+        <article class="card"><div class="card-head"><span class="card-title">Prohibited unsupported claims</span></div><div class="card-body">${list(c.prohibited_claims)}</div></article>
+      </div>
+      <article class="card" style="margin-top:1rem"><div class="card-head"><span class="card-title">Human review and comparison evidence</span><span class="card-note">Schema ${esc(c.contract.schema_version)}</span></div><div class="card-body"><p style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem">${esc(c.review_notes)}</p><ul class="evidence-list"><li><span>Canonical output</span><strong>${esc(c.canonical_output_path)}</strong></li><li><span>Baseline outcome</span><strong>${esc(c.comparison_evidence.baseline_outcome)}</strong></li><li><span>Langfuse trace</span><strong>${esc(c.comparison_evidence.langfuse_trace_id)}</strong></li></ul></div></article>`;
+    document.getElementById('case-prev')?.addEventListener('click',()=>renderCase(activeCase-1));
+    document.getElementById('case-next')?.addEventListener('click',()=>renderCase(activeCase+1));
+  };
+  gtCases.forEach((c,index)=>{const button=document.createElement('button');button.className='case-btn';button.textContent=c.test_id;button.setAttribute('aria-label',`Show ${c.test_id} ground truth`);button.addEventListener('click',()=>renderCase(index));gtNav.appendChild(button)});
+  if(gtCases.length)renderCase(0);
 </script>
 </body>
 </html>
