@@ -35,7 +35,7 @@
   .tab-bar{display:flex;gap:.2rem;padding:0 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(248,244,238,.96);backdrop-filter:blur(8px);z-index:5;overflow-x:auto}
   .tab{border:0;background:none;color:var(--muted);font-size:.75rem;font-weight:600;padding:.75rem 1rem;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
   .tab:hover,.tab.active{color:var(--accent)}.tab.active{border-bottom-color:var(--accent)}
-  .tab-dropdown{display:flex;align-items:center;gap:.25rem;border-bottom:2px solid transparent;padding:0 .45rem;color:var(--muted);white-space:nowrap}.tab-dropdown.active{border-bottom-color:var(--accent);color:var(--accent)}.tab-dropdown-label{font-size:.75rem;font-weight:600}.tab-dropdown select{max-width:28px;border:0;background:transparent;color:inherit;font-size:.75rem;font-weight:700;cursor:pointer;padding:.75rem 0}.tab-dropdown:focus-within,.tab-dropdown:hover{color:var(--accent)}
+  .tab-dropdown{display:flex;align-items:center;border-bottom:2px solid transparent;color:var(--muted);white-space:nowrap}.tab-dropdown.active{border-bottom-color:var(--accent);color:var(--accent)}.tab-dropdown select{width:255px;border:0;background:transparent;color:inherit;font-size:.75rem;font-weight:600;cursor:pointer;padding:.75rem 1.8rem .75rem 1rem}.tab-dropdown:focus-within,.tab-dropdown:hover{color:var(--accent)}
   main{max-width:1160px;margin:0 auto;padding:1.6rem 1.5rem 4rem}
   .panel{display:none}.panel.active{display:block}
   .hero{display:grid;grid-template-columns:1.45fr .75fr;gap:1rem;margin-bottom:1rem}
@@ -117,7 +117,7 @@
 </header>
 <nav class="tab-bar" aria-label="Dashboard sections">
   <button class="tab active" data-tab="overview">Executive Overview</button>
-  <label class="tab-dropdown" id="priority-nav"><span class="tab-dropdown-label">Priority Metrics Detail</span><select id="priority-view" aria-label="Select priority metrics view"><option value="" selected>▾</option><option value="priority-metrics">Source-to-Delivery Detail</option><option value="citation-reconciliation">Citation Disposition &amp; Reconciliation</option></select></label>
+  <label class="tab-dropdown" id="priority-nav"><select id="priority-view" aria-label="Select priority metrics view"><option value="" selected>Priority Metrics Detail ▾</option><option value="priority-metrics">Priority Metrics · Source-to-Delivery</option><option value="citation-reconciliation">Priority Metrics · Citation Reconciliation</option></select></label>
   <button class="tab" data-tab="tests">T1–T10 Results</button>
   <button class="tab" data-tab="ground-truth">Ground Truth Dataset</button>
   <button class="tab" data-tab="ground-truth-details">T1–T10 Ground Truth Details</button>
