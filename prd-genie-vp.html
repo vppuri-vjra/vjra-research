@@ -120,7 +120,7 @@
 <nav class="tab-bar" aria-label="Dashboard sections">
   <button class="tab active" data-tab="overview">Overview</button>
   <label class="tab-dropdown"><select data-nav-select aria-label="Select product and design view"><option value="" selected>Product &amp; Design</option><option value="brd">Business Requirements</option><option value="product-prd">Product Requirements</option><option value="architecture">System Architecture</option></select></label>
-  <label class="tab-dropdown"><select data-nav-select aria-label="Select evaluation view"><option value="" selected>Evaluation</option><option value="tests">T1–T10 Results</option><option value="ground-truth">Ground Truth Dataset</option><option value="ground-truth-details">Ground Truth Details</option></select></label>
+  <label class="tab-dropdown"><select data-nav-select aria-label="Select evaluation view"><option value="" selected>Evaluation</option><option value="tests">T1–T10 Results</option><option value="ground-truth">Ground Truth Dataset</option><option value="ground-truth-details">Requirement Extractor Ground Truth</option><option value="ga-ground-truth-details">Gap Analyzer Ground Truth</option></select></label>
   <label class="tab-dropdown"><select data-nav-select aria-label="Select evidence view"><option value="" selected>Evidence</option><option value="priority-metrics">Priority Metrics</option><option value="citation-reconciliation">Citation Reconciliation</option><option value="evidence">Evidence &amp; Lineage</option></select></label>
   <button class="tab" data-tab="delivery">Delivery</button>
 </nav>
@@ -308,6 +308,12 @@
     <div id="case-detail" aria-live="polite"></div>
   </section>
 
+  <section id="ga-ground-truth-details" class="panel">
+    <h2 class="section-title">GA-T1–GA-T10 ground truth walkthrough</h2>
+    <div class="case-nav" id="ga-case-nav" aria-label="Select a Gap Analyzer ground-truth case"></div>
+    <div id="ga-case-detail" aria-live="polite"></div>
+  </section>
+
   <section id="evidence" class="panel">
     <h2 class="section-title">Evidence, controls, and delivery lineage</h2>
     <div class="lineage" style="margin-bottom:1rem"><div class="lineage-item"><div class="lineage-label">S2 workflow</div><div class="lineage-value">yF1xQLKZyNyrpaT9</div></div><div class="lineage-item"><div class="lineage-label">Execution</div><div class="lineage-value">9872 · 64.815s</div></div><div class="lineage-item"><div class="lineage-label">Result</div><div class="lineage-value">10/10 fresh cases passed</div></div><div class="lineage-item"><div class="lineage-label">Lifecycle</div><div class="lineage-value">Inactive · unpublished</div></div></div>
@@ -342,6 +348,7 @@ DELIVERY = exactly one JSON report + one Markdown report</div></div></article>
 </main>
 <footer>PRD Genie VP · Built by Vipin Puri · Evidence captured 8 August 2026</footer>
 <script src="/prd-genie-ground-truth-data.js"></script>
+<script src="/prd-genie-gap-analyzer-ground-truth-data.js?v=10434"></script>
 <script src="/prd-genie-priority-metrics-data.js?v=c0dc0c6"></script>
 <script src="/prd-genie-citation-ledger-data.js?v=2"></script>
 <script src="/prd-genie-s2-runtime-data.js?v=9842"></script>
@@ -390,6 +397,31 @@ DELIVERY = exactly one JSON report + one Markdown report</div></div></article>
   };
   gtCases.forEach((c,index)=>{const button=document.createElement('button');button.className='case-btn';button.textContent=c.test_id;button.setAttribute('aria-label',`Show ${c.test_id} ground truth`);button.addEventListener('click',()=>renderCase(index));gtNav.appendChild(button)});
   if(gtCases.length)renderCase(0);
+  const gaCases=window.PRD_GENIE_GAP_ANALYZER_GROUND_TRUTH||[];
+  const gaNav=document.getElementById('ga-case-nav');
+  const gaDetail=document.getElementById('ga-case-detail');
+  let activeGaCase=0;
+  const renderGaCase=index=>{
+    activeGaCase=Math.max(0,Math.min(gaCases.length-1,index));
+    const c=gaCases[activeGaCase],input=c.canonical_input||{},output=c.canonical_output||{},items=input.items||[],gaps=output.gaps||[],contradictions=output.contradictions||[],risks=output.risks||[];
+    [...gaNav.children].forEach((button,i)=>button.classList.toggle('active',i===activeGaCase));
+    const itemRows=items.map(item=>`<tr><td class="test-id">${esc(item.id)}</td><td>${esc(label(item.type))}</td><td class="input-cell">${esc(item.statement)}</td><td>${esc(label(item.status))}</td><td class="output-cell">${esc(item.evidence?.[0]?.quote||'—')}</td><td>${item.related_item_ids?.length?esc(item.related_item_ids.join(', ')):'—'}</td></tr>`).join('');
+    const gapRows=gaps.map(item=>`<tr><td class="test-id">${esc(item.id)}</td><td>${esc(label(item.category))}</td><td class="input-cell">${esc(item.description)}</td><td><span class="status ${item.severity==='blocking'||item.severity==='high'?'failed':'partial'}">${esc(label(item.severity))}</span></td><td class="output-cell">${esc(item.clarification_question)}</td><td>${esc([...(item.related_item_ids||[]),...(item.source_missing_information_ids||[])].join(', ')||'—')}</td></tr>`).join('');
+    const issueRows=[...contradictions.map(item=>({...item,kind:'Contradiction'})),...risks.map(item=>({...item,kind:'Risk'}))].map(item=>`<tr><td class="test-id">${esc(item.id)}</td><td>${esc(item.kind)}</td><td class="input-cell">${esc(item.description)}</td><td>${esc(label(item.severity||'—'))}</td><td>${esc((item.related_item_ids||[]).join(', ')||'—')}</td></tr>`).join('');
+    gaDetail.innerHTML=`
+      <div class="case-toolbar"><div><div class="case-heading">Gap Analyzer Ground Truth ${esc(c.test_id)}</div><div class="case-subtitle">Dataset ${esc(c.dataset_version)} · Human reviewed · evaluation execution ${esc(c.comparison_evidence.execution_id)}</div></div><div class="case-arrows"><button class="case-arrow" id="ga-case-prev" ${activeGaCase===0?'disabled':''}>← Previous</button><button class="case-arrow" id="ga-case-next" ${activeGaCase===gaCases.length-1?'disabled':''}>Next →</button></div></div>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Canonical Requirement Extractor input</span><span class="card-note">${esc(input.extraction_status)} · ${items.length} upstream item${items.length===1?'':'s'}</span></div><div class="card-body"><p style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem">${esc(input.summary||'No extractor summary.')}</p></div><div class="table-wrap" style="border:0;border-radius:0"><table><thead><tr><th>ID</th><th>Type</th><th>Canonical statement</th><th>Status</th><th>Exact evidence</th><th>Relationships</th></tr></thead><tbody>${itemRows||'<tr><td colspan="6" class="empty-state">No canonical requirement items. The Gap Analyzer must detect that generation cannot safely proceed.</td></tr>'}</tbody></table></div></article>
+      <div class="metrics"><div class="metric"><div class="metric-value">${esc(label(output.information_sufficiency))}</div><div class="metric-label">Information sufficiency</div></div><div class="metric"><div class="metric-value ${output.generation_allowed?'good':''}">${output.generation_allowed?'Yes':'No'}</div><div class="metric-label">Generation allowed</div></div><div class="metric"><div class="metric-value">${esc(label(output.recommended_action))}</div><div class="metric-label">Recommended action</div></div><div class="metric"><div class="metric-value good">${esc(c.comparison_evidence.result)}</div><div class="metric-label">Fresh evaluation result</div></div></div>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Expected decision</span><span class="card-note">Canonical output contract</span></div><div class="card-body"><div class="source-quote">${esc(output.decision_reason)}</div></div></article>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Expected gaps</span><span class="card-note">${gaps.length} gap${gaps.length===1?'':'s'}</span></div><div class="table-wrap" style="border:0;border-radius:0"><table><thead><tr><th>ID</th><th>Category</th><th>Description</th><th>Severity</th><th>Clarification question</th><th>Source links</th></tr></thead><tbody>${gapRows||'<tr><td colspan="6" class="empty-state">No material gaps are expected for this case.</td></tr>'}</tbody></table></div></article>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Expected contradictions and risks</span><span class="card-note">${contradictions.length} contradiction${contradictions.length===1?'':'s'} · ${risks.length} risk${risks.length===1?'':'s'}</span></div><div class="table-wrap" style="border:0;border-radius:0"><table><thead><tr><th>ID</th><th>Type</th><th>Description</th><th>Severity</th><th>Related items</th></tr></thead><tbody>${issueRows||'<tr><td colspan="5" class="empty-state">No contradictions or risks are expected.</td></tr>'}</tbody></table></div></article>
+      <div class="detail-grid"><article class="card"><div class="card-head"><span class="card-title">Coverage</span></div><div class="card-body">${list(c.coverage)}</div></article><article class="card"><div class="card-head"><span class="card-title">Supporting information</span></div><div class="card-body">${list(c.supporting_information)}</div></article></div>
+      <article class="card" style="margin-top:1rem"><div class="card-head"><span class="card-title">Canonical artifacts and comparison evidence</span><span class="card-note">Execution ${esc(c.comparison_evidence.execution_id)} · ${esc(c.comparison_evidence.result)}</span></div><div class="card-body"><ul class="evidence-list"><li><span>Canonical input</span><strong>${esc(c.canonical_input_path)}</strong></li><li><span>Canonical output</span><strong>${esc(c.canonical_output_path)}</strong></li><li><span>Langfuse trace</span><strong>${esc(c.comparison_evidence.langfuse_trace_id)}</strong></li></ul></div></article>`;
+    document.getElementById('ga-case-prev')?.addEventListener('click',()=>renderGaCase(activeGaCase-1));
+    document.getElementById('ga-case-next')?.addEventListener('click',()=>renderGaCase(activeGaCase+1));
+  };
+  gaCases.forEach((c,index)=>{const button=document.createElement('button');button.className='case-btn';button.textContent=c.test_id;button.setAttribute('aria-label',`Show ${c.test_id} Gap Analyzer ground truth`);button.addEventListener('click',()=>renderGaCase(index));gaNav.appendChild(button)});
+  if(gaCases.length)renderGaCase(0);
   const pm=window.PRD_GENIE_PRIORITY_METRICS,s2=window.PRD_GENIE_S2_RUNTIME;
   const pmRoot=document.getElementById('priority-detail'),citationRoot=document.getElementById('citation-detail');
   if(pm&&pmRoot){
