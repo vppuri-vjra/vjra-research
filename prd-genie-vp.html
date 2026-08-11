@@ -120,7 +120,7 @@
 <nav class="tab-bar" aria-label="Dashboard sections">
   <button class="tab active" data-tab="overview">Overview</button>
   <label class="tab-dropdown"><select data-nav-select aria-label="Select product and design view"><option value="" selected>Product &amp; Design</option><option value="brd">Business Requirements</option><option value="product-prd">Product Requirements</option><option value="architecture">System Architecture</option></select></label>
-  <label class="tab-dropdown"><select data-nav-select aria-label="Select evaluation view"><option value="" selected>Evaluation</option><option value="tests">T1–T10 Results</option><option value="ground-truth">Ground Truth Dataset</option><option value="ground-truth-details">Requirement Extractor Ground Truth</option><option value="ga-ground-truth-details">Gap Analyzer Ground Truth</option></select></label>
+  <label class="tab-dropdown"><select data-nav-select aria-label="Select evaluation view"><option value="" selected>Evaluation</option><option value="tests">T1–T10 Results</option><option value="ground-truth">Ground Truth Dataset</option><option value="ground-truth-details">Requirement Extractor Ground Truth</option><option value="ga-ground-truth-details">Gap Analyzer Ground Truth</option><option value="ha-ground-truth-details">Human Approval Ground Truth</option></select></label>
   <label class="tab-dropdown"><select data-nav-select aria-label="Select evidence view"><option value="" selected>Evidence</option><option value="priority-metrics">Priority Metrics</option><option value="citation-reconciliation">Citation Reconciliation</option><option value="evidence">Evidence &amp; Lineage</option></select></label>
   <button class="tab" data-tab="delivery">Delivery</button>
 </nav>
@@ -314,6 +314,12 @@
     <div id="ga-case-detail" aria-live="polite"></div>
   </section>
 
+  <section id="ha-ground-truth-details" class="panel">
+    <h2 class="section-title">Human Approval ground truth walkthrough</h2>
+    <div class="case-nav" id="ha-case-nav" aria-label="Select a Human Approval ground-truth case"></div>
+    <div id="ha-case-detail" aria-live="polite"></div>
+  </section>
+
   <section id="evidence" class="panel">
     <h2 class="section-title">Evidence, controls, and delivery lineage</h2>
     <div class="lineage" style="margin-bottom:1rem"><div class="lineage-item"><div class="lineage-label">S2 workflow</div><div class="lineage-value">yF1xQLKZyNyrpaT9</div></div><div class="lineage-item"><div class="lineage-label">Execution</div><div class="lineage-value">9872 · 64.815s</div></div><div class="lineage-item"><div class="lineage-label">Result</div><div class="lineage-value">10/10 fresh cases passed</div></div><div class="lineage-item"><div class="lineage-label">Lifecycle</div><div class="lineage-value">Inactive · unpublished</div></div></div>
@@ -349,6 +355,7 @@ DELIVERY = exactly one JSON report + one Markdown report</div></div></article>
 <footer>PRD Genie VP · Built by Vipin Puri · Evidence captured 8 August 2026</footer>
 <script src="/prd-genie-ground-truth-data.js"></script>
 <script src="/prd-genie-gap-analyzer-ground-truth-data.js?v=10434"></script>
+<script src="/prd-genie-human-approval-ground-truth-data.js?v=10483"></script>
 <script src="/prd-genie-priority-metrics-data.js?v=c0dc0c6"></script>
 <script src="/prd-genie-citation-ledger-data.js?v=2"></script>
 <script src="/prd-genie-s2-runtime-data.js?v=9842"></script>
@@ -422,6 +429,30 @@ DELIVERY = exactly one JSON report + one Markdown report</div></div></article>
   };
   gaCases.forEach((c,index)=>{const button=document.createElement('button');button.className='case-btn';button.textContent=c.test_id;button.setAttribute('aria-label',`Show ${c.test_id} Gap Analyzer ground truth`);button.addEventListener('click',()=>renderGaCase(index));gaNav.appendChild(button)});
   if(gaCases.length)renderGaCase(0);
+  const haCases=window.PRD_GENIE_HUMAN_APPROVAL_GROUND_TRUTH||[];
+  const haNav=document.getElementById('ha-case-nav'),haDetail=document.getElementById('ha-case-detail');
+  let activeHaCase=0;
+  const renderHaCase=index=>{
+    activeHaCase=Math.max(0,Math.min(haCases.length-1,index));
+    const c=haCases[activeHaCase],input=c.input||{},expected=c.expected||{},evaluation=c.evaluation||{},items=input.extraction?.items||[],gaps=input.gap_analysis?.gaps||[];
+    [...haNav.children].forEach((button,i)=>button.classList.toggle('active',i===activeHaCase));
+    const itemRows=items.map(item=>`<tr><td class="test-id">${esc(item.id)}</td><td>${esc(label(item.type))}</td><td class="input-cell">${esc(item.statement)}</td><td>${esc(label(item.status))}</td><td>${esc((item.related_item_ids||[]).join(', ')||'—')}</td></tr>`).join('');
+    const gapRows=gaps.map(gap=>`<tr><td class="test-id">${esc(gap.id)}</td><td>${esc(label(gap.category))}</td><td class="input-cell">${esc(gap.description)}</td><td>${esc(label(gap.severity))}</td></tr>`).join('');
+    const evidenceChecks=Object.entries(expected.evidence_checks||{}).map(([key,value])=>`<li><span>${esc(label(key))}</span><strong class="${value?'pass':''}">${value?'Verified':'Not verified'}</strong></li>`).join('');
+    const score=value=>value===null||value===undefined?'N/A':String(value);
+    haDetail.innerHTML=`
+      <div class="case-toolbar"><div><div class="case-heading">Human Approval ${esc(c.case_label)}</div><div class="case-subtitle">Canonical contract · evaluation execution ${esc(evaluation.execution_id)} · ${evaluation.negative_control?'fail-closed negative control':'three-layer Langfuse evaluation'}</div></div><div class="case-arrows"><button class="case-arrow" id="ha-case-prev" ${activeHaCase===0?'disabled':''}>← Previous</button><button class="case-arrow" id="ha-case-next" ${activeHaCase===haCases.length-1?'disabled':''}>Next →</button></div></div>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Authoritative upstream packet</span><span class="card-note">${esc(input.source?.source_name||'Controlled invalid variant')} · ${esc(input.source?.location||input.test_id)}</span></div><div class="card-body"><div class="source-quote">${esc(input.source?.source_text||'Eligibility gate intentionally mutated to verify fail-closed behavior.')}</div></div></article>
+      <div class="metrics"><div class="metric"><div class="metric-value">${esc(label(expected.review_status||expected.contract_status))}</div><div class="metric-label">Expected review status</div></div><div class="metric"><div class="metric-value">${esc(label(expected.next_route||'No route'))}</div><div class="metric-label">Expected next route</div></div><div class="metric"><div class="metric-value good">${esc(label(evaluation.n8n_deterministic))}</div><div class="metric-label">n8n deterministic</div></div><div class="metric"><div class="metric-value good">${score(evaluation.code_evaluator_pass)}</div><div class="metric-label">Langfuse Code</div></div><div class="metric"><div class="metric-value good">${score(evaluation.llm_faithfulness)}</div><div class="metric-label">LLM faithfulness</div></div><div class="metric"><div class="metric-value good">${score(evaluation.llm_hallucination)}</div><div class="metric-label">LLM hallucination</div></div></div>
+      <article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Eligible upstream items</span><span class="card-note">${items.length} item${items.length===1?'':'s'} · ${gaps.length} gap${gaps.length===1?'':'s'}</span></div><div class="table-wrap" style="border:0;border-radius:0"><table><thead><tr><th>ID</th><th>Type</th><th>Canonical statement</th><th>Status</th><th>Relationships</th></tr></thead><tbody>${itemRows||'<tr><td colspan="5" class="empty-state">No eligible items—the validation boundary must stop processing.</td></tr>'}</tbody></table></div></article>
+      ${gaps.length?`<article class="card" style="margin-bottom:1rem"><div class="card-head"><span class="card-title">Controlled upstream gaps</span></div><div class="table-wrap" style="border:0;border-radius:0"><table><thead><tr><th>ID</th><th>Category</th><th>Description</th><th>Severity</th></tr></thead><tbody>${gapRows}</tbody></table></div></article>`:''}
+      <div class="detail-grid"><article class="card"><div class="card-head"><span class="card-title">Expected decision</span></div><div class="card-body"><ul class="evidence-list"><li><span>Reviewer</span><strong>${esc(expected.reviewer||'Validation control')}</strong></li><li><span>Approved IDs</span><strong>${esc((expected.approved_item_ids||[]).join(', ')||'None')}</strong></li><li><span>Rejected IDs</span><strong>${esc((expected.rejected_item_ids||[]).join(', ')||'None')}</strong></li><li><span>Controlled TBDs</span><strong>${esc((expected.controlled_tbd_ids||[]).join(', ')||'None')}</strong></li><li><span>Conditions</span><strong>${esc((expected.conditions||[]).join('; ')||'None')}</strong></li></ul></div></article><article class="card"><div class="card-head"><span class="card-title">Evidence checks</span></div><div class="card-body"><ul class="evidence-list">${evidenceChecks||'<li><span>Eligibility validation</span><strong class="pass">Fail closed</strong></li>'}</ul></div></article></div>
+      <article class="card" style="margin-top:1rem"><div class="card-head"><span class="card-title">Review rationale and evaluation evidence</span><span class="card-note">${evaluation.negative_control?'No trace by design':`Trace ${esc(evaluation.langfuse_trace_id)}`}</span></div><div class="card-body"><p style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem">${esc(expected.review_notes||expected.error_message||'The invalid eligibility state must produce no route, trace, model call, or token usage.')}</p><ul class="evidence-list"><li><span>Canonical input</span><strong>${esc(c.canonical_input_path)}</strong></li><li><span>Canonical output</span><strong>${esc(c.canonical_output_path)}</strong></li><li><span>Agreement result</span><strong>${evaluation.negative_control?'Fail-closed behavior verified':'n8n pass · Code pass · Faithfulness 1.0 · Hallucination 0'}</strong></li></ul></div></article>`;
+    document.getElementById('ha-case-prev')?.addEventListener('click',()=>renderHaCase(activeHaCase-1));
+    document.getElementById('ha-case-next')?.addEventListener('click',()=>renderHaCase(activeHaCase+1));
+  };
+  haCases.forEach((c,index)=>{const button=document.createElement('button');button.className='case-btn';button.textContent=c.case_label.replace(' / ','·');button.setAttribute('aria-label',`Show ${c.case_label} Human Approval ground truth`);button.addEventListener('click',()=>renderHaCase(index));haNav.appendChild(button)});
+  if(haCases.length)renderHaCase(0);
   const pm=window.PRD_GENIE_PRIORITY_METRICS,s2=window.PRD_GENIE_S2_RUNTIME;
   const pmRoot=document.getElementById('priority-detail'),citationRoot=document.getElementById('citation-detail');
   if(pm&&pmRoot){
