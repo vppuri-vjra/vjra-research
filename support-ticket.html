@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShopNest Global Support Ticket Analysis System · vjra.us</title>
+<title>ShopNest Global AI Support Copilot · vjra.us</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -209,7 +209,7 @@
 <header>
   <div>
     <div class="kicker">VJRA.US / UT AUSTIN</div>
-    <h1>ShopNest Global Support Ticket Analysis System</h1>
+    <h1>ShopNest Global AI Support Copilot</h1>
   </div>
   <div style="display:flex;align-items:center;gap:1rem;">
     <div class="agent-balls">
@@ -224,6 +224,7 @@
 
 <div class="tab-bar">
   <button class="tab active" onclick="switchTab('overview')">Business Problem &amp; Solution</button>
+  <button class="tab" onclick="switchTab('design')">Copilot Product Design</button>
   <button class="tab" onclick="switchTab('arch')">Architecture &amp; Pipeline</button>
   <button class="tab" onclick="switchTab('workflow')">n8n Workflow</button>
   <button class="tab" onclick="switchTab('eval')">Evaluation Results</button>
@@ -302,6 +303,103 @@
   </div>
 
 </div><!-- #tab-overview -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 2 — Copilot Product Design
+═══════════════════════════════════════════════ -->
+<div id="tab-design" class="tab-panel">
+  <div class="section-card">
+    <div class="section-card-head">01 &middot; Product Thesis &amp; North Star</div>
+    <div class="card-grid-2">
+      <div><div class="label-sm">Product Thesis</div><div class="body-sm">Build a <strong>governed agent copilot</strong>, not an autonomous service bot. The copilot identifies intent, assembles permissioned order and policy evidence, proposes an allowed next action, drafts a cited response, and routes uncertain or high-risk cases to a person. Agents retain final authority during the pilot.</div></div>
+      <div><div class="label-sm">North Star KPI</div><div class="body-sm"><strong>Verified First-Contact Resolution Rate:</strong> the percentage of eligible contacts resolved in one interaction, with no policy violation, correction, reopen, or repeat contact within seven days. Pilot target: <strong>&ge;12% relative improvement</strong>.</div></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">&ge;12%</div><div class="stat-label">Verified FCR Lift</div></div>
+      <div class="stat"><div class="stat-num">&minus;20%</div><div class="stat-label">Median Handle Time</div></div>
+      <div class="stat"><div class="stat-num">&ge;95%</div><div class="stat-label">Grounded Responses</div></div>
+      <div class="stat"><div class="stat-num">&ge;4.3</div><div class="stat-label">CSAT / 5</div></div>
+      <div class="stat"><div class="stat-num">&lt;1%</div><div class="stat-label">Severe Error Rate</div></div>
+      <div class="stat"><div class="stat-num">&le;8s</div><div class="stat-label">p95 Draft Latency</div></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">02 &middot; Problem Framing, Assumptions &amp; Scope</div>
+    <div class="card-grid-2">
+      <div><div class="label-sm">Primary User &amp; Segment</div><div class="body-sm"><strong>Frontline support agents</strong> serving <strong>high-value returning customers with post-purchase issues</strong>. This behavioral segment combines high support load, high relationship value, reusable order history, and a strong opportunity to improve the North Star.</div><div class="chip-row"><span class="chip">High-value returning</span><span class="chip">Post-purchase</span><span class="chip">Chat + email</span></div></div>
+      <div><div class="label-sm">Business Alignment</div><div class="body-sm">Increase correct first-contact resolution while lowering cost per resolved contact. Assumptions: authenticated customer context; permissioned read access to orders, CRM history, and approved policy; live chat and email first; market-specific policy metadata is available.</div></div>
+    </div>
+    <div class="section-card-body" style="padding-top:0;">
+      <table class="data-table"><thead><tr><th>In scope</th><th>Out of scope for pilot</th></tr></thead><tbody><tr><td>Intent and entity extraction; order/policy retrieval; evidence panel; response draft; allowed-action recommendation; risk routing</td><td>Autonomous refunds, credits, cancellations, fraud appeals, legal/safety cases, voice automation, public social replies, or foundation-model training</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">03 &middot; Problem Selection &amp; Focused Experience</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table"><thead><tr><th>Candidate problem</th><th>Impact</th><th>AI fit</th><th>Decision</th></tr></thead><tbody><tr><td><strong>Agents search several systems for the right order and policy context</strong></td><td>High</td><td>High with retrieval and citations</td><td><strong>Selected</strong></td></tr><tr><td>Agents rewrite similar responses</td><td>Medium</td><td>High</td><td>Supporting capability</td></tr><tr><td>Policy exceptions require judgment</td><td>High</td><td>Medium / high risk</td><td>Human escalation</td></tr><tr><td>Carrier status must be current</td><td>Medium</td><td>Low</td><td>Deterministic API</td></tr></tbody></table>
+    </div>
+    <div class="pipeline"><div class="pipeline-agent"><div class="pipeline-ball" style="background:#1d4ed8;">01</div><div class="pipeline-label">Understand</div><div class="pipeline-sub">Intent + entities</div></div><div class="pipeline-connector">&rarr;</div><div class="pipeline-agent"><div class="pipeline-ball" style="background:#6d28d9;">02</div><div class="pipeline-label">Retrieve</div><div class="pipeline-sub">Order + policy evidence</div></div><div class="pipeline-connector">&rarr;</div><div class="pipeline-agent"><div class="pipeline-ball" style="background:#b85042;">03</div><div class="pipeline-label">Assist</div><div class="pipeline-sub">Draft + allowed action</div></div><div class="pipeline-connector">&rarr;</div><div class="pipeline-agent"><div class="pipeline-ball" style="background:#2d6a4f;">04</div><div class="pipeline-label">Govern</div><div class="pipeline-sub">Approve or escalate</div></div></div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">04 &middot; AI, Model &amp; Adaptation Choices</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table"><thead><tr><th>Capability</th><th>Approach</th><th>Rationale</th></tr></thead><tbody><tr><td>Authentication, order status, refund limits, eligibility, action execution</td><td><strong>Rules + APIs</strong></td><td>Exact, auditable, and fail-closed</td></tr><tr><td>Intent, entity extraction, summarization</td><td><strong>Fast model / LLM</strong></td><td>Customer language is varied and ambiguous</td></tr><tr><td>Policy and precedent discovery</td><td><strong>Hybrid RAG</strong></td><td>Semantic retrieval plus market/version metadata filters</td></tr><tr><td>Draft and explanation</td><td><strong>Grounded LLM</strong></td><td>Natural language generation only after facts and allowed actions are fixed</td></tr><tr><td>Material exception or action</td><td><strong>Human approval</strong></td><td>Financial and relationship judgment remains accountable</td></tr></tbody></table>
+    </div>
+    <div class="card-grid-3">
+      <div><div class="label-sm">Prompting</div><div class="body-sm">Define role, workflow, professional tone, citation requirements, structured output, and abstention behavior.</div></div>
+      <div><div class="label-sm">RAG</div><div class="body-sm">Required for dynamic policies, order facts, approved macros, and factual grounding.</div></div>
+      <div><div class="label-sm">Fine-tuning</div><div class="body-sm">Defer until stable error patterns and enough expert-reviewed examples exist.</div></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">05 &middot; RAG &amp; Data Strategy</div>
+    <div class="card-grid-2">
+      <div><div class="label-sm">Retrieval Design</div><div class="body-sm"><strong>Sources:</strong> policy CMS, order and logistics APIs, permissioned CRM history, approved response macros, and exception directory.<br><br><strong>Chunking:</strong> one policy clause or decision unit per chunk, retaining title, market, product, effective date, version, and authority.<br><br><strong>Retrieval:</strong> metadata filtering + keyword/vector search + reranking. No material claim or action without a valid citation or deterministic fact.</div></div>
+      <div><div class="label-sm">Golden Dataset</div><div class="body-sm">Versioned conversations with retrieved evidence, approved intent, entities, allowed action, escalation decision, and ideal response. Cover top intents, regions, languages, ambiguity, conflicting policies, missing context, and rare high-risk cases. Support QA and policy owners adjudicate labels; the test split remains frozen.</div></div>
+    </div>
+    <div class="callout"><strong>Precision-first stance:</strong> retrieve broadly, answer narrowly. An agent can recover an omitted suggestion; a confidently wrong promise may create financial loss or breach trust. Missing, weak, or conflicting evidence triggers abstention or escalation.</div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">06 &middot; Evaluation &amp; Human-in-the-Loop</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table"><thead><tr><th>Stage</th><th>Measures</th><th>Gate</th></tr></thead><tbody><tr><td><strong>Offline deterministic</strong></td><td>Intent macro-F1, entity F1, retrieval recall@k, citation precision, action-rule accuracy</td><td>100% critical-action rules; &ge;95% citation precision</td></tr><tr><td><strong>Offline human</strong></td><td>Correctness, evidence support, relevance, completeness, tone, safe escalation</td><td>&ge;4.5/5 correctness; severe errors &lt;1%</td></tr><tr><td><strong>Shadow</strong></td><td>Compare draft and action with expert resolution</td><td>No customer exposure; review every high-risk disagreement</td></tr><tr><td><strong>Controlled A/B</strong></td><td>Verified FCR, handle time, CSAT, reopen, escalation, edit distance, adoption</td><td>North Star improves without safety or CSAT regression</td></tr></tbody></table>
+    </div>
+    <div class="card-grid-2">
+      <div><div class="label-sm">Where Humans Intervene</div><div class="body-sm">Agents review every pilot draft. Mandatory escalation covers fraud, safety, legal threats, vulnerable customers, policy conflicts, missing evidence, unknown intent, and actions above the agent's monetary authority.</div></div>
+      <div><div class="label-sm">Feedback Loop</div><div class="body-sm">Capture helpful/not-helpful reasons, edit distance, rejected actions, escalations, reopens, and repeat contacts. Weekly QA turns confirmed failures into regression cases before any prompt, retrieval, or model release.</div></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">07 &middot; Target Architecture, Operations &amp; Safety</div>
+    <div class="arch-layer"><div class="arch-layer-head"><span class="arch-layer-badge" style="background:#e0f2fe;color:#0369a1;">Experience</span><span class="arch-layer-title">Agent workspace</span><span class="arch-layer-sub">Conversation, customer and order context, evidence, draft, actions, escalation</span></div></div>
+    <div class="arch-layer"><div class="arch-layer-head"><span class="arch-layer-badge" style="background:#ede9fe;color:#5b21b6;">Orchestration</span><span class="arch-layer-title">Intent &rarr; tools &rarr; retrieval &rarr; guardrails &rarr; generation</span><span class="arch-layer-sub">Model routing, authority checks, citation contract, and risk-based routing</span></div></div>
+    <div class="arch-layer"><div class="arch-layer-head"><span class="arch-layer-badge" style="background:#f0fdf4;color:#166534;">Knowledge</span><span class="arch-layer-title">Live APIs + governed policy index</span><span class="arch-layer-sub">Orders, logistics, CRM, policy CMS, approved macros, versions, permissions</span></div></div>
+    <div class="arch-layer"><div class="arch-layer-head"><span class="arch-layer-badge" style="background:#fff0e6;color:#c2410c;">Assurance</span><span class="arch-layer-title">Observability, evaluation, privacy, and reliability</span><span class="arch-layer-sub">Latency/cost, groundedness, drift, RBAC, redaction, audit logs, caching, timeouts, fallback</span></div></div>
+    <div class="card-grid-2">
+      <div><div class="label-sm">Operational Plan</div><div class="body-sm">Parallelize order and policy retrieval, stream drafts, route simple tasks to smaller models, cap context, cache versioned policy results, autoscale for traffic spikes, and fall back to deterministic facts and standard search if generation is unavailable.</div></div>
+      <div><div class="label-sm">Safety Controls</div><div class="body-sm">Citation-required claims, post-generation verification, prompt-injection isolation, least-privilege tools, PII masking, professional-tone moderation, parity tests by language/region/tier, and allowlisted actions validated server-side.</div></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head">08 &middot; Go / No-Go Framework &amp; Trade-offs</div>
+    <div class="section-card-body" style="padding-top:.75rem;">
+      <table class="data-table"><thead><tr><th>Dimension</th><th>Launch / expand if</th><th>Stop / roll back if</th></tr></thead><tbody><tr><td>Value</td><td>Verified FCR improves &ge;12% and handle time improves &ge;20%</td><td>No significant FCR gain or CSAT drops &gt;0.1</td></tr><tr><td>Quality</td><td>Grounded-response rate &ge;95%</td><td>Severe factual or policy error rate &ge;1%</td></tr><tr><td>Safety</td><td>100% critical actions pass authorization tests</td><td>Unauthorized action, material privacy incident, or missed critical escalation</td></tr><tr><td>Reliability</td><td>p95 &le;8 seconds and availability &ge;99.5%</td><td>Persistent failure without safe fallback</td></tr><tr><td>Economics</td><td>Cost per resolved eligible contact is below manual baseline</td><td>Model and tool costs erase measurable benefit</td></tr></tbody></table>
+    </div>
+    <div class="card-grid-3">
+      <div><div class="label-sm">Accuracy vs Latency</div><div class="body-sm">Accept modest latency for verified evidence; parallelize to remain under eight seconds.</div></div>
+      <div><div class="label-sm">Cost vs Quality</div><div class="body-sm">Route by complexity instead of using the strongest model for every step.</div></div>
+      <div><div class="label-sm">Automation vs Control</div><div class="body-sm">Recommend and draft; humans approve material actions during the pilot.</div></div>
+    </div>
+    <div class="callout"><strong>Recommendation:</strong> launch a limited, agent-facing pilot for high-value returning customers and the highest-volume post-purchase intents. Start in shadow mode and expand only after all customer, quality, safety, reliability, and economic gates pass.</div>
+  </div>
+</div><!-- #tab-design -->
 
 <!-- ══════════════════════════════════════════════
      TAB 2 — Architecture & Pipeline
@@ -547,7 +645,7 @@
 const WORKFLOW_JSON = {"name":"AI-Powered Support Ticket Analysis System","nodes":[{"parameters":{},"type":"n8n-nodes-base.manualTrigger","typeVersion":1,"position":[-32,0],"id":"920cafe7-f2cd-42b1-98bd-a2e52b1eb867","name":"When clicking \u2018Execute workflow\u2019"},{"parameters":{"options":{}},"type":"n8n-nodes-base.extractFromFile","typeVersion":1.1,"position":[416,0],"id":"eac72768-ce15-419b-b91f-3be2a5852845","name":"Extract Ticket Data"},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"role":"system","content":"You are a customer support ticket summarization assistant.\n\nRules:\n- Summarize the support ticket in 2-3 concise sentences\n- Clearly identify the main issue\n- Remove unnecessary emotional language\n- Preserve important facts\n- Mention order/payment/delivery/refund issue clearly\n- Maintain factual accuracy\n- Do not hallucinate information"},{"content":"={{ $json.support_ticket_desc }}"}]},"builtInTools":{},"options":{"maxTokens":150,"temperature":0.2}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[624,0],"id":"8801271f-a3a4-4636-9dd9-f3207002d04e","name":"Ticket Summarization","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"role":"system","content":"You are an AI evaluator for customer support ticket summaries.\n\nEvaluate the generated summary using the following criteria:\n\n1. Accuracy\n- Does the summary correctly reflect the original ticket?\n- Are important facts preserved?\n\n2. Clarity\n- Is the summary easy to understand?\n- Is the wording concise and professional?\n\n3. Completeness\n- Does the summary include all major issues, requests, and context?\n\nInstructions:\n- Provide a score out of 10 for each criterion\n- Be objective and consistent\n- Penalize hallucinations or missing key details\n- Keep feedback concise\n\nReturn plain text only.\n\nOutput Format:\n\nAccuracy: X/10\nClarity: X/10\nCompleteness: X/10\n\nFeedback:\n<short explanation>\n\nDo not use markdown formatting. Return plain text only."},{"content":"=Original Ticket: {{ $('Extract Ticket Data').item.json.support_ticket_desc }}\n\nGenerated Summary:{{ $json.output[0].content[0].text }}"}]},"builtInTools":{},"options":{"maxTokens":150,"temperature":0.2}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[944,0],"id":"4c322a55-7cbd-4543-a33a-d2a191612552","name":"Summary Evaluation","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"role":"system","content":"You are a professional customer support assistant for ShopNest Global.\n\nRules:\n- Be empathetic and professional\n- Acknowledge the customer's issue\n- Provide clear next steps\n- Maintain a calm and respectful tone\n- Keep the response concise and actionable\n- Do not make unsupported promises\n\nPolicies:\n\nRefund & Return Policy:\n- Customers can request full refund or replacement within 10 days\n- Refunds are processed within 5-7 business days\n- COD refunds are processed via bank transfer\n\nDelivery Delay Policy:\n- Delay over 3 days qualifies for a Rs 100 voucher\n- Delay over 7 days may qualify for a full refund\n\nWrong Item Policy:\n- Free replacement or refund available\n- Pickup arranged within 2 business days\n- Photo evidence may be requested\n\nPayment Failure Policy:\n- Failed transactions are usually reversed within 3-5 business days\n- Ask customer for transaction reference if needed\n\nReturn plain text only.\n\nDo not include newline escape characters like \\n\\n in the response. Write as clean plain text paragraphs."},{"content":"=Customer Ticket: {{ $('Extract Ticket Data').item.json.support_ticket_desc }}\n\nGenerated Summary:{{ $json.output[0].content[0].text }}"}]},"builtInTools":{},"options":{"maxTokens":250,"temperature":0.4}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[1296,0],"id":"97f3db47-5702-4658-83e2-b035ab40cf2b","name":"Response Generation","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1","mode":"list","cachedResultName":"GPT-4.1"},"responses":{"values":[{"role":"system","content":"You are an AI evaluator for customer support responses.\n\nEvaluate the generated response using the following criteria:\n\n1. Professionalism\n- Is the tone respectful and business appropriate?\n\n2. Empathy\n- Does the response acknowledge the customer's frustration appropriately?\n\n3. Clarity\n- Are the next steps and actions easy to understand?\n\n4. Policy Compliance\n- Does the response follow the provided company policies correctly?\n\n5. Actionability\n- Does the response provide clear and useful next steps?\n\nInstructions:\n- Provide a score out of 10 for each criterion\n- Be objective and concise\n- Penalize unsupported promises or vague actions\n- Return plain text only\n\nOutput Format:\n\nProfessionalism: X/10\nEmpathy: X/10\nClarity: X/10\nPolicy Compliance: X/10\nActionability: X/10\n\nFeedback:\n<short explanation>"},{"content":"=Customer Ticket: {{ $('Extract Ticket Data').item.json.support_ticket_desc }}\n\nGenerated Response:{{ $json.output[0].content[0].text }}"}]},"builtInTools":{},"options":{"maxTokens":180,"temperature":0.1}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":2.1,"position":[1648,0],"id":"fc033cbe-6292-41ad-9dd1-4657aded2b84","name":"Response Evaluation","credentials":{"openAiApi":{"id":"JklUB02AKX2A1PiF","name":"OpenAi account"}}},{"parameters":{"fileSelector":"/data/shared/support_ticket_data.csv","options":{}},"type":"n8n-nodes-base.readWriteFile","typeVersion":1.1,"position":[208,0],"id":"1b07fa16-1a2c-4b8a-8003-4f40ce1d8fd2","name":"Load Support Ticket Dataset"},{"parameters":{"operation":"write","fileName":"/data/shared/output_file.csv","options":{}},"type":"n8n-nodes-base.readWriteFile","typeVersion":1.1,"position":[2416,0],"id":"3d0ad0e6-dc08-456a-8cb6-66db8e48fb16","name":"Export Final Results"},{"parameters":{"assignments":{"assignments":[{"id":"a259fdd1-ff97-44bb-9519-649d2a605bd1","name":"support_ticket_id","value":"={{ $('Extract Ticket Data').item.json['\ufeffsupport_ticket_id'] }}","type":"string"},{"id":"c56f4d7e-dbc6-4a1b-af1f-84b23cdffeb2","name":"support_ticket_desc","value":"={{ $('Extract Ticket Data').item.json.support_ticket_desc }}","type":"string"},{"id":"c70b9f1c-8391-4c3c-9d1a-da44ea7ff4f7","name":"Summarization ","value":"={{ $('Ticket Summarization').item.json.output[0].content[0].text }}","type":"string"},{"id":"77c8fb26-fcdd-4cf2-b912-e5f92d6adcca","name":"summary_evaluation","value":"={{ $('Summary Evaluation').item.json.output[0].content[0].text }}","type":"string"},{"id":"c69282ed-f2d7-4bff-be4a-62832ef15967","name":"response_generation","value":"={{ $('Response Generation').item.json.output[0].content[0].text }}","type":"string"},{"id":"77f3e97a-76f5-4725-bd8c-62724eca95f9","name":"response_evaluation","value":"={{ $json.output[0].content[0].text }}","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[2000,0],"id":"b41ddea5-64d5-45d6-9069-356c3a9098d1","name":"Prepare Final Output"},{"parameters":{"options":{}},"type":"n8n-nodes-base.convertToFile","typeVersion":1.1,"position":[2208,0],"id":"21603c61-c49f-47aa-9c1b-f59e22e0323f","name":"Generate CSV Report"}],"pinData":{},"connections":{"When clicking \u2018Execute workflow\u2019":{"main":[[{"node":"Load Support Ticket Dataset","type":"main","index":0}]]},"Extract Ticket Data":{"main":[[{"node":"Ticket Summarization","type":"main","index":0}]]},"Ticket Summarization":{"main":[[{"node":"Summary Evaluation","type":"main","index":0}]]},"Summary Evaluation":{"main":[[{"node":"Response Generation","type":"main","index":0}]]},"Response Generation":{"main":[[{"node":"Response Evaluation","type":"main","index":0}]]},"Response Evaluation":{"main":[[{"node":"Prepare Final Output","type":"main","index":0}]]},"Load Support Ticket Dataset":{"main":[[{"node":"Extract Ticket Data","type":"main","index":0}]]},"Prepare Final Output":{"main":[[{"node":"Generate CSV Report","type":"main","index":0}]]},"Generate CSV Report":{"main":[[{"node":"Export Final Results","type":"main","index":0}]]}},"active":false,"settings":{"executionOrder":"v1","availableInMCP":false},"versionId":"0e68b7c3-d06c-4811-aed9-60b57c830712","meta":{"templateCredsSetupCompleted":true,"instanceId":"9eec91ab028da3044b893ad93da376fcd67c0d37224cdead88c7c3ba95ce47dc"},"id":"m5T3rv7INTTiwvLxtdbJl","tags":[]};
 
 function switchTab(name) {
-  const order = ['overview','arch','workflow','eval'];
+  const order = ['overview','design','arch','workflow','eval'];
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', order[i] === name);
   });
